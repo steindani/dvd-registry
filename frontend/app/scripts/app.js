@@ -1,35 +1,29 @@
+/// <reference path="../_all.ts" />
 'use strict';
-
-/**
- * @ngdoc overview
- * @name dvdApp
- * @description
- * # dvdApp
- *
- * Main module of the application.
- */
-angular
-  .module('dvdApp', [
-    'ngAnimate',
-    'ngCookies',
-    'ngResource',
-    'ngRoute',
-    'ngSanitize',
-    'ngTouch'
-  ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
-  });
+var dvdApp;
+(function (dvdApp) {
+    //export module Controllers {}
+    //angular.module('dvdApp.Controllers', []);
+    var app = angular
+        .module('dvdApp', [
+        'ngAnimate',
+        'ngCookies',
+        'ngResource',
+        'ngRoute',
+        'ngSanitize',
+        'ngTouch',
+        'dvdApp.Controllers'
+    ]);
+    app.config(function ($routeProvider) {
+        $routeProvider
+            .when('/', {
+            templateUrl: 'views/main.html',
+            controller: dvdApp.Controllers.MoviesCtrl,
+            controllerAs: 'movies'
+        })
+            .otherwise({
+            redirectTo: '/'
+        });
+    });
+})(dvdApp || (dvdApp = {}));
+//# sourceMappingURL=app.js.map

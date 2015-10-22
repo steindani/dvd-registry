@@ -31,12 +31,42 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+
+    typescript: {
+      base: {
+        src: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
+        options: {
+          target: 'es5',
+          sourceMap: true
+        }
+      },
+      test: {
+        src: ['test/spec/{,*/}*.ts'],
+        options: {
+          target: 'es5',
+          sourceMap: true
+        }
+      }
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
         files: ['bower.json'],
         tasks: ['wiredep']
       },
+
+
+      ts: {
+        files: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
+        tasks: ['typescript']
+      },
+      tsTest: {
+        files: ['test/spec/{,*/}*.ts'],
+        tasks: ['typescript:test']
+      },
+
+
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
@@ -231,7 +261,7 @@ module.exports = function (grunt) {
       },
       server: {
         options: {
-          sourcemap: true
+          sourcemap: false
         }
       }
     },
@@ -331,6 +361,19 @@ module.exports = function (grunt) {
         }]
       }
     },
+
+//    typescript: {
+//      base: {
+//        src: ['app/scripts/**/*.ts'],
+//        options: {
+//          module: 'amd', //or commonjs
+//          target: 'es5', //or es3
+//          rootDir: true,
+//          sourceMap: true,
+//          declaration: true
+//        }
+//      }
+//    },
 
     htmlmin: {
       dist: {
@@ -449,6 +492,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'typescript',
       'wiredep',
       'concurrent:server',
       'autoprefixer:server',
@@ -464,6 +508,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
+    'typescript',
     'wiredep',
     'concurrent:test',
     'autoprefixer',
@@ -473,6 +518,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'typescript',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
