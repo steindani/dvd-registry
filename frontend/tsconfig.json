@@ -3,5 +3,10 @@
         "target": "ES5",
         "module": "amd",
         "sourceMap": true
-    }
+    },
+    "exclude": [
+        "node_modules",
+        "bower_components",
+        "typings"
+    ]
 }

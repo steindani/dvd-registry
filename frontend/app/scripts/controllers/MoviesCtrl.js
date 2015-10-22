@@ -23,6 +23,7 @@ var dvdApp;
         angular
             .module('dvdApp.Controllers', [])
             .controller('MoviesCtrl', ['$scope', dvdApp.Controllers.MoviesCtrl]);
+        angu;
     })(Controllers = dvdApp.Controllers || (dvdApp.Controllers = {}));
 })(dvdApp || (dvdApp = {}));
 //# sourceMappingURL=MoviesCtrl.js.map
