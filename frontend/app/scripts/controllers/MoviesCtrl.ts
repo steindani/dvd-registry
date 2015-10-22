@@ -2,16 +2,11 @@
 'use strict';
 
 module dvdApp.Controllers {
-    
+
     export class MoviesCtrl {
 
         scope: any;
         data: any;
-
-
-        public static $inject = [
-            '$scope'
-        ];
 
         constructor(
             private $scope: ng.IScope
@@ -27,4 +22,8 @@ module dvdApp.Controllers {
             };
         }
     }
+
+    angular
+      .module('dvdApp.Controllers', [])
+      .controller('MoviesCtrl', ['$scope', dvdApp.Controllers.MoviesCtrl]);
 }

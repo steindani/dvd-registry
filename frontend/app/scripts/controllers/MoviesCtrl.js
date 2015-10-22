@@ -17,12 +17,12 @@ var dvdApp;
                     ]
                 };
             }
-            MoviesCtrl.$inject = [
-                '$scope'
-            ];
             return MoviesCtrl;
         })();
         Controllers.MoviesCtrl = MoviesCtrl;
+        angular
+            .module('dvdApp.Controllers', [])
+            .controller('MoviesCtrl', ['$scope', dvdApp.Controllers.MoviesCtrl]);
     })(Controllers = dvdApp.Controllers || (dvdApp.Controllers = {}));
 })(dvdApp || (dvdApp = {}));
 //# sourceMappingURL=MoviesCtrl.js.map

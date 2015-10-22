@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 
     // Project settings
     yeoman: appConfig,
-    
+
 
     typescript: {
       base: {
@@ -55,8 +55,8 @@ module.exports = function (grunt) {
         files: ['bower.json'],
         tasks: ['wiredep']
       },
-      
-      
+
+
       ts: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
         tasks: ['typescript']
@@ -65,8 +65,8 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.ts'],
         tasks: ['typescript:test']
       },
-      
-      
+
+
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
