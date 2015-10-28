@@ -29,7 +29,7 @@ class Movie( Base ):
     poster = Column( String )
     
     medium_id = Column( Integer, ForeignKey( 'media.id' ) )
-    
+    user_id = Column( Integer, ForeignKey( 'users.id' ) )
     
     cast = relationship( 'Person',
                     secondary = movie_cast_association_table,
