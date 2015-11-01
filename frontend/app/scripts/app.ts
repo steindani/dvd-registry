@@ -2,8 +2,6 @@
 'use strict';
 
 module dvdApp {
-  //export module Controllers {}
-  //angular.module('dvdApp.Controllers', []);
 
   var app = angular
     .module('dvdApp', [
@@ -13,7 +11,8 @@ module dvdApp {
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'dvdApp.Controllers'
+    'dvdApp.Controllers',
+    'dvdApp.Directives'
   ]);
 
   app.config(
@@ -22,7 +21,7 @@ module dvdApp {
           .when('/', {
             templateUrl: 'views/main.html',
             controller: dvdApp.Controllers.MoviesCtrl,
-            controllerAs: 'movies'
+            controllerAs: 'controller'
           })
           .otherwise({
             redirectTo: '/'
