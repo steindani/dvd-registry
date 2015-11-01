@@ -20,8 +20,8 @@ module dvdApp.Directives {
 					image.on(
 						'load',
 						(event: JQueryEventObject) => {
-							var vibrant = new Vibrant((<any> event).target);
-							element.append(vibrant.swatches());
+							//var vibrant = new Vibrant((<any> event).target);
+							//element.append(vibrant.swatches());
 						});
 				});
 
