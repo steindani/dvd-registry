@@ -2,11 +2,10 @@
 @author:  benedekh
 '''
 
+from db.entities.Base import Base
 from sqlalchemy import Column, ForeignKey, Integer, Sequence, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
-
-from entities.Base import Base
 
 
 class Medium( Base ):
