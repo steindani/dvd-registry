@@ -8,6 +8,7 @@ from db.entities.Medium import Medium
 from db.entities.Movie import Movie
 from db.entities.Person import Person
 from db.entities.User import User
+from db.entities.Membership import Membership
 
 
 dbc = DBManager()
@@ -19,21 +20,31 @@ user = User( googleid = 12 )
 genre = Genre( name = "Action" )
 movie = Movie( title = "Bronze", year = 1923, plot = "BLALALALAAL", trailer = "http://woo", poster = "http://waaa" )
 
-user.media.append( medium )
-medium.movies.append( movie )
+membership = Membership( user, movie, medium )
+
+
+# user.media.append( medium )
+# medium.movies.append( movie )
+
 movie.genre.append( genre )
 movie.cast.append( person )
-user.movies.append( movie )
+
+# user.movies.append( movie )
 
 dbc.add_movie( movie )
+dbc.add_membership( membership )
 
-print("addedd")
+print( "addeddDONE" )
 
-res = dbc.get_movie_by_title("Bronze")
-print("hello")
-for mooovie in res:
-    print( mooovie.year )
-    print( mooovie.media.name )
-    print( mooovie.genre[0].name )
-    print( mooovie.cast[0].name )
-    print( mooovie.users[0].googleid )
+membersh = dbc.get_membership()
+
+print(membersh[0].user.googleid)
+
+#res = dbc.get_movie_by_title( "Bronze" )
+#print( "hello" )
+#for mooovie in res:
+#    print( mooovie.year )
+#    #print( mooovie.media.name )
+#    print( mooovie.genre[0].name )
+#    print( mooovie.cast[0].name )
+    #print( mooovie.users[0].googleid )

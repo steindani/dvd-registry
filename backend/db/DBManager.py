@@ -10,11 +10,13 @@ from db.entities.User import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+from db.entities.Membership import Membership
+
 
 class DBManager( object ):
     
     def __init__( self ):
-        self.engine = create_engine( 'sqlite:///:memory:', echo = False )
+        self.engine = create_engine( 'sqlite:///:memory:', echo = True )
         
         try:
             self.engine.connect().close()
@@ -39,8 +41,8 @@ class DBManager( object ):
         return scoped_session( self.session_factory )
     
     def add_movie( self, movie ):
-        _session_creator = self.session_factory
-        #_session_creator = self.create_session()
+        # _session_creator = self.session_factory
+        _session_creator = self.create_session()
         _session = _session_creator()
         
         _session.add( movie )
@@ -49,14 +51,36 @@ class DBManager( object ):
         _session.refresh( movie )
         _session.commit()
         
-        #_session_creator.remove()
+        _session_creator.remove()
+   
+    def add_membership( self, membership ):
+        # _session_creator = self.session_factory
+        _session_creator = self.create_session()
+        _session = _session_creator()
+        
+        _session.add( membership )
+        
+        _session.flush()
+        _session.refresh( membership )
+        _session.commit()
+        
+        _session_creator.remove()
+        
+    def get_membership( self ):
+        _session_creator = self.create_session()
+        _session = _session_creator()
+        
+        result = _session.query( Membership ).all()
+        _session_creator.remove()
+        
+        return result
     
     def get_movie_by_title( self, titlequery ):
-        _session_creator = self.session_factory
-        #_session_creator = self.create_session()
+        # _session_creator = self.session_factory
+        _session_creator = self.create_session()
         _session = _session_creator()
         
         result = _session.query( Movie ).filter_by( title = titlequery ).all()
-        #_session_creator.remove()
+        _session_creator.remove()
         
         return result

@@ -13,6 +13,3 @@ class Medium( Base ):
     
     id = Column( Integer, Sequence( 'medium_id_seq' ), primary_key = True )
     name = Column( String )
-    
-    user_id = Column( Integer, ForeignKey( 'users.id' ) )
-    movies = relationship( 'Movie', backref = backref( 'media' ) )
