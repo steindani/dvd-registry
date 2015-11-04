@@ -28,9 +28,11 @@ class Movie( Base ):
     trailer = Column( String )
     poster = Column( String )
     
-    cast = relationship( 'Person',
+    triplet = relationship( 'db.entities.OwnershipTriplet.OwnershipTriplet', uselist = False, lazy = 'joined' )
+    
+    cast = relationship( 'db.entities.Person.Person',
                     secondary = movie_cast_association_table,
-                    backref = backref( 'movies' ), lazy = 'subquery' )
-    genre = relationship( 'Genre',
+                    backref = backref( 'movies' ), lazy = 'joined' )
+    genre = relationship( 'db.entities.Genre.Genre',
                     secondary = movie_genre_association_table,
-                    backref = backref( 'movies' ), lazy = 'subquery' )
+                    backref = backref( 'movies' ), lazy = 'joined' )

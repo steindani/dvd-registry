@@ -13,3 +13,8 @@ class Medium( Base ):
     
     id = Column( Integer, Sequence( 'medium_id_seq' ), primary_key = True )
     name = Column( String )
+    
+    triplet = relationship( 'db.entities.OwnershipTriplet.OwnershipTriplet', uselist = False, lazy = 'joined' )
+    
+    user_id = Column( Integer, ForeignKey( 'users.id' ) )
+    user = relationship( 'db.entities.User.User', uselist = False, lazy = 'joined' )

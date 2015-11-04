@@ -18,9 +18,13 @@ class OwnershipTriplet( Base ):
     medium_id = Column( Integer, ForeignKey( 'media.id' ), primary_key = True )
  
     UniqueConstraint( 'user_id', 'movie_id', 'medium_id' )
-    user = relationship( 'db.entities.User.User', uselist = False, backref = 'ownertriplets', lazy = 'joined' )
-    movie = relationship( 'db.entities.Movie.Movie', uselist = False, backref = 'ownertriplets', lazy = 'joined' )
-    medium = relationship( 'db.entities.Medium.Medium', uselist = False, backref = 'ownertriplets', lazy = 'joined' )
+    # user = relationship( 'db.entities.User.User', uselist = False, backref = 'ownertriplets', lazy = 'joined' )
+    # movie = relationship( 'db.entities.Movie.Movie', uselist = False, backref = 'ownertriplets', lazy = 'joined' )
+    # medium = relationship( 'db.entities.Medium.Medium', uselist = False, backref = 'ownertriplets', lazy = 'joined' )
+ 
+    user = relationship( 'db.entities.User.User', uselist = False, lazy = 'joined' )
+    movie = relationship( 'db.entities.Movie.Movie', uselist = False, lazy = 'joined' )
+    medium = relationship( 'db.entities.Medium.Medium', uselist = False, lazy = 'joined' )
  
     def __init__( self, user, movie, medium ):
         self.user = user
