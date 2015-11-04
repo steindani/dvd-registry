@@ -8,7 +8,7 @@ from db.entities.Medium import Medium
 from db.entities.Movie import Movie
 from db.entities.Person import Person
 from db.entities.User import User
-from db.entities.Membership import Membership
+from db.entities.OwnershipTriplet import OwnershipTriplet
 
 
 dbc = DBManager()
@@ -20,31 +20,33 @@ user = User( googleid = 12 )
 genre = Genre( name = "Action" )
 movie = Movie( title = "Bronze", year = 1923, plot = "BLALALALAAL", trailer = "http://woo", poster = "http://waaa" )
 
-membership = Membership( user, movie, medium )
-
-
-# user.media.append( medium )
-# medium.movies.append( movie )
+membership = OwnershipTriplet( user, movie, medium )
 
 movie.genre.append( genre )
 movie.cast.append( person )
 
-# user.movies.append( movie )
-
 dbc.add_movie( movie )
-dbc.add_membership( membership )
+dbc.add_ownertriplet( membership )
 
 print( "addeddDONE" )
 
-membersh = dbc.get_membership()
+ownersh = dbc.get_ownertriplet()
 
-print(membersh[0].user.googleid)
+print( ownersh[0].user.googleid )
+print( ownersh[0].medium.name )
+print( ownersh[0].movie.title )
+print( ownersh[0].movie.year )
+print( ownersh[0].movie.plot )
+print( ownersh[0].movie.trailer )
+print( ownersh[0].movie.poster )
+print( ownersh[0].movie.genre[0].name )
+print( ownersh[0].movie.cast[0].name )
 
-#res = dbc.get_movie_by_title( "Bronze" )
-#print( "hello" )
-#for mooovie in res:
+# res = dbc.get_movie_by_title( "Bronze" )
+# print( "hello" )
+# for mooovie in res:
 #    print( mooovie.year )
 #    #print( mooovie.media.name )
 #    print( mooovie.genre[0].name )
 #    print( mooovie.cast[0].name )
-    #print( mooovie.users[0].googleid )
+    # print( mooovie.users[0].googleid )

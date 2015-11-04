@@ -10,7 +10,7 @@ from db.entities.User import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from db.entities.Membership import Membership
+from db.entities.OwnershipTriplet import OwnershipTriplet
 
 
 class DBManager( object ):
@@ -53,24 +53,24 @@ class DBManager( object ):
         
         _session_creator.remove()
    
-    def add_membership( self, membership ):
+    def add_ownertriplet( self, ownertriplet ):
         # _session_creator = self.session_factory
         _session_creator = self.create_session()
         _session = _session_creator()
         
-        _session.add( membership )
+        _session.add( ownertriplet )
         
         _session.flush()
-        _session.refresh( membership )
+        _session.refresh( ownertriplet )
         _session.commit()
         
         _session_creator.remove()
         
-    def get_membership( self ):
+    def get_ownertriplet( self ):
         _session_creator = self.create_session()
         _session = _session_creator()
         
-        result = _session.query( Membership ).all()
+        result = _session.query( OwnershipTriplet ).all()
         _session_creator.remove()
         
         return result
