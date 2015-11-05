@@ -15,3 +15,4 @@ class Genre( Base ):
     id = Column( Integer, Sequence( 'genre_id_seq' ), primary_key = True )
     name = Column( String )
     
+    movie_id = Column( Integer, ForeignKey( 'moviesextra.id' ) )

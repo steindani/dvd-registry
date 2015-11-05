@@ -15,5 +15,4 @@ class User( Base ):
     googleid = Column( String )
     
     triplet = relationship( 'db.entities.OwnershipTriplet.OwnershipTriplet', uselist = False, lazy = 'joined' )
-    
     media = relationship( 'db.entities.Medium.Medium', lazy = 'joined' )

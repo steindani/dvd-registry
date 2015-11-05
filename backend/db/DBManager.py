@@ -4,13 +4,12 @@
 from db.entities.Base import Base
 from db.entities.Genre import Genre
 from db.entities.Medium import Medium
-from db.entities.Movie import Movie
+from db.entities.Movie import MovieBase, MovieExtra
+from db.entities.OwnershipTriplet import OwnershipTriplet
 from db.entities.Person import Person
 from db.entities.User import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-
-from db.entities.OwnershipTriplet import OwnershipTriplet
 
 
 class DBManager( object ):
@@ -121,7 +120,7 @@ class DBManager( object ):
         _session_creator = self.create_session()
         _session = _session_creator()
         
-        result = _session.query( User ).filter_by( id = googleid ).first()
+        result = _session.query( User ).filter_by( googleid = googleid ).first()
         _session_creator.remove()
         
         return result
@@ -130,7 +129,7 @@ class DBManager( object ):
         _session_creator = self.create_session()
         _session = _session_creator()
         
-        result = _session.query( Movie ).filter_by( id = movieid ).first()
+        result = _session.query( MovieBase ).filter_by( id = movieid ).first()
         _session_creator.remove()
         
         return result
