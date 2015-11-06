@@ -43,8 +43,8 @@ module dvdApp.Controllers {
             
             $scope.showDetails = function (id: string) {
                 ngDialog.open({
-                    template: '<p>' + id + '</p>',
-                    plain: true
+                    template: 'views/details.html',
+                    plain: false
                 });
             }
         }

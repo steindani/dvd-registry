@@ -39,8 +39,8 @@ var dvdApp;
                 });
                 $scope.showDetails = function (id) {
                     ngDialog.open({
-                        template: '<p>' + id + '</p>',
-                        plain: true
+                        template: 'views/details.html',
+                        plain: false
                     });
                 };
             }
