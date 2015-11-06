@@ -10,6 +10,7 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css" />
     <link rel="stylesheet" href="bower_components/lato/css/lato.css" />
+    <link rel="stylesheet" href="bower_components/animate.css/animate.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -31,8 +32,8 @@
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
               <i class="material-icons">search</i>
             </label>
-            <div class="mdl-textfield__expandable-holder">
-              <input class="mdl-textfield__input" type="text" id="search" />
+            <div class="mdl-textfield__expandable-holder" ng-init="search=''">
+              <input class="mdl-textfield__input" type="text" id="search" ng-model="search"/>
               <label class="mdl-textfield__label" for="search">Enter your query...</label>
             </div>
           </div>
