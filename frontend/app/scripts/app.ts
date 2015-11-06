@@ -11,6 +11,7 @@ module dvdApp {
     'ngRoute',
     'ngSanitize',
     'ngTouch',
+    'ngDialog',
     'dvdApp.Controllers',
     'dvdApp.Directives'
   ]);
@@ -28,4 +29,15 @@ module dvdApp {
           });
         }
       );
+      
+  app.config(["ngDialogProvider", function(ngDialogProvider) {
+    ngDialogProvider.setDefaults({
+      className: "ngdialog-theme-default",
+      plain: false,
+      showClose: true,
+      closeByDocument: true,
+      closeByEscape: true,
+      appendTo: false
+    });
+  }]); 
 }

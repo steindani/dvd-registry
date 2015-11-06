@@ -9,7 +9,8 @@ module dvdApp.Controllers {
         constructor(
             private $scope: IMoviesScope,
             private $window: ng.IWindowService,
-            private $http: ng.IHttpService
+            private $http: ng.IHttpService,
+            private ngDialog: angular.dialog.IDialogService
         ) {
             this.scope = $scope;
             $scope.movies = [];
@@ -17,7 +18,7 @@ module dvdApp.Controllers {
                  .success((data) =>{
                      (<any> data).results.slice(4).forEach(movie => {
                          var m = {
-                             id: $scope.movies.length,
+                             id: movie.id,
                              title: movie.original_title,
                              cover: "https://image.tmdb.org/t/p/w185" + movie.poster_path
                          };
@@ -31,12 +32,17 @@ module dvdApp.Controllers {
                  .success((data) =>{
                      (<any> data).results.slice(0, 4).forEach(movie => {
                          var m = {
-                             id: $scope.recommendations.length,
+                             id: movie.id,
                              title: movie.original_title,
                              cover: "https://image.tmdb.org/t/p/w185" + movie.poster_path
                          };
                          console.log(m);
                          $scope.recommendations.push(m);
+                     });
+                     
+                     ngDialog.open({
+                         template: '<p>my template</p>',
+                         plain: true
                      });
                  });
         }
@@ -44,7 +50,7 @@ module dvdApp.Controllers {
 
     angular
       .module('dvdApp.Controllers', [])
-      .controller('MoviesCtrl', ['$scope', '$window', '$http', dvdApp.Controllers.MoviesCtrl]);
+      .controller('MoviesCtrl', ['$scope', '$window', '$http', 'ngDialog', dvdApp.Controllers.MoviesCtrl]);
     
     export interface IMoviesScope extends ng.IScope {
         movies: any;

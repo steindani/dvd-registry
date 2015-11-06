@@ -1,4 +1,6 @@
 @import "compass";
+
+$lato-font-path: '../bower_components/lato/font';
 @import "lato/scss/lato";
 
 body {
@@ -97,8 +99,8 @@ h2 {
     width: 100%;
     max-width: 900px;
     height: 300px;
-    padding-top: 15px;
-    padding-bottom: 35px;
+    padding-top: 18px;
+    padding-bottom: 32px;
     justify-content: center;
     overflow: hidden;
     
@@ -127,7 +129,7 @@ h2 {
 
   &::after {
     z-index: -2;
-    transform: translateX(-25%) translateY(-100%) rotate(2deg);
+    transform: translateX(-23%) translateY(-100%) rotate(2deg);
     background-color: #880e4f;
   }
 }
