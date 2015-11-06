@@ -39,12 +39,14 @@ module dvdApp.Controllers {
                          console.log(m);
                          $scope.recommendations.push(m);
                      });
-                     
-                     ngDialog.open({
-                         template: '<p>my template</p>',
-                         plain: true
-                     });
                  });
+            
+            $scope.showDetails = function (id: string) {
+                ngDialog.open({
+                    template: '<p>' + id + '</p>',
+                    plain: true
+                });
+            }
         }
     }
 
@@ -55,5 +57,7 @@ module dvdApp.Controllers {
     export interface IMoviesScope extends ng.IScope {
         movies: any;
         recommendations: any;
+        
+        showDetails: (id: string) => void;
     }
 }

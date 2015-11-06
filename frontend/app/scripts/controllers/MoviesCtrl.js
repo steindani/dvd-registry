@@ -36,11 +36,13 @@ var dvdApp;
                         console.log(m);
                         $scope.recommendations.push(m);
                     });
+                });
+                $scope.showDetails = function (id) {
                     ngDialog.open({
-                        template: '<p>my template</p>',
+                        template: '<p>' + id + '</p>',
                         plain: true
                     });
-                });
+                };
             }
             return MoviesCtrl;
         })();
