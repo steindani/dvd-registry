@@ -21,7 +21,7 @@ module dvdApp {
         $routeProvider
           .when('/', {
             templateUrl: 'views/main.html',
-            controller: dvdApp.Controllers.MoviesCtrl,
+            controller: dvdApp.Controllers.MoviesController,
             controllerAs: 'controller'
           })
           .otherwise({
