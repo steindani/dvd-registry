@@ -1,6 +1,8 @@
 import tmdbsimple as tmdb
 from requests.exceptions import HTTPError
 
+''' TMDB lib: https://github.com/celiao/tmdbsimple '''
+
 class TMDBHelper( object ):
     _API_KEY = '13ed7e5e07699386ba2c32a52aed7ae6'
     
