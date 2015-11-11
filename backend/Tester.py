@@ -31,18 +31,27 @@ dbc.add_movie( moviebase )
 medium.user = user
 dbc.add_medium( medium )
 
+medium2 = Medium(name = "World")
+medium2.user = user
+
+dbc.add_medium(medium2)
+
 ownertrip = OwnershipTriplet( user, moviebase, medium )
 dbc.add_ownertriplet( ownertrip )
 
-print( dbc.get_users()[0].googleid )
-print( dbc.get_users()[0].triplet[0].movie.title )
-print( dbc.get_user_by_googleid( 12 ).id )
+res = dbc.get_movie_by_id(1)
+print(res.extra.genres[0].name)
 
-m = dbc.get_movie_by_id( 1 )
+#print( dbc.get_users()[0].googleid )
+#print(dbc.get_user_with_media_by_googleid(12).media[0].name)
+#print( dbc.get_users()[0].triplet[0].movie.title )
+#print( dbc.get_user_by_googleid( 12 ).id )
 
-print( m.title )
-print( m.extra.genres[0].name )
-print( m.extra.cast[0].name )
+#m = dbc.get_movie_by_id( 1 )
+
+#print( m.title )
+#print( m.extra.genres[0].name )
+#print( m.extra.cast[0].name )
 
 
 ''' TODO: eager loading helyett megcsinalni,hogy querykre legyen csak eager loading, hogy amikor a usert keressuk, akkor ne szedje le az egesz adatbazist! 

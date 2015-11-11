@@ -14,5 +14,5 @@ class User( Base ):
     id = Column( Integer, Sequence( 'user_id_seq' ), primary_key = True )
     googleid = Column( String )
     
-    triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet', lazy = 'joined' )
-    media = relationship( 'db.entities.medium.Medium', lazy = 'joined' )
+    triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet' )
+    media = relationship( 'db.entities.medium.Medium' )

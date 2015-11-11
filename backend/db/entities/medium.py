@@ -14,7 +14,7 @@ class Medium( Base ):
     id = Column( Integer, Sequence( 'medium_id_seq' ), primary_key = True )
     name = Column( String )
     
-    triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet', lazy = 'joined' )
+    triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet' )
     
     user_id = Column( Integer, ForeignKey( 'users.id' ) )
-    user = relationship( 'db.entities.user.User', uselist = False, lazy = 'joined' )
+    user = relationship( 'db.entities.user.User', uselist = False )

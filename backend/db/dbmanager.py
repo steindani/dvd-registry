@@ -107,20 +107,30 @@ class DBManager( object ):
     
     '''GETTER METHODS BY QUERY'''
     
-    def get_medium_by_userid( self, userid ):
-        _session_creator = self.create_session()
-        _session = _session_creator()
-        
-        result = _session.query( Medium ).filter_by( user_id = userid ).first()
-        _session_creator.remove()
-        
-        return result
-    
-    def get_user_by_googleid( self, googleid ):
+    def get_user_with_media_by_googleid( self, googleid ):
         _session_creator = self.create_session()
         _session = _session_creator()
         
         result = _session.query( User ).filter_by( googleid = googleid ).first()
+        result.media
+        _session_creator.remove()
+        
+        return result
+    
+    def get_user_only_by_googleid( self, googleid ):
+        _session_creator = self.create_session()
+        _session = _session_creator()
+        
+        result = _session.query( User ).filter_by( googleid = googleid ).first()
+        _session_creator.remove()
+        
+        return result
+    
+    def get_movie_base_only_by_id( self, movieid ):
+        _session_creator = self.create_session()
+        _session = _session_creator()
+        
+        result = _session.query( MovieBase ).filter_by( id = movieid ).first()
         _session_creator.remove()
         
         return result
@@ -130,6 +140,9 @@ class DBManager( object ):
         _session = _session_creator()
         
         result = _session.query( MovieBase ).filter_by( id = movieid ).first()
+        result.extra
+        result.extra.genres
+        result.extra.cast
         _session_creator.remove()
         
         return result

@@ -14,8 +14,8 @@ class MovieBase( Base ):
     title = Column( String )
     cover = Column( String )
     
-    triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet', uselist = False, lazy = 'joined' )
-    extra = relationship( 'db.entities.movie.MovieExtra', uselist = False, lazy = 'joined' )
+    triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet', uselist = False )
+    extra = relationship( 'db.entities.movie.MovieExtra', uselist = False )
     
 class MovieExtra( Base ):
     __tablename__ = 'moviesextra'
@@ -27,6 +27,6 @@ class MovieExtra( Base ):
     
     moviebase_id = Column( Integer, ForeignKey( 'movies.id' ) )
     
-    cast = relationship( 'db.entities.person.Person', lazy = 'joined' )
-    genres = relationship( 'db.entities.genre.Genre', lazy = 'joined' )
+    cast = relationship( 'db.entities.person.Person' )
+    genres = relationship( 'db.entities.genre.Genre' )
 

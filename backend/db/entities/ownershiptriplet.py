@@ -19,9 +19,9 @@ class OwnershipTriplet( Base ):
  
     UniqueConstraint( 'user_id', 'movie_id', 'medium_id' )
 
-    user = relationship( 'db.entities.user.User', uselist = False, lazy = 'joined' )
-    movie = relationship( 'db.entities.movie.MovieBase', uselist = False, lazy = 'joined' )
-    medium = relationship( 'db.entities.medium.Medium', uselist = False, lazy = 'joined' )
+    user = relationship( 'db.entities.user.User', uselist = False )
+    movie = relationship( 'db.entities.movie.MovieBase', uselist = False )
+    medium = relationship( 'db.entities.medium.Medium', uselist = False )
  
     def __init__( self, user, movie, medium ):
         self.user = user
