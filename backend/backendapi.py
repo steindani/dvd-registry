@@ -143,7 +143,9 @@ def get_movie( movie_id ):
     TODO authentikacio, hogy a user be van-e jelentkezve
     TODO hibakezeles
     '''
-    movie = dbc.get_movie_by_id( movie_id )
+    
+    googleid = str( request.cookies.get( 'googleid' ) )
+    movie = dbc.get_movie_by_id_and_by_googleid( movie_id, googleid )
     
     result = {}
     if not ( movie is None ):

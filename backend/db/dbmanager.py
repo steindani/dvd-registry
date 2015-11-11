@@ -114,34 +114,20 @@ class DBManager( object ):
         
         return user
     
-    
-    def get_movie_base_only_by_id( self, movieid ):
+    def get_movie_by_id_and_by_googleid( self, movieid, googleid ):
         # create session
         _session_creator = self.create_session()
         _session = _session_creator()
         
         # fetch result
-        movie_base = _session.query( MovieBase ).filter_by( id = movieid ).first()
+        user_ownertriplet_moviebase_tuple = _session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == googleid ).filter( MovieBase.id == movieid ).first()
+        movie = user_ownertriplet_moviebase_tuple[2]
+        movie.triplet.medium
+        movie.extra
+        movie.extra.cast
+        movie.extra.genres
         
         # remove session
         _session_creator.remove()
         
-        return movie_base
-    
-    
-    def get_movie_by_id( self, movieid ):
-        # create session
-        _session_creator = self.create_session()
-        _session = _session_creator()
-        
-        # fetch result
-        movie_base = _session.query( MovieBase ).filter_by( id = movieid ).first()
-        movie_base.triplet.medium
-        movie_base.extra
-        movie_base.extra.genres
-        movie_base.extra.cast
-        
-        # remove session
-        _session_creator.remove()
-        
-        return movie_base
+        return movie
