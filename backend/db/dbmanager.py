@@ -65,45 +65,6 @@ class DBManager( object ):
    
     def add_ownertriplet( self, ownertriplet ):
         self._add_object( ownertriplet )
-        
-    '''GETTER METHODS'''
-        
-    def get_media( self ):
-        _session_creator = self.create_session()
-        _session = _session_creator()
-        
-        result = _session.query( Medium ).all()
-        _session_creator.remove()
-        
-        return result
-    
-    def get_users( self ):
-        _session_creator = self.create_session()
-        _session = _session_creator()
-        
-        result = _session.query( User ).all()
-        _session_creator.remove()
-        
-        return result
-        
-    def get_ownertriplet( self ):
-        _session_creator = self.create_session()
-        _session = _session_creator()
-        
-        result = _session.query( OwnershipTriplet ).all()
-        _session_creator.remove()
-        
-        return result
-    
-    def get_movies( self ):
-        _session_creator = self.create_session()
-        _session = _session_creator()
-        
-        result = _session.query( Movie ).all()
-        _session_creator.remove()
-        
-        return result
-    
     
     '''GETTER METHODS BY QUERY'''
     
