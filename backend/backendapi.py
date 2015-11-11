@@ -25,7 +25,6 @@ genre = Genre( name = "Action" )
 moviebase = MovieBase( title = "Bronze", cover = "http://waaa" )
 movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
 
-moviebase.tmdb_id = 1
 moviebase.extra = movieextra
 
 movieextra.genres.append( genre )
@@ -38,6 +37,14 @@ dbc.add_medium( medium )
 
 ownertrip = OwnershipTriplet( user, moviebase, medium )
 dbc.add_ownertriplet( ownertrip )
+
+basetwo = MovieBase( title = "silver", cover = "http://silvertwo" )
+basetwoextra = MovieExtra( year = 1928, plot = "BLOBLOBLOB", trailer = "http://wiasjdi" )
+basetwo.extra = basetwoextra
+ownertriptwo = OwnershipTriplet( user, basetwo, medium )
+dbc.add_ownertriplet( ownertriptwo )
+
+
 # # DEBUG
 
 @app.route( '/login', methods = ['POST'] )
@@ -56,6 +63,9 @@ def add_medium():
        “name”: “The Fifth Element”, 
         “location”: “WD HDD”, 
     }
+    
+    TODO authentikacio, hogy a user be van-e jelentkezve
+    TODO hibakezeles
     '''
     pass
 
@@ -81,6 +91,9 @@ def search_tmdb():
             "https://image.tmdb.org/t/p/w185/zaFa1NRZEnFgRTv5OVXkNIZO78O.jpg", 
         } 
     } 
+    
+    TODO authentikacio, hogy a user be van-e jelentkezve
+    TODO hibakezeles
     '''
     fragment = str( request.json['fragment'] )
     result = tmdb.getFirstFiveResults( fragment )
@@ -100,11 +113,16 @@ def get_movies():
             } 
         ] 
     } 
+    
+    TODO authentikacio, hogy a user be van-e jelentkezve
+    TODO hibakezeles
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
+    
     user = dbc.get_user_by_googleid( googleid )
     result = [{"movie_id": triple.movie.id, "title": triple.movie.title, "cover": triple.movie.cover} for triple in user.triplet]
+    
     return jsonify( movies = result )
 
 @app.route( '/movie/<int:movie_id>', methods = ['GET'] )
@@ -121,8 +139,24 @@ def get_movie( movie_id ):
         backdrop_path: “backdrop URL”, 
         medium: “iStore” 
     } 
+    
+    TODO authentikacio, hogy a user be van-e jelentkezve
+    TODO hibakezeles
     '''
-    pass
+    movie = dbc.get_movie_by_id( movie_id )
+    
+    result = {}
+    if not ( movie is None ):
+        result['title'] = movie.title
+        result['year'] = movie.extra.year
+        result['genres'] = [genre.name for genre in movie.extra.genres]
+        result['actors'] = [actor.name for actor in movie.extra.cast]
+        result['plot'] = movie.extra.plot
+        result['trailer'] = movie.extra.trailer
+        result['backdrop_path'] = movie.cover
+        result['medium'] = movie.triplet.medium.name
+    
+    return jsonify( result )
 
 @app.route( '/random', methods = ['GET'] )
 def get_random_movie():
@@ -137,6 +171,9 @@ def get_random_movie():
             } 
         ] 
      } 
+    
+    TODO authentikacio, hogy a user be van-e jelentkezve
+    TODO hibakezeles
     '''
     pass
 
