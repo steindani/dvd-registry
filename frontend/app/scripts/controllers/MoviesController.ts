@@ -58,6 +58,16 @@ module dvdApp.Controllers {
                     scope: childScope
                 });
             }
+            
+            $scope.newMovieModal = function() {
+
+                ngDialog.open({
+                    className: 'ngdialog-theme-dvd',
+                    template: 'views/newMovieModal.html',
+                    plain: false,
+                    controller: dvdApp.Controllers.NewMovieController
+                });
+            }
         }
     }
 
@@ -70,5 +80,6 @@ module dvdApp.Controllers {
         recommendations: any;
 
         showDetails: (id: string) => void;
+        newMovieModal: () => void;
     }
 }

@@ -50,6 +50,21 @@ h3 {
     margin: 0 auto;
     justify-content: center;
   }
+  
+  .dvd-fab {
+    position: fixed;
+    right: 3vw;
+    bottom: 5vw;
+    z-index: 3;
+    background: #ad1457;
+    padding: 36px;
+    
+    &:hover,
+    &:focus,
+    &:active {
+      background: lighten($color: #ad1457, $amount: 10)
+    }
+  }
 }
 
 .dvd-card-image {
@@ -145,3 +160,4 @@ h3 {
     background-color: #880e4f;
   }
 }
+

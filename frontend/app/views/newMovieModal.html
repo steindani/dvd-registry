@@ -1,0 +1,15 @@
+<div class="dvd-details-container mdl-card mdl-shadow--2dp">
+  <h2>Add new movie</h2>
+  <input ng-model="enteredTitle" ng-change="titleChanged()"/>
+  <ul>
+    <li ng-repeat="m in possibleMovies" ng-click="alert(m.id)" class="animated fadeIn">{{m.title}}</li>
+  </ul>
+  <div class="dvd-details-content">
+    <div class="dvd-column dvd-column-left">
+      <h3>Story</h3>
+      <p>Maecenas tempor vehicula lacinia condimentum parturient purus a suspendisse cubilia vehicula quam etiam torquent aliquet parturient eros suspendisse a dolor elementum cum tristique platea.Fringilla a litora metus nisi adipiscing ac morbi porta adipiscing curabitur ut vestibulum auctor vestibulum cum adipiscing ac nec fringilla luctus elit habitant. A adipiscing.</p>
+    </div>
+    
+    <div class="clear" />
+  </div>
+</div>
