@@ -35,6 +35,7 @@ ownertrip = OwnershipTriplet( user, moviebase, medium )
 dbc.add_ownertriplet( ownertrip )
 
 print( dbc.get_users()[0].googleid )
+print( dbc.get_users()[0].triplet[0].movie.title )
 print( dbc.get_user_by_googleid( 12 ).id )
 
 m = dbc.get_movie_by_id( 1 )
