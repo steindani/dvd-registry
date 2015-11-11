@@ -120,10 +120,10 @@ def get_movies():
     
     googleid = str( request.cookies.get( 'googleid' ) )
     
-    user = dbc.get_user_by_googleid( googleid )
-    result = [{"movie_id": triple.movie.id, "title": triple.movie.title, "cover": triple.movie.cover} for triple in user.triplet]
+    user = dbc.get_movie_bases_by_googleid( googleid )
+    movie_bases = [{"movie_id": triple.movie.id, "title": triple.movie.title, "cover": triple.movie.cover} for triple in user.triplet]
     
-    return jsonify( movies = result )
+    return jsonify( movies = movie_bases )
 
 @app.route( '/movie/<int:movie_id>', methods = ['GET'] )
 def get_movie( movie_id ):

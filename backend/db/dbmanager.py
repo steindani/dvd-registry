@@ -43,15 +43,17 @@ class DBManager( object ):
     '''ADDER METHODS'''
     
     def _add_object( self, obj ):
+        # create session
         _session_creator = self.create_session()
         _session = _session_creator()
         
+        # insert and commit
         _session.add( obj )
-        
         _session.flush()
         _session.refresh( obj )
         _session.commit()
         
+        # remove session
         _session_creator.remove()
     
     def add_user( self, user ):
@@ -69,41 +71,77 @@ class DBManager( object ):
     '''GETTER METHODS BY QUERY'''
     
     def get_user_with_media_by_googleid( self, googleid ):
+        # create session
         _session_creator = self.create_session()
         _session = _session_creator()
         
-        result = _session.query( User ).filter_by( googleid = googleid ).first()
-        result.media
+        # fetch result
+        user = _session.query( User ).filter_by( googleid = googleid ).first()
+        user.media
+        
+        # remove session
         _session_creator.remove()
         
-        return result
+        return user
+    
     
     def get_user_only_by_googleid( self, googleid ):
+        # create session
         _session_creator = self.create_session()
         _session = _session_creator()
         
-        result = _session.query( User ).filter_by( googleid = googleid ).first()
+        # fetch result
+        user = _session.query( User ).filter_by( googleid = googleid ).first()
+        
+        # remove session
         _session_creator.remove()
         
-        return result
+        return user
+    
+    
+    def get_movie_bases_by_googleid( self, googleid ):
+        # create session
+        _session_creator = self.create_session()
+        _session = _session_creator()
+        
+        # fetch result
+        user = _session.query( User ).filter_by( googleid = googleid ).first()
+        for triplet in user.triplet:
+            triplet.movie
+            
+        # remove session
+        _session_creator.remove()
+        
+        return user
+    
     
     def get_movie_base_only_by_id( self, movieid ):
+        # create session
         _session_creator = self.create_session()
         _session = _session_creator()
         
-        result = _session.query( MovieBase ).filter_by( id = movieid ).first()
+        # fetch result
+        movie_base = _session.query( MovieBase ).filter_by( id = movieid ).first()
+        
+        # remove session
         _session_creator.remove()
         
-        return result
+        return movie_base
+    
     
     def get_movie_by_id( self, movieid ):
+        # create session
         _session_creator = self.create_session()
         _session = _session_creator()
         
-        result = _session.query( MovieBase ).filter_by( id = movieid ).first()
-        result.extra
-        result.extra.genres
-        result.extra.cast
+        # fetch result
+        movie_base = _session.query( MovieBase ).filter_by( id = movieid ).first()
+        movie_base.triplet.medium
+        movie_base.extra
+        movie_base.extra.genres
+        movie_base.extra.cast
+        
+        # remove session
         _session_creator.remove()
         
-        return result
+        return movie_base
