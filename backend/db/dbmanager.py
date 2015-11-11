@@ -1,13 +1,13 @@
 '''
 @author: benedekh
 '''
-from db.entities.Base import Base
-from db.entities.Genre import Genre
-from db.entities.Medium import Medium
-from db.entities.Movie import MovieBase, MovieExtra
-from db.entities.OwnershipTriplet import OwnershipTriplet
-from db.entities.Person import Person
-from db.entities.User import User
+from db.entities.base import Base
+from db.entities.genre import Genre
+from db.entities.medium import Medium
+from db.entities.movie import MovieBase, MovieExtra
+from db.entities.ownershiptriplet import OwnershipTriplet
+from db.entities.person import Person
+from db.entities.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 

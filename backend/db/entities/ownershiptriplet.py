@@ -2,9 +2,9 @@
 @author: benedekh
 '''
  
-from db.entities.Base import Base
-from db.entities.User import User
-from db.entities.Movie import MovieBase
+from db.entities.base import Base
+from db.entities.user import User
+from db.entities.movie import MovieBase
 
 from sqlalchemy import Column, ForeignKey, Integer, Sequence, String, Table, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
@@ -19,9 +19,9 @@ class OwnershipTriplet( Base ):
  
     UniqueConstraint( 'user_id', 'movie_id', 'medium_id' )
 
-    user = relationship( 'db.entities.User.User', uselist = False, lazy = 'joined' )
-    movie = relationship( 'db.entities.Movie.MovieBase', uselist = False, lazy = 'joined' )
-    medium = relationship( 'db.entities.Medium.Medium', uselist = False, lazy = 'joined' )
+    user = relationship( 'db.entities.user.User', uselist = False, lazy = 'joined' )
+    movie = relationship( 'db.entities.movie.MovieBase', uselist = False, lazy = 'joined' )
+    medium = relationship( 'db.entities.medium.Medium', uselist = False, lazy = 'joined' )
  
     def __init__( self, user, movie, medium ):
         self.user = user
