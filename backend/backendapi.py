@@ -9,7 +9,10 @@ from db.entities.ownershiptriplet import OwnershipTriplet
 from db.entities.person import Person
 from db.entities.user import User
 
+from flask.ext.cors import CORS
+
 app = Flask( __name__ )
+CORS(app)
 
 dbc = DBManager()
 dbc.init_db()
@@ -182,4 +185,4 @@ def get_random_movie():
     pass
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug = True)
