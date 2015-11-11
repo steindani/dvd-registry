@@ -142,6 +142,8 @@ def get_movie( movie_id ):
     
     TODO authentikacio, hogy a user be van-e jelentkezve
     TODO hibakezeles
+    
+    TODO frissíteni, hogy a movie extrát mikor kérték le, ezt átvezetni az adatbázisba, létrehozni egy új oszlopot neki.
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )

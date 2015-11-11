@@ -131,3 +131,15 @@ class DBManager( object ):
         _session_creator.remove()
         
         return movie
+
+
+    ''' UPDATE METHODS '''
+    ''' TODO: film hozzáférés (moviebase.extra) eltárolása az aktuális dátumot, amikor lekértük az adott movie_extrát
+        TODO: felhasználóhoz hozzávenni, hogy mikor jelentkezett be utoljára, ha nincsen belépve akkor 0000 legyen a dátum helyette (vagy helyette egy kijeleentkezés dátumot)
+        TODO: felhasználóhoz a legutolsó bejeletnkezést átírni 0000-ra, ha kijelentkezett (vagy helyette egy kijelenektezési dátumot)
+        TODO: a felhasználó bejelentkezettségét le lehessen kérdezni egy get metódussal, ami visszaadja, a legutolsó bejelentkezés dátumát (vagy helyette egy kijelentkezési dátumot és az alapján megnézni, hogy ő most be van-e lépve)
+        TODO: film hozzáadásának folyamatát végiggondolni, mit kell visszaadni a JS-nek, mit nem adunk már vissza neki, mi az amit nekünk kell most még eközben megcsinálnunk szerveroldalon (hogyan kapom vissza az adatokat kliensoldalró, hogy most akkor mit választott a felhasználó, hogymit ad hozzá az adatbázishoz)
+        TODO: minden hívásnál megvizsgálni, hogy a user be van-e jelentkezve, mert ha nincsen, akkor 403-at (access denied-ot) visszaküldeni
+        TODO: google atuhentikációt integrálni ehhez
+        TODO: https-et integrálni az egészhez, megnézni hogy a flask tudja-e (kell-e tudnia)
+     '''
