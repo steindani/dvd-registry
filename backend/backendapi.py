@@ -1,6 +1,13 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+from db.dbmanager import DBManager
+from tmdb.tmdbhelper import TMDBHelper
 
-app = Flask()
+app = Flask( __name__ )
+
+dbc = DBManager()
+dbc.init_db()
+
+tmdb = TMDBHelper()
 
 @app.route( '/login', methods = ['POST'] )
 def login():
@@ -21,7 +28,7 @@ def add_medium():
     '''
     pass
 
-@app.route( '/helper/search', methods = ['GET'] )
+@app.route( '/helper/search', methods = ['POST'] )
 def search_tmdb():
     '''
     GET /helper/search 
@@ -44,7 +51,10 @@ def search_tmdb():
         } 
     } 
     '''
-    pass
+    fragment = str( request.json['fragment'] )
+    result = tmdb.getFirstFiveResults( fragment )
+    return jsonify( result )
+    
 
 @app.route( '/movies', methods = ['GET'] )
 def get_movies():
