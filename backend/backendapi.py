@@ -1,6 +1,4 @@
-from flask import Flask, request, jsonify
 from db.dbmanager import DBManager
-from tmdb.tmdbhelper import TMDBHelper
 from db.entities.base import Base
 from db.entities.genre import Genre
 from db.entities.medium import Medium
@@ -8,8 +6,11 @@ from db.entities.movie import MovieBase, MovieExtra
 from db.entities.ownershiptriplet import OwnershipTriplet
 from db.entities.person import Person
 from db.entities.user import User
+from flask import Flask, request, jsonify
 
 from flask.ext.cors import CORS
+from tmdb.tmdbhelper import TMDBHelper
+
 
 app = Flask( __name__ )
 CORS( app )
@@ -20,7 +21,7 @@ dbc.init_db()
 tmdb = TMDBHelper()
 
 
-# # DEBUG
+# # TEST DATA
 medium = Medium( name = "Hello" )
 person = Person( name = "John Doe" )
 user = User( googleid = 12 )
@@ -47,8 +48,7 @@ basetwo.extra = basetwoextra
 ownertriptwo = OwnershipTriplet( user, basetwo, medium )
 dbc.add_ownertriplet( ownertriptwo )
 
-
-# # DEBUG
+# # TEST DATA
 
 @app.route( '/login', methods = ['POST'] )
 def login():
@@ -118,12 +118,14 @@ def get_movies():
     } 
     
     TODO authentikacio, hogy a user be van-e jelentkezve
-    TODO hibakezeles
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
     user = dbc.get_movie_bases_by_googleid( googleid )
-    movie_bases = [{"movie_id": triple.movie.id, "title": triple.movie.title, "cover": triple.movie.cover} for triple in user.triplet]
+    movie_bases = []
+    
+    if user is not None:
+        movie_bases = [{"movie_id": triple.movie.id, "title": triple.movie.title, "cover": triple.movie.cover} for triple in user.triplet]
     
     return jsonify( movies = movie_bases )
 
@@ -143,14 +145,13 @@ def get_movie( movie_id ):
     } 
     
     TODO authentikacio, hogy a user be van-e jelentkezve
-    TODO hibakezeles
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
     movie = dbc.get_movie_by_id_and_by_googleid( movie_id, googleid )
     
     result = {}
-    if not ( movie is None ):
+    if movie is not None:
         result['title'] = movie.title
         result['year'] = movie.extra.year
         result['genres'] = [genre.name for genre in movie.extra.genres]

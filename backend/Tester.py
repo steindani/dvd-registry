@@ -58,6 +58,12 @@ res = dbc.get_movie_by_id_and_by_googleid( 1, 12 )
 print( res.extra.last_access )
 print( datetime.now() - res.extra.last_access )
 
+res = dbc.get_movie_bases_by_googleid(12)
+print(res.triplet[0].movie.title)
+print(res.triplet[1].movie.title)
+
+print(dbc.get_movie_by_id_and_by_googleid( 102, 12 ))
+
 # print( dbc.get_users()[0].googleid )
 # print(dbc.get_user_with_media_by_googleid(12).media[0].name)
 # print( dbc.get_users()[0].triplet[0].movie.title )
@@ -68,8 +74,3 @@ print( datetime.now() - res.extra.last_access )
 # print( m.title )
 # print( m.extra.genres[0].name )
 # print( m.extra.cast[0].name )
-
-
-''' TODO: eager loading helyett megcsinalni,hogy querykre legyen csak eager loading, hogy amikor a usert keressuk, akkor ne szedje le az egesz adatbazist! 
-AZAZ: lazy = 'joined' helyett lazy  = 'dynamic' - et irni a relationshipnel
- '''

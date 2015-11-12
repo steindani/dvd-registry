@@ -82,7 +82,8 @@ class DBManager( object ):
         
         # fetch result
         user = session.query( User ).filter_by( googleid = googleid ).first()
-        user.media
+        if user is not None:
+            user.media
         
         # remove session
         session_creator.remove()
@@ -111,8 +112,9 @@ class DBManager( object ):
         
         # fetch result
         user = session.query( User ).filter_by( googleid = googleid ).first()
-        for triplet in user.triplet:
-            triplet.movie
+        if user is not None:
+            for triplet in user.triplet:
+                triplet.movie
             
         # remove session
         session_creator.remove()
@@ -126,21 +128,29 @@ class DBManager( object ):
         
         # fetch result
         user_ownertriplet_moviebase_tuple = session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == googleid ).filter( MovieBase.id == movieid ).first()
-        movie = user_ownertriplet_moviebase_tuple[2]
         
-        # update last access time for movie
-        self.update_movie_last_access( movie.extra, session )
+        if user_ownertriplet_moviebase_tuple is None:
+            # remove session
+            session_creator.remove()
+            return user_ownertriplet_moviebase_tuple
         
-        # load required data
-        movie.triplet.medium
-        movie.extra
-        movie.extra.cast
-        movie.extra.genres
+        else:
+            movie = user_ownertriplet_moviebase_tuple[2]
         
-        # remove session
-        session_creator.remove()
+            # update last access time for movie
+            self.update_movie_last_access( movie.extra, session )
+            
+            # load required data
+            movie.triplet.medium
+            movie.extra
+            movie.extra.cast
+            movie.extra.genres
+           
+            # remove session
+            session_creator.remove()
+            
+            return movie
         
-        return movie
 
     ''' UPDATE METHODS '''
 
