@@ -77,59 +77,59 @@ class DBManager( object ):
     
     def get_user_with_media_by_googleid( self, googleid ):
         # create session
-        _session_creator = self.create_session()
-        _session = _session_creator()
+        session_creator = self.create_session()
+        session = session_creator()
         
         # fetch result
-        user = _session.query( User ).filter_by( googleid = googleid ).first()
+        user = session.query( User ).filter_by( googleid = googleid ).first()
         user.media
         
         # remove session
-        _session_creator.remove()
+        session_creator.remove()
         
         return user
     
     
     def get_user_only_by_googleid( self, googleid ):
         # create session
-        _session_creator = self.create_session()
-        _session = _session_creator()
+        session_creator = self.create_session()
+        session = session_creator()
         
         # fetch result
-        user = _session.query( User ).filter_by( googleid = googleid ).first()
+        user = session.query( User ).filter_by( googleid = googleid ).first()
         
         # remove session
-        _session_creator.remove()
+        session_creator.remove()
         
         return user
     
     
     def get_movie_bases_by_googleid( self, googleid ):
         # create session
-        _session_creator = self.create_session()
-        _session = _session_creator()
+        session_creator = self.create_session()
+        session = session_creator()
         
         # fetch result
-        user = _session.query( User ).filter_by( googleid = googleid ).first()
+        user = session.query( User ).filter_by( googleid = googleid ).first()
         for triplet in user.triplet:
             triplet.movie
             
         # remove session
-        _session_creator.remove()
+        session_creator.remove()
         
         return user
     
     def get_movie_by_id_and_by_googleid( self, movieid, googleid ):
         # create session
-        _session_creator = self.create_session()
-        _session = _session_creator()
+        session_creator = self.create_session()
+        session = session_creator()
         
         # fetch result
-        user_ownertriplet_moviebase_tuple = _session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == googleid ).filter( MovieBase.id == movieid ).first()
+        user_ownertriplet_moviebase_tuple = session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == googleid ).filter( MovieBase.id == movieid ).first()
         movie = user_ownertriplet_moviebase_tuple[2]
         
         # update last access time for movie
-        self.update_movie_last_access( movie.extra, _session )
+        self.update_movie_last_access( movie.extra, session )
         
         # load required data
         movie.triplet.medium
@@ -138,7 +138,7 @@ class DBManager( object ):
         movie.extra.genres
         
         # remove session
-        _session_creator.remove()
+        session_creator.remove()
         
         return movie
 
