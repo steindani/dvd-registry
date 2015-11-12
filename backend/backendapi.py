@@ -96,10 +96,15 @@ def search_tmdb():
     } 
     
     TODO authentikacio, hogy a user be van-e jelentkezve
-    TODO hibakezeles
     '''
-    fragment = str( request.json['fragment'] )
-    result = tmdb.getFirstFiveResults( fragment )
+    result = {}
+    try:
+        if request.json is None:
+            raise KeyError()
+        fragment = str( request.json['fragment'] )
+        result = tmdb.getFirstFiveResults( fragment )
+    except KeyError:
+        pass
     return jsonify( result )
     
 
