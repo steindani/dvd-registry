@@ -6,7 +6,7 @@ from db.entities.movie import MovieBase, MovieExtra
 from db.entities.ownershiptriplet import OwnershipTriplet
 from db.entities.person import Person
 from db.entities.user import User
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 
 from flask.ext.cors import CORS
 from tmdb.tmdbhelper import TMDBHelper
@@ -126,6 +126,9 @@ def get_movies():
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
+    if googleid == 'None':
+        abort( 403 )
+        
     user = dbc.get_movie_bases_by_googleid( googleid )
     movie_bases = []
     
@@ -153,6 +156,9 @@ def get_movie( movie_id ):
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
+    if googleid == 'None':
+        abort( 403 )
+        
     movie = dbc.get_movie_by_id_and_by_googleid( movie_id, googleid )
     
     result = {}
