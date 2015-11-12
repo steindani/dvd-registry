@@ -9,6 +9,7 @@ from db.entities.movie import MovieBase, MovieExtra
 from db.entities.ownershiptriplet import OwnershipTriplet
 from db.entities.person import Person
 from db.entities.user import User
+from datetime import datetime
 
 
 dbc = DBManager()
@@ -25,6 +26,8 @@ moviebase.extra = movieextra
 
 movieextra.genres.append( genre )
 movieextra.cast.append( person )
+movieextra.last_access = datetime.now()
+print( movieextra.last_access )
 
 dbc.add_movie( moviebase )
 
@@ -52,7 +55,8 @@ dbc.add_ownertriplet( ownertriptwo )
 # print(res.extra.genres[0].name)
 
 res = dbc.get_movie_by_id_and_by_googleid( 1, 12 )
-print( res.extra.year )
+print( res.extra.last_access )
+print( datetime.now() - res.extra.last_access )
 
 # print( dbc.get_users()[0].googleid )
 # print(dbc.get_user_with_media_by_googleid(12).media[0].name)

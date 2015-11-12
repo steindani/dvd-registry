@@ -3,7 +3,7 @@
 '''
 
 from db.entities.base import Base
-from sqlalchemy import Column, ForeignKey, Integer, Sequence, String, Table
+from sqlalchemy import Column, ForeignKey, Integer, Sequence, String, Table, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
@@ -24,6 +24,7 @@ class MovieExtra( Base ):
     year = Column( Integer )
     plot = Column( String )
     trailer = Column( String )
+    last_access = Column( DateTime )
     
     moviebase_id = Column( Integer, ForeignKey( 'movies.id' ) )
     

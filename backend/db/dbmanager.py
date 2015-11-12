@@ -10,6 +10,7 @@ from db.entities.person import Person
 from db.entities.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from datetime import datetime
 
 
 class DBManager( object ):
@@ -42,10 +43,13 @@ class DBManager( object ):
     
     '''ADDER METHODS'''
     
-    def _add_object( self, obj ):
+    def _add_object( self, obj, session = None ):
         # create session
-        _session_creator = self.create_session()
-        _session = _session_creator()
+        if not session:
+            _session_creator = self.create_session()
+            _session = _session_creator()
+        else:
+            _session = session
         
         # insert and commit
         _session.add( obj )
@@ -54,7 +58,8 @@ class DBManager( object ):
         _session.commit()
         
         # remove session
-        _session_creator.remove()
+        if not session:
+            _session_creator.remove()
     
     def add_user( self, user ):
         self._add_object( user )
@@ -122,6 +127,11 @@ class DBManager( object ):
         # fetch result
         user_ownertriplet_moviebase_tuple = _session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == googleid ).filter( MovieBase.id == movieid ).first()
         movie = user_ownertriplet_moviebase_tuple[2]
+        
+        # update last access time for movie
+        self.update_movie_last_access( movie.extra, _session )
+        
+        # load required data
         movie.triplet.medium
         movie.extra
         movie.extra.cast
@@ -132,10 +142,14 @@ class DBManager( object ):
         
         return movie
 
+    ''' UPDATE METHODS '''
+
+    def update_movie_last_access( self, movie_extra_obj, session ):
+        movie_extra_obj.last_access = datetime.now()
+        self._add_object( movie_extra_obj, session )
 
     ''' UPDATE METHODS '''
-    ''' TODO: film hozzáférés (moviebase.extra) eltárolása az aktuális dátumot, amikor lekértük az adott movie_extrát
-        TODO: felhasználóhoz hozzávenni, hogy mikor jelentkezett be utoljára, ha nincsen belépve akkor 0000 legyen a dátum helyette (vagy helyette egy kijeleentkezés dátumot)
+    ''' TODO: felhasználóhoz hozzávenni, hogy mikor jelentkezett be utoljára, ha nincsen belépve akkor 0000 legyen a dátum helyette (vagy helyette egy kijeleentkezés dátumot)
         TODO: felhasználóhoz a legutolsó bejeletnkezést átírni 0000-ra, ha kijelentkezett (vagy helyette egy kijelenektezési dátumot)
         TODO: a felhasználó bejelentkezettségét le lehessen kérdezni egy get metódussal, ami visszaadja, a legutolsó bejelentkezés dátumát (vagy helyette egy kijelentkezési dátumot és az alapján megnézni, hogy ő most be van-e lépve)
         TODO: film hozzáadásának folyamatát végiggondolni, mit kell visszaadni a JS-nek, mit nem adunk már vissza neki, mi az amit nekünk kell most még eközben megcsinálnunk szerveroldalon (hogyan kapom vissza az adatokat kliensoldalró, hogy most akkor mit választott a felhasználó, hogymit ad hozzá az adatbázishoz)
