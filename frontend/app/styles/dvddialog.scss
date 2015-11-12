@@ -1,0 +1,59 @@
+.dvd-details-container {
+	width: 100%;
+	z-index: 0;
+	margin-bottom: 200px;
+	
+	.dvd-details-header {
+		max-height: 30vw;
+		position: relative;
+		padding-bottom: 2em;
+		overflow: hidden;
+		
+		img.dvd-backdrop {
+			position: relative;
+			width: 100%;
+		}
+		
+		h2 {
+			position: absolute;
+			bottom: 0px;
+			margin: 24px;
+			z-index: 10;
+			color: whitesmoke;
+			
+			&::before {
+				content: "";
+				width: 200vw;
+				height: 350px;
+				position: absolute;
+				image-rendering: optimizeQuality;
+				transform-origin: 50% 50%;
+				z-index: -1;
+				transform: translateX(-50%) translateY(-10%) rotate(3deg);
+				background-color: rgba($color: #880e4f, $alpha: 0.7) ;
+				top: 0px;
+			}
+		}
+	}
+	
+	.dvd-details-content {
+		margin: 0px 24px;
+		
+		.dvd-column {
+			width: 47.5%
+		}
+		
+		.dvd-column-left {
+			float: left;
+		}
+		
+		.dvd-column-right {
+			float: right;
+		}
+		
+		.clear {
+			clear: both;
+		}
+	}
+	
+}

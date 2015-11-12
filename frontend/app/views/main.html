@@ -1,7 +1,6 @@
 <div class="dvd-reccomendation-breaker">
   <div class="dvd-recommendation-container mdl-grid">
-    <div class="dvd-card-image mdl-card mdl-shadow--2dp" ng-repeat="m in recommendations track by $index" ng-style="{ 'background': 'url({{m.cover}}) center / cover' }"
-    vibrant-color>
+    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in recommendations track by $index">
       <img class="cover-loader" style="display: hidden;" ng-src="{{m.cover}}" />
       <div class="mdl-card__title mdl-card--expand"></div>
       <div class="mdl-card__actions">
@@ -14,8 +13,11 @@
 <div class="dvd-container">
   <h2>Your Movies</h2>
   <div class="dvd-grid mdl-grid">
-    <div class="dvd-card-image mdl-card mdl-shadow--2dp" ng-repeat="m in movies track by $index" ng-style="{ 'background': 'url({{m.cover}}) center / cover' }"
-    vibrant-color>
+    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn"
+         ng-repeat="m in movies | filter: search track by $index"
+         ng-click="showDetails(m.id)"
+         >
+      <!--ng-style="{ 'background': 'url({{m.cover}}) center / cover' }"-->
       <img class="cover-loader" style="display: hidden;" ng-src="{{m.cover}}" />
       <div class="mdl-card__title mdl-card--expand"></div>
       <div class="mdl-card__actions">
@@ -23,4 +25,9 @@
       </div>
     </div>
   </div>
+  <button style="position: fixed; right: 3em; bottom: 3em; z-index: 3; background: rgb(173, 20, 87) none repeat scroll 0% 0%; padding: 36px;"
+  class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored dvd-fab"
+  ng-click="newMovieModal()">
+    <i class="material-icons">add</i>
+  </button>
 </div>

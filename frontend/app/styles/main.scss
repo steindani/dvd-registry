@@ -1,5 +1,10 @@
 @import "compass";
+
+$lato-font-path: '../bower_components/lato/font';
 @import "lato/scss/lato";
+
+@import "ngdialog";
+@import "dvddialog";
 
 body {
   font-family: Lato;
@@ -12,6 +17,15 @@ h2 {
   font-weight: 300;
   margin-bottom: 0px;
   margin-top: 5vh;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 48px;
+  font-family: Lato;
+  font-weight: 400;
+  margin-bottom: 0px;
+  margin-top: 2vh;
 }
 
 .dvd-ribbon {
@@ -35,6 +49,21 @@ h2 {
   .dvd-grid {
     margin: 0 auto;
     justify-content: center;
+  }
+  
+  .dvd-fab {
+    position: fixed;
+    right: 3vw;
+    bottom: 5vw;
+    z-index: 3;
+    background: #ad1457;
+    padding: 36px;
+    
+    &:hover,
+    &:focus,
+    &:active {
+      background: lighten($color: #ad1457, $amount: 10)
+    }
   }
 }
 
@@ -89,16 +118,21 @@ h2 {
 .dvd-reccomendation-breaker {
   position: relative;
   margin-top: 2vh;
+  width: 100%;
   
   .dvd-recommendation-container {
     margin: 0 auto;
     width: auto;
+    width: 100%;
     max-width: 900px;
     height: 300px;
-    padding-top: 15px;
-    padding-bottom: 35px;
+    padding-top: 18px;
+    padding-bottom: 32px;
     justify-content: center;
     overflow: hidden;
+    
+    transition-property: width;
+    transform-style: ease-in-out;
     
     .dvd-card-image {
       margin: 20px;
@@ -107,21 +141,23 @@ h2 {
   
   &::before, &::after {
     content: "";
-    width: 200%;
+    width: 200vw;
     height: 350px;
     position: absolute;
     image-rendering: optimizeQuality;
+    transform-origin: 50% 50%;
   } 
   
   &::before {
     z-index: -1;
-    transform: rotate(-2deg) translateX(-25%) translateY(-8%);
+    transform: translateX(-25%) rotate(-2deg);
     background-color: #ad1457;
   }
 
   &::after {
     z-index: -2;
-    transform: rotate(2deg) translateX(-25%) translateY(-100%);
+    transform: translateX(-23%) translateY(-100%) rotate(2deg);
     background-color: #880e4f;
   }
 }
+

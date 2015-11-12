@@ -10,6 +10,9 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css" />
     <link rel="stylesheet" href="bower_components/lato/css/lato.css" />
+    <link rel="stylesheet" href="bower_components/animate.css/animate.css" />
+    <link rel="stylesheet" href="bower_components/ng-dialog/css/ngDialog.css" />
+    <link rel="stylesheet" href="bower_components/ng-dialog/css/ngDialog-theme-default.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -31,8 +34,8 @@
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
               <i class="material-icons">search</i>
             </label>
-            <div class="mdl-textfield__expandable-holder">
-              <input class="mdl-textfield__input" type="text" id="search" />
+            <div class="mdl-textfield__expandable-holder" ng-init="search=''">
+              <input class="mdl-textfield__input" type="text" id="search" ng-model="search"/>
               <label class="mdl-textfield__label" for="search">Enter your query...</label>
             </div>
           </div>
@@ -52,18 +55,6 @@
       </footer>
     </div>
 
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script>
-
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -78,12 +69,14 @@
     <script src="bower_components/material-design-lite/material.min.js"></script>
     <script src="bower_components/vibrant/dist/Vibrant.js"></script>
     <script src="bower_components/waitForImages/src/jquery.waitforimages.js"></script>
+    <script src="bower_components/ng-dialog/js/ngDialog.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js scripts/scripts.js -->
         <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/MoviesCtrl.js"></script>
+        <script src="scripts/controllers/MoviesController.js"></script>
+        <script src="scripts/controllers/NewMovieController.js"></script>
         <script src="scripts/directives/VibrantColor.js"></script>
         <!-- endbuild -->
 </body>

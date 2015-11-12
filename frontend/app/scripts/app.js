@@ -10,6 +10,7 @@ var dvdApp;
         'ngRoute',
         'ngSanitize',
         'ngTouch',
+        'ngDialog',
         'dvdApp.Controllers',
         'dvdApp.Directives'
     ]);
@@ -17,12 +18,22 @@ var dvdApp;
         $routeProvider
             .when('/', {
             templateUrl: 'views/main.html',
-            controller: dvdApp.Controllers.MoviesCtrl,
+            controller: dvdApp.Controllers.MoviesController,
             controllerAs: 'controller'
         })
             .otherwise({
             redirectTo: '/'
         });
     });
+    app.config(["ngDialogProvider", function (ngDialogProvider) {
+            ngDialogProvider.setDefaults({
+                className: "ngdialog-theme-default",
+                plain: false,
+                showClose: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                appendTo: false
+            });
+        }]);
 })(dvdApp || (dvdApp = {}));
 //# sourceMappingURL=app.js.map
