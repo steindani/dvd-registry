@@ -90,7 +90,6 @@ class DBManager( object ):
         
         return user
     
-    
     def get_user_only_by_googleid( self, googleid ):
         # create session
         session_creator = self.create_session()
@@ -103,7 +102,6 @@ class DBManager( object ):
         session_creator.remove()
         
         return user
-    
     
     def get_movie_bases_by_googleid( self, googleid ):
         # create session
@@ -149,14 +147,46 @@ class DBManager( object ):
             # remove session
             session_creator.remove()
             
-            return movie
+        return movie
         
+    def get_user_login_time( self, googleid ):
+        login_time = None
+        
+        # fetch result
+        user = self.get_user_only_by_googleid( googleid )
+        if user is not None:
+            login_time = user.login_time
+        
+        return login_time
+    
+    def get_user_logout_time( self, googleid ):
+        logout_time = None
+        
+        # fetch result
+        user = self.get_user_only_by_googleid( googleid )
+        if user is not None:
+            logout_time = user.logout_time
+        
+        return logout_time
 
     ''' UPDATE METHODS '''
 
     def update_movie_last_access( self, movie_extra_obj, session ):
         movie_extra_obj.last_access = datetime.now()
         self._add_object( movie_extra_obj, session )
+        
+    def update_user_login_time( self, googleid ):
+        user = self.get_user_only_by_googleid( googleid )
+        if user is not None:
+            user.login_time = datetime.now()
+            self._add_object( user )
+        
+    def update_user_logout_time( self, googleid ):
+        user = self.get_user_only_by_googleid( googleid )
+        if user is not None:
+            user.logout_time = datetime.now()
+            self._add_object( user )
+    
 
     ''' UPDATE METHODS '''
     ''' TODO: felhasználóhoz hozzávenni, hogy mikor jelentkezett be utoljára, ha nincsen belépve akkor 0000 legyen a dátum helyette (vagy helyette egy kijeleentkezés dátumot)
