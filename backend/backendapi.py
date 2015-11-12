@@ -1,3 +1,4 @@
+from datetime import datetime
 from db.dbmanager import DBManager
 from db.entities.base import Base
 from db.entities.genre import Genre
@@ -25,6 +26,8 @@ tmdb = TMDBHelper()
 medium = Medium( name = "Hello" )
 person = Person( name = "John Doe" )
 user = User( googleid = 12 )
+user.login_time = datetime.now()
+user.logout_time = datetime.now()
 genre = Genre( name = "Action" )
 moviebase = MovieBase( title = "Bronze", cover = "http://waaa" )
 movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
@@ -50,14 +53,46 @@ dbc.add_ownertriplet( ownertriptwo )
 
 # # TEST DATA
 
+
 @app.route( '/login', methods = ['POST'] )
 def login():
-    pass
+    googleid = str( request.cookies.get( 'googleid' ) )
+    if googleid == 'None':  
+        abort( 400 )
+    
+    is_user_logged_in = dbc.is_user_logged_in( googleid )
+    if( is_user_logged_in ):
+        return jsonify()
+    else:
+        last_login = dbc.get_user_login_time( googleid )
+        last_logout = dbc.get_user_logout_time( googleid )
+          
+        if ( last_login is None ) or ( last_logout is None ):
+            abort( 400 )
+        
+        now = datetime.now()
+        is_later = ( last_login < last_logout ) and ( now > last_logout ) 
+        if is_later:
+            dbc.update_user_login_time( googleid )
+            return jsonify()
+        else:
+            abort( 400 )
+    
 
 @app.route( '/logout', methods = ['POST'] )
 def logout():
-    pass
-
+    googleid = str( request.cookies.get( 'googleid' ) )
+    if googleid == 'None':
+        abort( 400 )
+    
+    is_user_logged_in = dbc.is_user_logged_in( googleid )
+    if is_user_logged_in:
+        dbc.update_user_logout_time( googleid )
+        return jsonify()
+    else:
+       abort( 400 )
+   
+    
 @app.route( '/movies', methods = ['POST'] )
 def add_medium():
     '''

@@ -64,20 +64,27 @@ res = dbc.get_movie_bases_by_googleid( 12 )
 print( res.triplet[0].movie.title )
 print( res.triplet[1].movie.title )
 
+original_login = dbc.get_user_login_time( 12 )
+original_logout = dbc.get_user_logout_time( 12 )
+
 print( 'Original LOGIN = ' + str( dbc.get_user_login_time( 12 ) ) )
 print( 'Original LOGOUT = ' + str( dbc.get_user_logout_time( 12 ) ) )
 
 print( '-----' )
 
 print( 'Old LOGIN = ' + str( dbc.get_user_login_time( 12 ) ) )
+print( 'UNCHANGED = ' + str( original_login == dbc.get_user_login_time( 12 ) ) )
 dbc.update_user_login_time( 12 )
 print( 'New LOGIN = ' + str( dbc.get_user_login_time( 12 ) ) )
+print( 'IS LATER = ' + str( original_login < dbc.get_user_login_time( 12 ) ) )
 
 print( '-----' )
 
 print( 'Old LOGOUT = ' + str( dbc.get_user_logout_time( 12 ) ) )
+print( 'UNCHANGED = ' + str( original_logout == dbc.get_user_logout_time( 12 ) ) )
 dbc.update_user_logout_time( 12 )
 print( 'New LOGOUT = ' + str( dbc.get_user_logout_time( 12 ) ) )
+print( 'IS LATER = ' + str( original_logout < dbc.get_user_logout_time( 12 ) ) )
 
 
 # print( dbc.get_users()[0].googleid )

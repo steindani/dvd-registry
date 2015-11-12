@@ -12,7 +12,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime
 
-
 class DBManager( object ):
     
     def __init__( self ):
@@ -168,6 +167,17 @@ class DBManager( object ):
             logout_time = user.logout_time
         
         return logout_time
+    
+    def is_user_logged_in( self, googleid ):
+        login_time = self.get_user_login_time( 12 )
+        logout_time = self.get_user_logout_time( 12 )
+        
+        if ( login_time is None ) or ( logout_time is None ):
+            return None
+        
+        now = datetime.now()
+        user_is_logged_in = ( login_time > logout_time ) and ( now > login_time ) 
+        return user_is_logged_in
 
     ''' UPDATE METHODS '''
 
