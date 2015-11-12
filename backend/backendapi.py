@@ -12,7 +12,7 @@ from db.entities.user import User
 from flask.ext.cors import CORS
 
 app = Flask( __name__ )
-CORS(app)
+CORS( app )
 
 dbc = DBManager()
 dbc.init_db()
@@ -122,7 +122,6 @@ def get_movies():
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
-    
     user = dbc.get_movie_bases_by_googleid( googleid )
     movie_bases = [{"movie_id": triple.movie.id, "title": triple.movie.title, "cover": triple.movie.cover} for triple in user.triplet]
     
@@ -145,8 +144,6 @@ def get_movie( movie_id ):
     
     TODO authentikacio, hogy a user be van-e jelentkezve
     TODO hibakezeles
-    
-    TODO frissíteni, hogy a movie extrát mikor kérték le, ezt átvezetni az adatbázisba, létrehozni egy új oszlopot neki.
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
@@ -185,4 +182,4 @@ def get_random_movie():
     pass
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run( debug = False )
