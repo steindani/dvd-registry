@@ -64,14 +64,33 @@ class DBManager( object ):
     def add_user( self, user ):
         self._add_object( user )
         
-    def add_medium( self, medium ):
-        self._add_object( medium )
+    def add_medium( self, medium, session = None ):
+        self._add_object( medium, session )
     
     def add_movie( self, movie ):
         self._add_object( movie )
    
     def add_ownertriplet( self, ownertriplet ):
         self._add_object( ownertriplet )
+        
+    def add_medium_to_user( self, medium_name, googleid ):
+        # create session
+        session_creator = self.create_session()
+        session = session_creator()
+        
+        # fetch user
+        user = session.query( User ).filter_by( googleid = googleid ).first()
+        
+        if user is not None:
+            medium = Medium( name = medium_name )
+            medium.user = user
+            self.add_medium( medium, session )
+            return True
+        else:      
+            # remove session
+            session_creator.remove()
+            return False
+        
     
     '''GETTER METHODS BY QUERY'''
     

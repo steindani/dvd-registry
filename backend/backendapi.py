@@ -31,7 +31,7 @@ user.logout_time = datetime.now()
 genre = Genre( name = "Action" )
 moviebase = MovieBase( title = "Bronze", cover = "http://waaa" )
 movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
-#movieextra.last_access = datetime.now()
+# movieextra.last_access = datetime.now()
 
 moviebase.extra = movieextra
 
@@ -48,10 +48,15 @@ dbc.add_ownertriplet( ownertrip )
 
 basetwo = MovieBase( title = "silver", cover = "http://silvertwo" )
 basetwoextra = MovieExtra( year = 1928, plot = "BLOBLOBLOB", trailer = "http://wiasjdi" )
-#basetwoextra.last_access = datetime.now()
+# basetwoextra.last_access = datetime.now()
 basetwo.extra = basetwoextra
 ownertriptwo = OwnershipTriplet( user, basetwo, medium )
 dbc.add_ownertriplet( ownertriptwo )
+
+user2 = User( googleid = 11 )
+user2.login_time = datetime.now()
+user2.logout_time = datetime.now()
+dbc.add_user( user2 )
 
 # # TEST DATA
 
@@ -113,15 +118,15 @@ def logout():
     authenticate_user( googleid )
     dbc.update_user_logout_time( googleid )
     return jsonify()
-   
+    
     
 @app.route( '/movies', methods = ['POST'] )
-def add_medium():
+def add_movie():
     '''
     POST /movies 
     { 
        “name”: “The Fifth Element”, 
-        “location”: “WD HDD”, 
+        “location”: “WD HDD”
     }
     
     TODO authentikacio, hogy a user be van-e jelentkezve
@@ -167,6 +172,56 @@ def search_tmdb():
     else:
         return jsonify( result )
     
+    
+@app.route( '/media', methods = ['GET'] )
+def get_media():
+    '''
+    GET /media 
+    { 
+        "media": [
+            "WD HDD",
+            "BlueRay",
+            "Kiscica pendrive"
+        ]
+    }
+    '''
+    googleid = str( request.cookies.get( 'googleid' ) )
+    authenticate_user( googleid )
+    
+    user = dbc.get_user_with_media_by_googleid( googleid )
+    
+    media = []
+    if user is not None:
+        media = [medium.name for medium in user.media]
+        return jsonify( media = media )
+    else:
+        abort( 400 )
+        
+
+@app.route( '/medium', methods = ['POST'] )
+def add_medium():
+    '''
+    POST / medium
+    { 
+        "location": "Kiscica pendrive"
+    }
+    '''
+    
+    googleid = str( request.cookies.get( 'googleid' ) )
+    authenticate_user( googleid )
+    
+    try:
+        if request.json is None:
+            raise KeyError()
+        location = str( request.json['location'] )
+        is_ok = dbc.add_medium_to_user( location, googleid )
+        if is_ok:
+            return jsonify( {} )
+        else:
+            abort( 400 )
+    except KeyError:
+        abort( 400 )
+
 
 @app.route( '/movies', methods = ['GET'] )
 def get_movies():
