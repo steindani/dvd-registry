@@ -58,10 +58,10 @@ dbc.add_ownertriplet( ownertriptwo )
 ''' Aborts if either googleid is None, or user is not logged in yet.'''
 def authenticate_user( googleid ):
     if googleid == 'None':
-        abort( 400 )
+        abort( 403 )
     user_is_logged_in = dbc.is_user_logged_in( googleid )
     if not user_is_logged_in:
-        abort( 400 )
+        abort( 403 )
     
 def create_result_from_movie( movie ):
     result = {}
@@ -86,7 +86,7 @@ def convert_movie_base_obj( movie_base ):
 def login():
     googleid = str( request.cookies.get( 'googleid' ) )
     if googleid == 'None':  
-        abort( 400 )
+        abort( 403 )
     
     is_user_logged_in = dbc.is_user_logged_in( googleid )
     if is_user_logged_in:
@@ -96,7 +96,7 @@ def login():
         last_logout = dbc.get_user_logout_time( googleid )
           
         if ( last_login is None ) or ( last_logout is None ):
-            abort( 400 )
+            abort( 403 )
         
         now = datetime.now()
         is_later = ( last_login < last_logout ) and ( now > last_logout ) 
@@ -104,7 +104,7 @@ def login():
             dbc.update_user_login_time( googleid )
             return jsonify()
         else:
-            abort( 400 )
+            abort( 403 )
     
 
 @app.route( '/logout', methods = ['POST'] )
