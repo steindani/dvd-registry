@@ -222,8 +222,8 @@ class DBManager( object ):
     ''' IS METHODS BY QUERY '''
     
     def is_user_logged_in( self, googleid ):
-        login_time = self.get_user_login_time( 12 )
-        logout_time = self.get_user_logout_time( 12 )
+        login_time = self.get_user_login_time( googleid )
+        logout_time = self.get_user_logout_time( googleid )
         
         if ( login_time is None ) or ( logout_time is None ):
             return None
