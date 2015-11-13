@@ -10,7 +10,8 @@ from db.entities.person import Person
 from db.entities.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from datetime import datetime
+from datetime import datetime, timedelta
+from random import randrange
 
 class DBManager( object ):
     
@@ -118,6 +119,7 @@ class DBManager( object ):
         
         return user
     
+    
     def get_movie_by_id_and_by_googleid( self, movieid, googleid ):
         # create session
         session_creator = self.create_session()
@@ -129,24 +131,71 @@ class DBManager( object ):
         if user_ownertriplet_moviebase_tuple is None:
             # remove session
             session_creator.remove()
-            return user_ownertriplet_moviebase_tuple
-        
+            return None
         else:
             movie = user_ownertriplet_moviebase_tuple[2]
-        
-            # update last access time for movie
-            self.update_movie_last_access( movie.extra, session )
+            self._refresh_movie_extra_fields( movie, session )
             
-            # load required data
-            movie.triplet.medium
-            movie.extra
-            movie.extra.cast
-            movie.extra.genres
-           
             # remove session
             session_creator.remove()
+            return movie
+    
+    
+    def _refresh_movie_extra_fields( self, movie, session ):
+         # update last access time for movie
+        self.update_movie_last_access( movie.extra, session )    
+        # load required data
+        movie.triplet.medium
+        movie.extra
+        movie.extra.cast
+        movie.extra.genres
+    
+    
+    def get_movie_not_seen_in_last_time_by_googleid( self, googleid ):
+        # create session
+        session_creator = self.create_session()
+        session = session_creator()
+        
+        # fetch result
+        last_seen_date_threshold = datetime.now() - timedelta( days = 0 )
+        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ).join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ).filter( User.googleid == googleid ).filter( MovieExtra.last_access < last_seen_date_threshold ).all()
+        
+        if user_ownertrip_movie_tuple_list == []:
+            # remove session
+            session_creator.remove()
+            return None
+        else:
+            result_length = len( user_ownertrip_movie_tuple_list )
+            index = randrange( result_length )
+            movie = user_ownertrip_movie_tuple_list[index][2]
             
-        return movie
+            self._refresh_movie_extra_fields( movie, session )
+            
+            # remove session
+            session_creator.remove()
+            return movie
+    
+    
+    def get_movie_bases_not_seen_in_last_time_by_googleid( self, googleid ):
+        # create session
+        session_creator = self.create_session()
+        session = session_creator()
+        
+        # fetch result
+        last_seen_date_threshold = datetime.now() - timedelta( days = 0 )
+        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ).join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ).filter( User.googleid == googleid ).filter( MovieExtra.last_access < last_seen_date_threshold ).all()
+        
+        if user_ownertrip_movie_tuple_list == []:
+            # remove session
+            session_creator.remove()
+            return None
+        else:
+            movie_bases = [record[2] for record in user_ownertrip_movie_tuple_list]
+            
+            # remove session
+            session_creator.remove()
+            return movie_bases
+    
         
     def get_user_login_time( self, googleid ):
         login_time = None
@@ -158,6 +207,7 @@ class DBManager( object ):
         
         return login_time
     
+    
     def get_user_logout_time( self, googleid ):
         logout_time = None
         
@@ -168,6 +218,9 @@ class DBManager( object ):
         
         return logout_time
     
+    
+    ''' IS METHODS BY QUERY '''
+    
     def is_user_logged_in( self, googleid ):
         login_time = self.get_user_login_time( 12 )
         logout_time = self.get_user_logout_time( 12 )
@@ -177,7 +230,9 @@ class DBManager( object ):
         
         now = datetime.now()
         user_is_logged_in = ( login_time > logout_time ) and ( now > login_time ) 
+        
         return user_is_logged_in
+
 
     ''' UPDATE METHODS '''
 
@@ -199,11 +254,7 @@ class DBManager( object ):
     
 
     ''' UPDATE METHODS '''
-    ''' TODO: felhasználóhoz hozzávenni, hogy mikor jelentkezett be utoljára, ha nincsen belépve akkor 0000 legyen a dátum helyette (vagy helyette egy kijeleentkezés dátumot)
-        TODO: felhasználóhoz a legutolsó bejeletnkezést átírni 0000-ra, ha kijelentkezett (vagy helyette egy kijelenektezési dátumot)
-        TODO: a felhasználó bejelentkezettségét le lehessen kérdezni egy get metódussal, ami visszaadja, a legutolsó bejelentkezés dátumát (vagy helyette egy kijelentkezési dátumot és az alapján megnézni, hogy ő most be van-e lépve)
-        TODO: film hozzáadásának folyamatát végiggondolni, mit kell visszaadni a JS-nek, mit nem adunk már vissza neki, mi az amit nekünk kell most még eközben megcsinálnunk szerveroldalon (hogyan kapom vissza az adatokat kliensoldalró, hogy most akkor mit választott a felhasználó, hogymit ad hozzá az adatbázishoz)
-        TODO: minden hívásnál megvizsgálni, hogy a user be van-e jelentkezve, mert ha nincsen, akkor 403-at (access denied-ot) visszaküldeni
+    ''' TODO: film hozzáadásának folyamatát végiggondolni, mit kell visszaadni a JS-nek, mit nem adunk már vissza neki, mi az amit nekünk kell most még eközben megcsinálnunk szerveroldalon (hogyan kapom vissza az adatokat kliensoldalró, hogy most akkor mit választott a felhasználó, hogymit ad hozzá az adatbázishoz)
         TODO: google atuhentikációt integrálni ehhez
         TODO: https-et integrálni az egészhez, megnézni hogy a flask tudja-e (kell-e tudnia)
      '''

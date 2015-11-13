@@ -31,6 +31,7 @@ user.logout_time = datetime.now()
 genre = Genre( name = "Action" )
 moviebase = MovieBase( title = "Bronze", cover = "http://waaa" )
 movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
+#movieextra.last_access = datetime.now()
 
 moviebase.extra = movieextra
 
@@ -47,11 +48,38 @@ dbc.add_ownertriplet( ownertrip )
 
 basetwo = MovieBase( title = "silver", cover = "http://silvertwo" )
 basetwoextra = MovieExtra( year = 1928, plot = "BLOBLOBLOB", trailer = "http://wiasjdi" )
+#basetwoextra.last_access = datetime.now()
 basetwo.extra = basetwoextra
 ownertriptwo = OwnershipTriplet( user, basetwo, medium )
 dbc.add_ownertriplet( ownertriptwo )
 
 # # TEST DATA
+
+''' Aborts if either googleid is None, or user is not logged in yet.'''
+def authenticate_user( googleid ):
+    if googleid == 'None':
+        abort( 400 )
+    user_is_logged_in = dbc.is_user_logged_in( googleid )
+    if not user_is_logged_in:
+        abort( 400 )
+    
+def create_result_from_movie( movie ):
+    result = {}
+    if movie is not None:
+        result['title'] = movie.title
+        result['year'] = movie.extra.year
+        result['genres'] = [genre.name for genre in movie.extra.genres]
+        result['actors'] = [actor.name for actor in movie.extra.cast]
+        result['plot'] = movie.extra.plot
+        result['trailer'] = movie.extra.trailer
+        result['backdrop_path'] = movie.cover
+        result['medium'] = movie.triplet.medium.name
+        return jsonify( result )
+    else: 
+        abort( 400 )
+    
+def convert_movie_base_obj( movie_base ):
+    return {"movie_id": movie_base.id, "title": movie_base.title, "cover": movie_base.cover} 
 
 
 @app.route( '/login', methods = ['POST'] )
@@ -61,7 +89,7 @@ def login():
         abort( 400 )
     
     is_user_logged_in = dbc.is_user_logged_in( googleid )
-    if( is_user_logged_in ):
+    if is_user_logged_in:
         return jsonify()
     else:
         last_login = dbc.get_user_login_time( googleid )
@@ -82,15 +110,9 @@ def login():
 @app.route( '/logout', methods = ['POST'] )
 def logout():
     googleid = str( request.cookies.get( 'googleid' ) )
-    if googleid == 'None':
-        abort( 400 )
-    
-    is_user_logged_in = dbc.is_user_logged_in( googleid )
-    if is_user_logged_in:
-        dbc.update_user_logout_time( googleid )
-        return jsonify()
-    else:
-       abort( 400 )
+    authenticate_user( googleid )
+    dbc.update_user_logout_time( googleid )
+    return jsonify()
    
     
 @app.route( '/movies', methods = ['POST'] )
@@ -130,7 +152,7 @@ def search_tmdb():
         } 
     } 
     
-    TODO authentikacio, hogy a user be van-e jelentkezve
+    TODO ezt kiszedni, hogy ne legyen publikus!
     '''
     result = {}
     try:
@@ -140,7 +162,10 @@ def search_tmdb():
         result = tmdb.getFirstFiveResults( fragment )
     except KeyError:
         pass
-    return jsonify( result )
+    if result == {}:
+        abort( 400 )
+    else:
+        return jsonify( result )
     
 
 @app.route( '/movies', methods = ['GET'] )
@@ -156,21 +181,19 @@ def get_movies():
             } 
         ] 
     } 
-    
-    TODO authentikacio, hogy a user be van-e jelentkezve
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
-    if googleid == 'None':
-        abort( 403 )
+    authenticate_user( googleid )
         
     user = dbc.get_movie_bases_by_googleid( googleid )
-    movie_bases = []
     
     if user is not None:
-        movie_bases = [{"movie_id": triple.movie.id, "title": triple.movie.title, "cover": triple.movie.cover} for triple in user.triplet]
+        movie_bases = [convert_movie_base_obj( triple.movie ) for triple in user.triplet]
+        return jsonify( movies = movie_bases )
+    else:
+        abort( 400 )
     
-    return jsonify( movies = movie_bases )
 
 @app.route( '/movie/<int:movie_id>', methods = ['GET'] )
 def get_movie( movie_id ):
@@ -179,38 +202,24 @@ def get_movie( movie_id ):
     {  
         title: “movie title”, 
         year: “creation year”, 
-        genders: [“action”, “adventure”], 
+        genres: [“action”, “adventure”], 
         actors: [“Will Smith”, “Anne Hathaway”], 
         plot: “plot in hungarian”, 
         trailer: “youtube URL”, poster_path: “poster URL”, 
         backdrop_path: “backdrop URL”, 
         medium: “iStore” 
     } 
-    
-    TODO authentikacio, hogy a user be van-e jelentkezve
     '''
     
     googleid = str( request.cookies.get( 'googleid' ) )
-    if googleid == 'None':
-        abort( 403 )
+    authenticate_user( googleid )
         
     movie = dbc.get_movie_by_id_and_by_googleid( movie_id, googleid )
+    return create_result_from_movie( movie )
     
-    result = {}
-    if movie is not None:
-        result['title'] = movie.title
-        result['year'] = movie.extra.year
-        result['genres'] = [genre.name for genre in movie.extra.genres]
-        result['actors'] = [actor.name for actor in movie.extra.cast]
-        result['plot'] = movie.extra.plot
-        result['trailer'] = movie.extra.trailer
-        result['backdrop_path'] = movie.cover
-        result['medium'] = movie.triplet.medium.name
-    
-    return jsonify( result )
 
 @app.route( '/random', methods = ['GET'] )
-def get_random_movie():
+def get_random_movies():
     '''
     GET /random [no JSON] 
     {  
@@ -222,11 +231,39 @@ def get_random_movie():
             } 
         ] 
      } 
-    
-    TODO authentikacio, hogy a user be van-e jelentkezve
-    TODO hibakezeles
     '''
-    pass
+    googleid = str( request.cookies.get( 'googleid' ) )
+    authenticate_user( googleid )
+    
+    movie_bases_list = dbc.get_movie_bases_not_seen_in_last_time_by_googleid( googleid )
+
+    if movie_bases_list is not None:
+        movie_bases_result = [convert_movie_base_obj( movie_base ) for movie_base in movie_bases_list]
+        return jsonify( movies = movie_bases_result )
+    else:
+        abort( 400 )
+        
+
+@app.route( '/random/one', methods = ['GET'] )
+def get_random_movie():
+    '''
+    GET /random [no JSON] 
+    {   
+        title: “movie title”, 
+        year: “creation year”, 
+        genres: [“action”, “adventure”], 
+        actors: [“Will Smith”, “Anne Hathaway”], 
+        plot: “plot in hungarian”, 
+        trailer: “youtube URL”, poster_path: “poster URL”, 
+        backdrop_path: “backdrop URL”, 
+        medium: “iStore” 
+    } 
+    '''
+    googleid = str( request.cookies.get( 'googleid' ) )
+    authenticate_user( googleid )
+    
+    movie = dbc.get_movie_not_seen_in_last_time_by_googleid( googleid )
+    return create_result_from_movie( movie )
 
 if __name__ == '__main__':
     app.run( debug = False )

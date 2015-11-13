@@ -1,6 +1,7 @@
 '''
 @author: benjo
 '''
+from datetime import datetime, timedelta
 from db.dbmanager import DBManager
 from db.entities.base import Base
 from db.entities.genre import Genre
@@ -9,8 +10,7 @@ from db.entities.movie import MovieBase, MovieExtra
 from db.entities.ownershiptriplet import OwnershipTriplet
 from db.entities.person import Person
 from db.entities.user import User
-from datetime import datetime
-
+from random import randrange
 
 dbc = DBManager()
 dbc.init_db()
@@ -49,6 +49,7 @@ user2 = User( googleid = 11 )
 basetwo = MovieBase( title = "silver", cover = "http://silvertwo" )
 basetwoextra = MovieExtra( year = 1928, plot = "BLOBLOBLOB", trailer = "http://wiasjdi" )
 basetwo.extra = basetwoextra
+# basetwoextra.last_access = datetime.now()
 ownertriptwo = OwnershipTriplet( user, basetwo, medium )
 dbc.add_ownertriplet( ownertriptwo )
 
@@ -86,6 +87,12 @@ dbc.update_user_logout_time( 12 )
 print( 'New LOGOUT = ' + str( dbc.get_user_logout_time( 12 ) ) )
 print( 'IS LATER = ' + str( original_logout < dbc.get_user_logout_time( 12 ) ) )
 
+print( '-----' )
+
+print( str( timedelta( days = -14 ) ) )
+print( str( datetime.now() + timedelta( days = -14 ) ) )
+
+print( dbc.get_movie_bases_not_seen_in_last_time_by_googleid( 1 ) )
 
 # print( dbc.get_users()[0].googleid )
 # print(dbc.get_user_with_media_by_googleid(12).media[0].name)
