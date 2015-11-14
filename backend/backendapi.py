@@ -27,7 +27,7 @@ client_path = os.path.abspath( os.path.join( current_path, '..', '..', 'client' 
 app = Flask( __name__ , static_url_path = '', static_folder = client_path )
 app.config.from_object( 'config' )
 
-CORS( app )
+cors = CORS( app, resources = {r"/auth/*": {"origins": {"localhost:*"}, "supports_credentials":True}} )
 
 dbc = DBManager()
 dbc.init_db()
