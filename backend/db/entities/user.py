@@ -12,7 +12,7 @@ class User( Base ):
     __tablename__ = 'users'
     
     id = Column( Integer, Sequence( 'user_id_seq' ), primary_key = True )
-    googleid = Column( String )
+    googleid = Column( String( 120 ) )
     login_time = Column( DateTime )
     logout_time = Column( DateTime )
     
