@@ -16,7 +16,8 @@ import jwt
 import os
 import requests
 
-from flask.ext.cors import CORS
+from flask_cors import CORS
+from flask_cors import cross_origin
 from tmdb.tmdbhelper import TMDBHelper
 
 # Configuration
@@ -27,7 +28,7 @@ client_path = os.path.abspath( os.path.join( current_path, '..', '..', 'client' 
 app = Flask( __name__ , static_url_path = '', static_folder = client_path )
 app.config.from_object( 'config' )
 
-cors = CORS( app, resources = {r"/auth/*": {"origins": {"localhost:*"}, "supports_credentials":True}} )
+cors = CORS( app, resources = {r"/auth/google": {"origins": {"localhost:*"}, "supports_credentials":True}} )
 
 dbc = DBManager()
 dbc.init_db()
@@ -331,6 +332,7 @@ def get_random_movie():
 
 
 @app.route( '/auth/google', methods = ['POST'] )
+@cross_origin(supports_credentials = True)
 def google_authentication():
     access_token_url = 'https://accounts.google.com/o/oauth2/token'
     people_api_url = 'https://www.googleapis.com/plus/v1/people/me/openIdConnect'
