@@ -70,9 +70,32 @@ class DBManager( object ):
     
     def add_movie( self, movie ):
         self._add_object( movie )
-   
+    
     def add_ownertriplet( self, ownertriplet ):
         self._add_object( ownertriplet )
+   
+    def add_ownertriplet_with_googleid( self, ownertriplet, googleid ):
+        # create session
+        session_creator = self.create_session()
+        session = session_creator()
+        
+        # query for similar movies
+        movie_bases = self._get_movie_bases_by_title_and_year( ownertriplet.movie.title, ownertriplet.movie.extra.year, session )
+        if len( movie_bases ) > 0:
+            for movie_base in movie_bases:
+                triplet = movie_base.triplet
+                if ( triplet.user.googleid == googleid ) or ( triplet.medium.name == ownertriplet.medium.name ):
+                    # remove session
+                    session_creator.remove()
+                    return
+        
+        # add ownertriplet
+        self._add_object( ownertriplet, session )
+        
+        # remove session
+        session_creator.remove()
+        return
+        
         
     def add_medium_to_user( self, medium_name, googleid ):
         # create session
@@ -93,6 +116,7 @@ class DBManager( object ):
             else:
                 medium = [medium for medium in user_media.media if medium.name == medium_name][0]
                 
+            medium.name
             # remove session
             session_creator.remove()
             return medium
@@ -102,9 +126,28 @@ class DBManager( object ):
             return None
         
     
-        
-    
     '''GETTER METHODS BY QUERY'''
+    
+    def _get_movie_bases_by_title_and_year( self, title, year, session = None ):
+        # create session
+        if not session:
+            _session_creator = self.create_session()
+            _session = _session_creator()
+        else:
+            _session = session
+    
+        # fetch_result
+        movie_bases = _session.query( MovieBase ).join( MovieBase.extra ).filter( MovieBase.title == title ).filter( MovieExtra.year == year ).all()
+        for movie_base in movie_bases:
+            movie_base.triplet.medium
+            movie_base.triplet.user
+
+        if not session:
+            # remove session
+            _session_creator.remove()
+        
+        return movie_bases
+
     
     def get_user_with_media_by_googleid( self, googleid, session = None ):
         # create session
@@ -125,6 +168,7 @@ class DBManager( object ):
         
         return user
     
+    
     def get_user_only_by_googleid( self, googleid ):
         # create session
         session_creator = self.create_session()
@@ -137,6 +181,7 @@ class DBManager( object ):
         session_creator.remove()
         
         return user
+    
     
     def get_movie_bases_by_googleid( self, googleid ):
         # create session
@@ -153,7 +198,7 @@ class DBManager( object ):
         session_creator.remove()
         
         return user
-    
+            
     
     def get_movie_by_id_and_by_googleid( self, movieid, googleid ):
         # create session

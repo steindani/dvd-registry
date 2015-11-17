@@ -13,6 +13,8 @@ from db.entities.user import User
 from db.entityhelper import EntityFactory, EntityConnector
 from random import randrange
 
+from tmdb.tmdbhelper import TMDBHelper
+
 dbc = DBManager()
 dbc.init_db()
 
@@ -20,7 +22,7 @@ medium = Medium( name = "Hello" )
 person = Person( name = "John Doe" )
 user = User( googleid = 12 )
 genre = Genre( name = "Action" )
-moviebase = MovieBase( title = "Bronze", cover = "http://waaa" )
+moviebase = MovieBase( title = "Bronze", cover_small = "http://waaa" )
 movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
 
 moviebase.extra = movieextra
@@ -44,7 +46,7 @@ dbc.add_ownertriplet( ownertrip )
 
 user2 = User( googleid = 11 )
 
-basetwo = MovieBase( title = "silver", cover = "http://silvertwo" )
+basetwo = MovieBase( title = "silver", cover_small = "http://silvertwo" )
 basetwoextra = MovieExtra( year = 1928, plot = "BLOBLOBLOB", trailer = "http://wiasjdi" )
 basetwo.extra = basetwoextra
 # basetwoextra.last_access = datetime.now()
@@ -87,12 +89,42 @@ print( dbc.add_medium_to_user( "firstmedium", 11 ) )
 print( len( dbc.get_user_with_media_by_googleid( 11 ).media ) )
 
 user3 = User( googleid = 18 )
-m = EntityFactory.create_movie( 'title', 'cover', 123, 'plot', 'trailer', ['a', 'b'], ['c', 'd'] )
-medium3 = Medium( name = "alaa" )
-dbc.add_movie( m )
+dbc.add_user( user3 )
+print( '---------------------------------' )
 
-ot = EntityConnector.connect_user_with_movie_and_medium( user3, m, medium3 )
-dbc.add_ownertriplet( ot )
+tmdb = TMDBHelper()
 
-dbc.get_movie_by_id_and_by_googleid( 3, 18 )
-print( dbc.get_movie_not_seen_in_last_time_by_googleid( 18 ).extra.year )
+user = dbc.get_user_only_by_googleid( 18 )
+medium = dbc.add_medium_to_user( "kiscica", 18 )
+print( medium.name )
+    
+tmdb_id = int( 18 )
+movie = tmdb.getMovieByID( tmdb_id )
+
+if movie == {}:
+    abort( 400 )
+else:
+    db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
+    
+ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
+dbc.add_ownertriplet_with_googleid( ot, 18 )
+
+tmdb_title = str( 'Az ötödik elem' )
+movie = tmdb.getMovieByTitle( tmdb_title )
+
+if movie == {}:
+    abort( 400 )
+else:
+    db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
+    
+ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
+dbc.add_ownertriplet_with_googleid( ot, 18 )
+
+
+print( dbc.get_movie_by_id_and_by_googleid( 3, 18 ).title )
+
+print( dbc.get_movie_bases_by_googleid( 18 ).triplet[0].movie.title )
+
+print( '------------------------' )
+
+print( dbc._get_movie_bases_by_title_and_year( 'Az ötödik elem', 1997 ) )
