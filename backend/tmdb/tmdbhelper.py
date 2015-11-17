@@ -19,7 +19,7 @@ class TMDBHelper( object ):
             movie_credits = movie.credits()
             movie_videos = movie.videos()
             
-            result_movie['original_title'] = movie.original_title
+            result_movie['title'] = movie.title
             result_movie['genres'] = [genre['name'] for genre in movie.genres]
             result_movie['plot'] = movie.overview
             result_movie['year'] = movie.release_date [0:4]
@@ -41,7 +41,7 @@ class TMDBHelper( object ):
             search = tmdb.Search()
             response = search.movie( query = str( title_fragment ), year = year, language = 'hu' )
             
-            possible_results = [( result['original_title'], result['id'], result['overview'], result['poster_path'] ) for result in response['results'] if response['results'].index( result ) < 5 ]
+            possible_results = [( result['title'], result['id'], result['overview'], result['poster_path'] ) for result in response['results'] if response['results'].index( result ) < 5 ]
             result_movies['possible_ids'] = [result[1] for result in possible_results]
             result_movies['possible_titles'] = [result[0] for result in possible_results]
             result_movies['first_result'] = {}
