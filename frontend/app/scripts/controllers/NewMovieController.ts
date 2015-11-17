@@ -11,7 +11,8 @@ module dvdApp.Controllers {
             private $window: ng.IWindowService,
             private $http: ng.IHttpService,
 			private $q: ng.IQService,
-            private ngDialog: angular.dialog.IDialogService
+            private ngDialog: angular.dialog.IDialogService,
+			private $auth: any
         ) {
             this.scope = $scope;
 
@@ -19,13 +20,22 @@ module dvdApp.Controllers {
 			$scope.firstResult = {}
 
 			$scope.titleChanged = function() {
+				// var deferred = $q.defer();
+				
 				while($scope.possibleMovies && $scope.possibleMovies.length !== 0) {
 					$scope.possibleMovies.pop();
 				}
 				
-				$http.post(
-					"http://127.0.0.1:5000/helper/search",
-					{ fragment: $scope.enteredTitle }
+				$http({
+					method: "POST",
+					url: "http://127.0.0.1:5000/helper/search",
+					data: {
+						fragment: $scope.enteredTitle
+					},
+					headers: {
+						Authorization: 'Bearer ' + $auth.getToken()
+					}			
+				}
 				).success((data) => {
 					if ((<any>data).possible_ids) {
 						$scope.possibleMovies = (<any>data).possible_ids.map(
@@ -51,7 +61,7 @@ module dvdApp.Controllers {
 
     angular
         .module('dvdApp.Controllers', [])
-        .controller('NewMovieController', ['$scope', '$window', '$http', '$q', 'ngDialog', dvdApp.Controllers.NewMovieController]);
+        .controller('NewMovieController', ['$scope', '$window', '$http', '$q', 'ngDialog', '$auth', dvdApp.Controllers.NewMovieController]);
 
     export interface INewMovieScope extends ng.IScope {
 		enteredTitle: string;

@@ -10,7 +10,8 @@ module dvdApp.Controllers {
             private $scope: IMoviesScope,
             private $window: ng.IWindowService,
             private $http: ng.IHttpService,
-            private ngDialog: angular.dialog.IDialogService
+            private ngDialog: angular.dialog.IDialogService,
+            private $auth: any
         ) {
             this.scope = $scope;
             $scope.movies = [];
@@ -29,7 +30,13 @@ module dvdApp.Controllers {
                 });
 
             $scope.recommendations = [];
-            $http.get("http://api.themoviedb.org/3/discover/movie?api_key=13ed7e5e07699386ba2c32a52aed7ae6")
+            $http({
+                method: 'GET',
+                url: "http://api.themoviedb.org/3/discover/movie?api_key=13ed7e5e07699386ba2c32a52aed7ae6",
+                headers:  {
+                    "Content-Type": "text/plain"
+                }
+            })
                 .success((data) => {
                     (<any>data).results.slice(0, 4).forEach(movie => {
                         var m = {
@@ -73,7 +80,7 @@ module dvdApp.Controllers {
 
     angular
         .module('dvdApp.Controllers', [])
-        .controller('MoviesController', ['$scope', '$window', '$http', 'ngDialog', dvdApp.Controllers.MoviesController]);
+        .controller('MoviesController', ['$scope', '$window', '$http', 'ngDialog', '$auth', dvdApp.Controllers.MoviesController]);
 
     export interface IMoviesScope extends ng.IScope {
         movies: any;
