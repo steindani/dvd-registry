@@ -16,5 +16,5 @@ helper = TMDBHelper()
 movie = helper.getMovieByID( 296100 )
 print_dict( movie )
     
-fragments = helper.getFirstFiveResults( 'the night before')
+fragments = helper.getFirstFiveResults( 'the fif' )
 print_dict( fragments )
