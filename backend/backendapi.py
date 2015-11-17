@@ -214,9 +214,7 @@ def get_media():
     media = []
     if user is not None:
         media = [medium.name for medium in user.media]
-        return jsonify( media = media )
-    else:
-        abort( 400 )
+    return jsonify( media = media )
         
 
 @app.route( '/medium', methods = ['POST'] )
