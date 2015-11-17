@@ -28,7 +28,16 @@ client_path = os.path.abspath( os.path.join( current_path, '..', '..', 'client' 
 app = Flask( __name__ , static_url_path = '', static_folder = client_path )
 app.config.from_object( 'config' )
 
-cors = CORS( app, resources = {r"/auth/google": {"origins": {"localhost:*"}, "supports_credentials":True}} )
+cors = CORS( app, resources = {
+    r"/helper/search": {
+        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
+        "send_wildcard": True
+        },
+    
+    r"/auth/google": {
+        "origins": [{"localhost:9000"}, {"localhost:5000"}]
+        }
+    })
 
 dbc = DBManager()
 dbc.init_db()
@@ -150,6 +159,8 @@ def add_movie():
     pass
 
 @app.route( '/helper/search', methods = ['POST'] )
+@cross_origin(supports_credentials = True)
+@login_required
 def search_tmdb():
     '''
     GET /helper/search 
