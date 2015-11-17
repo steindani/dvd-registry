@@ -21,6 +21,10 @@ class TMDBHelper( object ):
             
             result_movie['title'] = movie.title
             result_movie['genres'] = [genre['name'] for genre in movie.genres]
+           
+            if movie.overview is None:
+                movie_infos = movie.info()
+            
             result_movie['plot'] = movie.overview
             result_movie['year'] = movie.release_date [0:4]
             result_movie['poster_path'] = 'https://image.tmdb.org/t/p/w185' + movie.poster_path
@@ -40,6 +44,10 @@ class TMDBHelper( object ):
         try:
             search = tmdb.Search()
             response = search.movie( query = str( title_fragment ), year = year, language = 'hu' )
+            
+            if( len( response['results'] ) > 0 ):
+                if len( response['results'][0]['overview'] ) == 0:
+                    response = search.movie( query = str( title_fragment ), year = year )
             
             possible_results = [( result['title'], result['id'], result['overview'], result['poster_path'] ) for result in response['results'] if response['results'].index( result ) < 5 ]
             result_movies['possible_ids'] = [result[1] for result in possible_results]
