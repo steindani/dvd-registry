@@ -4,4 +4,6 @@
 
 /// <reference path='scripts/app.ts' />
 /// <reference path='scripts/controllers/MoviesController.ts' />
+/// <reference path='scripts/controllers/NewMovieController.ts' />
 /// <reference path='scripts/directives/VibrantColor.ts' />
+/// <reference path='scripts/services/BackendService.ts' />

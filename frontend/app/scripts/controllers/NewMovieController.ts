@@ -18,6 +18,17 @@ module dvdApp.Controllers {
 
 			$scope.enteredTitle = ""
 			$scope.firstResult = {}
+			
+			$http({
+				method: "GET",
+				url: "http://localhost:5000/media",
+				headers: {
+					Authorization: 'Bearer ' + $auth.getToken()
+				}
+			}
+			).success((data) => {
+				$scope.media = (<any>data).media;
+			});
 
 			$scope.titleChanged = function() {
 				// var deferred = $q.defer();
@@ -67,6 +78,7 @@ module dvdApp.Controllers {
 		enteredTitle: string;
 		possibleMovies: [{ id: string, title: string }];
 		firstResult: any;
+		media: [string];
 
         titleChanged: () => void;
 		selectPossibleMovie: (id: string) => void;
