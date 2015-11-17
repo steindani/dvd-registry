@@ -90,14 +90,18 @@ class DBManager( object ):
                 medium = Medium( name = medium_name )
                 medium.user = user
                 self.add_medium( medium, session = session )
+            else:
+                medium = [medium for medium in user_media.media if medium.name == medium_name][0]
                 
             # remove session
             session_creator.remove()
-            return True
+            return medium
         else:
             # remove session
             session_creator.remove()
-            return False
+            return None
+        
+    
         
     
     '''GETTER METHODS BY QUERY'''

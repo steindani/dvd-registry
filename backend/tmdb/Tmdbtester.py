@@ -16,7 +16,7 @@ helper = TMDBHelper()
 #movie = helper.getMovieByID( 296100 )
 #print_dict( movie )
     
-#fragments = helper.getFirstFiveResults( 'the fif' )
-#print_dict( fragments )
+fragments = helper.getFirstFiveResults( 'The Fifth Element' )
+print_dict( fragments )
 
-print(helper.getMovieByTitle('the fif'))
+#print(helper.getMovieByTitle('The Fifth Element))

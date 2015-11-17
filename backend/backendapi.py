@@ -19,6 +19,7 @@ import requests
 from flask_cors import CORS
 from flask_cors import cross_origin
 from tmdb.tmdbhelper import TMDBHelper
+from db.entityhelper import EntityFactory, EntityConnector
 
 # Configuration
 
@@ -42,20 +43,19 @@ cors = CORS( app, resources = {
     r"/auth/google": {
         "origins": [{"localhost:9000"}, {"localhost:5000"}]
         }
-    })
+    } )
 
 dbc = DBManager()
 dbc.init_db()
 
 tmdb = TMDBHelper()
 
-
 # # TEST DATA
 medium = Medium( name = "Hello" )
 person = Person( name = "John Doe" )
 user = User( googleid = 12 )
 genre = Genre( name = "Action" )
-moviebase = MovieBase( title = "Bronze", cover = "http://waaa" )
+moviebase = MovieBase( title = "Bronze", cover_small = "http://waaa" )
 movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
 # movieextra.last_access = datetime.now()
 
@@ -72,7 +72,7 @@ dbc.add_medium( medium )
 ownertrip = OwnershipTriplet( user, moviebase, medium )
 dbc.add_ownertriplet( ownertrip )
 
-basetwo = MovieBase( title = "silver", cover = "http://silvertwo" )
+basetwo = MovieBase( title = "silver", cover_small = "http://silvertwo" )
 basetwoextra = MovieExtra( year = 1928, plot = "BLOBLOBLOB", trailer = "http://wiasjdi" )
 # basetwoextra.last_access = datetime.now()
 basetwo.extra = basetwoextra
@@ -93,14 +93,14 @@ def create_result_from_movie( movie ):
         result['actors'] = [actor.name for actor in movie.extra.cast]
         result['plot'] = movie.extra.plot
         result['trailer'] = movie.extra.trailer
-        result['backdrop_path'] = movie.cover
+        result['backdrop_path'] = movie.extra.cover_large
         result['medium'] = movie.triplet.medium.name
         return jsonify( result )
     else: 
         abort( 400 )
     
 def convert_movie_base_obj( movie_base ):
-    return {"movie_id": movie_base.id, "title": movie_base.title, "cover": movie_base.cover} 
+    return {"movie_id": movie_base.extra.id, "title": movie_base.title, "cover_small": movie_base.cover_small, } 
 
 
 ''' AUTHENTICATION '''
@@ -145,22 +145,55 @@ def login_required( f ):
 
     return decorated_function
 
+
 @app.route( '/movies', methods = ['POST'] )
+@cross_origin( supports_credentials = True )
+@login_required
 def add_movie():
     '''
     POST /movies 
     { 
-       “name”: “The Fifth Element”, 
-        “location”: “WD HDD”
+       “title”: “The Fifth Element”, 
+       "id": 42
+       “location”: “WD HDD”
     }
     
-    TODO authentikacio, hogy a user be van-e jelentkezve
-    TODO hibakezeles
     '''
-    pass
+    
+    req = request.json
+    if ( not req ) or ( 'location' not in request.json ) or ( ( 'title' not in req ) and ( 'id' not in req ) ):
+        abort( 400 )
+    
+    googleid = g.googleid
+    
+    location = str( request.json['location'] )
+    user = dbc.get_user_only_by_googleid( googleid )
+    medium = dbc.add_medium_to_user( location, googleid )
+    
+    if 'id' in req:
+        tmdb_id = int( req['id'] )
+        movie = tmdb.getMovieByID( tmdb_id )
+        if movie == {}:
+            abort( 400 )
+        else:
+            db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
+    else:
+        tmdb_title = str( req['title'] )
+        movie = tmdb.getMovieByTitle( tmdb_title )
+        if movie == {}:
+            abort( 400 )
+        else:
+            db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )            
+    
+    ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
+    dbc.add_ownertriplet( ot )
+    
+    return jsonify( {} )       
+
+
 
 @app.route( '/helper/search', methods = ['POST'] )
-@cross_origin(supports_credentials = True)
+@cross_origin( supports_credentials = True )
 @login_required
 def search_tmdb():
     '''
@@ -183,8 +216,6 @@ def search_tmdb():
             "https://image.tmdb.org/t/p/w185/zaFa1NRZEnFgRTv5OVXkNIZO78O.jpg", 
         } 
     } 
-    
-    TODO ezt kiszedni, hogy ne legyen publikus!
     '''
     result = {}
     try:
@@ -201,7 +232,7 @@ def search_tmdb():
     
     
 @app.route( '/media', methods = ['GET'] )
-@cross_origin(supports_credentials = True)
+@cross_origin( supports_credentials = True )
 @login_required
 def get_media():
     '''
@@ -223,30 +254,8 @@ def get_media():
     return jsonify( media = media )
         
 
-@app.route( '/medium', methods = ['POST'] )
-@login_required
-def add_medium():
-    '''
-    POST / medium
-    { 
-        "location": "Kiscica pendrive"
-    }
-    '''
-    googleid = g.googleid
-    try:
-        if request.json is None:
-            raise KeyError()
-        location = str( request.json['location'] )
-        is_ok = dbc.add_medium_to_user( location, googleid )
-        if is_ok:
-            return jsonify( {} )
-        else:
-            abort( 400 )
-    except KeyError:
-        abort( 400 )
-
-
 @app.route( '/movies', methods = ['GET'] )
+@cross_origin( supports_credentials = True )
 @login_required
 def get_movies():
     '''
@@ -273,6 +282,7 @@ def get_movies():
     
 
 @app.route( '/movie/<int:movie_id>', methods = ['GET'] )
+@cross_origin( supports_credentials = True )
 @login_required
 def get_movie( movie_id ):
     '''
@@ -304,7 +314,7 @@ def get_random_movies():
             { 
             movie_id: 42 
             title: “movie title”, 
-            cover: “cover URL / cover itself”, 
+            cover_small: “cover URL / cover itself”, 
             } 
         ] 
      } 
@@ -343,7 +353,7 @@ def get_random_movie():
 
 
 @app.route( '/auth/google', methods = ['POST'] )
-@cross_origin(supports_credentials = True)
+@cross_origin( supports_credentials = True )
 def google_authentication():
     access_token_url = 'https://accounts.google.com/o/oauth2/token'
     people_api_url = 'https://www.googleapis.com/plus/v1/people/me/openIdConnect'
