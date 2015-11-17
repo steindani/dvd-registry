@@ -18,8 +18,6 @@ dbc.init_db()
 medium = Medium( name = "Hello" )
 person = Person( name = "John Doe" )
 user = User( googleid = 12 )
-user.login_time = datetime.now()
-user.logout_time = datetime.now()
 genre = Genre( name = "Action" )
 moviebase = MovieBase( title = "Bronze", cover = "http://waaa" )
 movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
@@ -28,7 +26,6 @@ moviebase.extra = movieextra
 
 movieextra.genres.append( genre )
 movieextra.cast.append( person )
-movieextra.last_access = datetime.now()
 print( movieextra.last_access )
 
 dbc.add_movie( moviebase )
@@ -53,10 +50,6 @@ basetwo.extra = basetwoextra
 ownertriptwo = OwnershipTriplet( user, basetwo, medium )
 dbc.add_ownertriplet( ownertriptwo )
 
-
-# res = dbc.get_movie_by_id(1)
-# print(res.extra.genres[0].name)
-
 res = dbc.get_movie_by_id_and_by_googleid( 1, 12 )
 print( res.extra.last_access )
 print( datetime.now() - res.extra.last_access )
@@ -65,42 +58,26 @@ res = dbc.get_movie_bases_by_googleid( 12 )
 print( res.triplet[0].movie.title )
 print( res.triplet[1].movie.title )
 
-original_login = dbc.get_user_login_time( 12 )
-original_logout = dbc.get_user_logout_time( 12 )
-
-print( 'Original LOGIN = ' + str( dbc.get_user_login_time( 12 ) ) )
-print( 'Original LOGOUT = ' + str( dbc.get_user_logout_time( 12 ) ) )
-
-print( '-----' )
-
-print( 'Old LOGIN = ' + str( dbc.get_user_login_time( 12 ) ) )
-print( 'UNCHANGED = ' + str( original_login == dbc.get_user_login_time( 12 ) ) )
-dbc.update_user_login_time( 12 )
-print( 'New LOGIN = ' + str( dbc.get_user_login_time( 12 ) ) )
-print( 'IS LATER = ' + str( original_login < dbc.get_user_login_time( 12 ) ) )
-
-print( '-----' )
-
-print( 'Old LOGOUT = ' + str( dbc.get_user_logout_time( 12 ) ) )
-print( 'UNCHANGED = ' + str( original_logout == dbc.get_user_logout_time( 12 ) ) )
-dbc.update_user_logout_time( 12 )
-print( 'New LOGOUT = ' + str( dbc.get_user_logout_time( 12 ) ) )
-print( 'IS LATER = ' + str( original_logout < dbc.get_user_logout_time( 12 ) ) )
-
-print( '-----' )
-
-print( str( timedelta( days = -14 ) ) )
-print( str( datetime.now() + timedelta( days = -14 ) ) )
-
 print( dbc.get_movie_bases_not_seen_in_last_time_by_googleid( 1 ) )
 
-# print( dbc.get_users()[0].googleid )
-# print(dbc.get_user_with_media_by_googleid(12).media[0].name)
-# print( dbc.get_users()[0].triplet[0].movie.title )
-# print( dbc.get_user_by_googleid( 12 ).id )
+print( dbc.get_user_with_media_by_googleid( 11 ) )
 
-# m = dbc.get_movie_by_id( 1 )
+print( 'MEDIA TEST' )
 
-# print( m.title )
-# print( m.extra.genres[0].name )
-# print( m.extra.cast[0].name )
+dbc.add_user( user2 )
+
+# mtest = Medium( name = "fmedium" )
+# mtest.user = user2
+# dbc.add_medium( mtest )
+mtest2 = Medium( name = "firstmedium" )
+mtest2.user = user2
+dbc.add_medium( mtest2 )
+print( len( dbc.get_user_with_media_by_googleid( 11 ).media ) )
+print( dbc.add_medium_to_user( "firstmedium", 11 ) )
+print( dbc.add_medium_to_user( "smedium", 11 ) )
+print( dbc.add_medium_to_user( "dmedium", 11 ) )
+print( dbc.add_medium_to_user( "firstmedium", 11 ) )
+print( len( dbc.get_user_with_media_by_googleid( 11 ).media ) )
+
+for m in dbc.get_user_with_media_by_googleid( 11 ).media:
+    print( m.name )

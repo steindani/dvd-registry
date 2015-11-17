@@ -57,9 +57,10 @@ class DBManager( object ):
         _session.refresh( obj )
         _session.commit()
         
-        # remove session
         if not session:
+            # remove session
             _session_creator.remove()
+    
     
     def add_user( self, user ):
         self._add_object( user )
@@ -81,12 +82,19 @@ class DBManager( object ):
         # fetch user
         user = session.query( User ).filter_by( googleid = googleid ).first()
         
-        if user is not None:
-            medium = Medium( name = medium_name )
-            medium.user = user
-            self.add_medium( medium, session )
+        if user:
+            user_media = self.get_user_with_media_by_googleid( googleid, session = session )
+            
+            media_names = [medium.name for medium in user_media.media]
+            if ( not user_media ) or not( medium_name in media_names ):
+                medium = Medium( name = medium_name )
+                medium.user = user
+                self.add_medium( medium, session = session )
+                
+            # remove session
+            session_creator.remove()
             return True
-        else:      
+        else:
             # remove session
             session_creator.remove()
             return False
@@ -94,18 +102,22 @@ class DBManager( object ):
     
     '''GETTER METHODS BY QUERY'''
     
-    def get_user_with_media_by_googleid( self, googleid ):
+    def get_user_with_media_by_googleid( self, googleid, session = None ):
         # create session
-        session_creator = self.create_session()
-        session = session_creator()
+        if not session:
+            _session_creator = self.create_session()
+            _session = _session_creator()
+        else:
+            _session = session
         
         # fetch result
-        user = session.query( User ).filter_by( googleid = googleid ).first()
+        user = _session.query( User ).filter_by( googleid = googleid ).first()
         if user is not None:
             user.media
         
         # remove session
-        session_creator.remove()
+        if not session:
+            _session_creator.remove()
         
         return user
     
