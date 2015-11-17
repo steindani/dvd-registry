@@ -33,6 +33,11 @@ cors = CORS( app, resources = {
         "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
         "send_wildcard": True
         },
+        
+    r"/media": {
+        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
+        "send_wildcard": True
+        },
     
     r"/auth/google": {
         "origins": [{"localhost:9000"}, {"localhost:5000"}]
@@ -196,6 +201,7 @@ def search_tmdb():
     
     
 @app.route( '/media', methods = ['GET'] )
+@cross_origin(supports_credentials = True)
 @login_required
 def get_media():
     '''
