@@ -15,7 +15,7 @@ class TMDBHelper( object ):
             movie = tmdb.Movies( int( movie_id ) )
             
             movie_posters = movie.images()
-            movie_infos = movie.info()
+            movie_infos = movie.info( language = 'hu' )
             movie_credits = movie.credits()
             movie_videos = movie.videos()
             
@@ -39,7 +39,7 @@ class TMDBHelper( object ):
         
         try:
             search = tmdb.Search()
-            response = search.movie( query = str( title_fragment ) )
+            response = search.movie( query = str( title_fragment ), language = 'hu' )
             
             possible_results = [( result['original_title'], result['id'], result['overview'], result['poster_path'] ) for result in response['results'] if response['results'].index( result ) < 5 ]
             result_movies['possible_ids'] = [result[1] for result in possible_results]
