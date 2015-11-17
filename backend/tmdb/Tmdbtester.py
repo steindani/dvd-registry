@@ -13,8 +13,8 @@ def print_dict( dics ):
 
 helper = TMDBHelper()
 
-movie = helper.getMovieByID( 123 )
+movie = helper.getMovieByID( 296100 )
 print_dict( movie )
     
-fragments = helper.getFirstFiveResults( 'The Fif' )
+fragments = helper.getFirstFiveResults( 'the night before')
 print_dict( fragments )
