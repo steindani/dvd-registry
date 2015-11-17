@@ -32,14 +32,14 @@ class TMDBHelper( object ):
         
         return result_movie
     
-    def getFirstFiveResults( self, title_fragment ):
+    def getFirstFiveResults( self, title_fragment, year = None ):
         tmdb.API_KEY = TMDBHelper._API_KEY
         
         result_movies = {}
         
         try:
             search = tmdb.Search()
-            response = search.movie( query = str( title_fragment ), language = 'hu' )
+            response = search.movie( query = str( title_fragment ), year = year, language = 'hu' )
             
             possible_results = [( result['original_title'], result['id'], result['overview'], result['poster_path'] ) for result in response['results'] if response['results'].index( result ) < 5 ]
             result_movies['possible_ids'] = [result[1] for result in possible_results]
