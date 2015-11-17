@@ -213,44 +213,7 @@ class DBManager( object ):
             
             # remove session
             session_creator.remove()
-            return movie_bases
-    
-        
-    def get_user_login_time( self, googleid ):
-        login_time = None
-        
-        # fetch result
-        user = self.get_user_only_by_googleid( googleid )
-        if user is not None:
-            login_time = user.login_time
-        
-        return login_time
-    
-    
-    def get_user_logout_time( self, googleid ):
-        logout_time = None
-        
-        # fetch result
-        user = self.get_user_only_by_googleid( googleid )
-        if user is not None:
-            logout_time = user.logout_time
-        
-        return logout_time
-    
-    
-    ''' IS METHODS BY QUERY '''
-    
-    def is_user_logged_in( self, googleid ):
-        login_time = self.get_user_login_time( googleid )
-        logout_time = self.get_user_logout_time( googleid )
-        
-        if ( login_time is None ) or ( logout_time is None ):
-            return None
-        
-        now = datetime.now()
-        user_is_logged_in = ( login_time > logout_time ) and ( now > login_time ) 
-        
-        return user_is_logged_in
+            return movie_bases    
 
 
     ''' UPDATE METHODS '''
@@ -259,21 +222,8 @@ class DBManager( object ):
         movie_extra_obj.last_access = datetime.now()
         self._add_object( movie_extra_obj, session )
         
-    def update_user_login_time( self, googleid ):
-        user = self.get_user_only_by_googleid( googleid )
-        if user is not None:
-            user.login_time = datetime.now()
-            self._add_object( user )
-        
-    def update_user_logout_time( self, googleid ):
-        user = self.get_user_only_by_googleid( googleid )
-        if user is not None:
-            user.logout_time = datetime.now()
-            self._add_object( user )
-    
 
     ''' UPDATE METHODS '''
     ''' TODO: film hozzáadásának folyamatát végiggondolni, mit kell visszaadni a JS-nek, mit nem adunk már vissza neki, mi az amit nekünk kell most még eközben megcsinálnunk szerveroldalon (hogyan kapom vissza az adatokat kliensoldalró, hogy most akkor mit választott a felhasználó, hogymit ad hozzá az adatbázishoz)
-        TODO: google atuhentikációt integrálni ehhez
         TODO: https-et integrálni az egészhez, megnézni hogy a flask tudja-e (kell-e tudnia)
      '''

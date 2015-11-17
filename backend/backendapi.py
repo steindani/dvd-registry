@@ -49,8 +49,6 @@ tmdb = TMDBHelper()
 medium = Medium( name = "Hello" )
 person = Person( name = "John Doe" )
 user = User( googleid = 12 )
-user.login_time = datetime.now()
-user.logout_time = datetime.now()
 genre = Genre( name = "Action" )
 moviebase = MovieBase( title = "Bronze", cover = "http://waaa" )
 movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
@@ -77,8 +75,6 @@ ownertriptwo = OwnershipTriplet( user, basetwo, medium )
 dbc.add_ownertriplet( ownertriptwo )
 
 user2 = User( googleid = 11 )
-user2.login_time = datetime.now()
-user2.logout_time = datetime.now()
 dbc.add_user( user2 )
 
 # # TEST DATA
