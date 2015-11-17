@@ -9,7 +9,6 @@ class TMDBHelper( object ):
     
     def getMovieByID( self, movie_id ):
         tmdb.API_KEY = TMDBHelper._API_KEY
-        
         result_movie = {}
         
         try:
@@ -42,9 +41,25 @@ class TMDBHelper( object ):
         
         return result_movie
     
+    
+    def getMovieByTitle( self, title_fragment ):
+        tmdb.API_KEY = TMDBHelper._API_KEY
+        result_movie = {}
+        
+        try:
+            search = tmdb.Search()
+            response = search.movie( query = str( title_fragment ), language = 'hu' )
+            if( len( response['results'] ) > 0 ):
+                tmdb_id = response['results'][0]['id']
+                result_movie = self.getMovieByID( tmdb_id )
+        except HTTPError:
+             pass
+         
+        return result_movie
+    
+    
     def getFirstFiveResults( self, title_fragment, year = None ):
         tmdb.API_KEY = TMDBHelper._API_KEY
-        
         result_movies = {}
         
         try:
