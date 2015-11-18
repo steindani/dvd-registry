@@ -295,6 +295,7 @@ def get_movie( movie_id ):
     
 
 @app.route( '/random', methods = ['GET'] )
+@cross_origin( supports_credentials = True )
 @login_required
 def get_random_movies():
     '''
@@ -321,6 +322,7 @@ def get_random_movies():
         
 
 @app.route( '/random/one', methods = ['GET'] )
+@cross_origin( supports_credentials = True )
 @login_required
 def get_random_movie():
     '''
