@@ -84,17 +84,18 @@ class DBManager( object ):
         if len( movie_bases ) > 0:
             for movie_base in movie_bases:
                 triplet = movie_base.triplet
-                if ( triplet.user.googleid == googleid ) or ( triplet.medium.name == ownertriplet.medium.name ):
+                if ( triplet.user.googleid == googleid ) and ( triplet.medium.name == ownertriplet.medium.name ):
                     # remove session
                     session_creator.remove()
-                    return
-        
+                    return False
+
         # add ownertriplet
         self._add_object( ownertriplet, session )
+        ownertriplet.user
         
         # remove session
         session_creator.remove()
-        return
+        return True
         
         
     def add_medium_to_user( self, medium_name, googleid ):
@@ -193,6 +194,7 @@ class DBManager( object ):
         if user is not None:
             for triplet in user.triplet:
                 triplet.movie
+                triplet.movie.extra
             
         # remove session
         session_creator.remove()

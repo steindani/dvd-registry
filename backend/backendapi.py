@@ -159,17 +159,17 @@ def add_movie():
     }
     
     '''
-    
     req = request.json
     if ( not req ) or ( 'location' not in request.json ) or ( ( 'title' not in req ) and ( 'id' not in req ) ):
         abort( 400 )
-    
+        
+    # googleid = req['g']
     googleid = g.googleid
-    
-    location = str( request.json['location'] )
+        
+    location = str( req['location'] )
     user = dbc.get_user_only_by_googleid( googleid )
     medium = dbc.add_medium_to_user( location, googleid )
-    
+        
     if 'id' in req:
         tmdb_id = int( req['id'] )
         movie = tmdb.getMovieByID( tmdb_id )
@@ -184,12 +184,11 @@ def add_movie():
             abort( 400 )
         else:
             db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )            
-    
+        
     ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
-    dbc.add_ownertriplet( ot )
-    
-    return jsonify( {} )       
-
+    dbc.add_ownertriplet_with_googleid( ot, googleid )
+        
+    return jsonify( {} )           
 
 
 @app.route( '/helper/search', methods = ['POST'] )
@@ -245,7 +244,8 @@ def get_media():
         ]
     }
     '''
-    googleid = g.googleid
+    googleid = request.json['g']
+    # googleid = g.googleid
     user = dbc.get_user_with_media_by_googleid( googleid )
     
     media = []
@@ -270,10 +270,10 @@ def get_movies():
         ] 
     } 
     '''
+    # googleid = request.json['g']
     googleid = g.googleid
     
     user = dbc.get_movie_bases_by_googleid( googleid )
-    
     if user is not None:
         movie_bases = [convert_movie_base_obj( triple.movie ) for triple in user.triplet]
         return jsonify( movies = movie_bases )
@@ -298,7 +298,8 @@ def get_movie( movie_id ):
         medium: “iStore” 
     } 
     '''
-    googleid = g.googleid
+    googleid = request.json['g']
+    # googleid = g.googleid
         
     movie = dbc.get_movie_by_id_and_by_googleid( movie_id, googleid )
     return create_result_from_movie( movie )

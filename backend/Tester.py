@@ -98,7 +98,7 @@ user = dbc.get_user_only_by_googleid( 18 )
 medium = dbc.add_medium_to_user( "kiscica", 18 )
 print( medium.name )
     
-tmdb_id = int( 18 )
+tmdb_id = int( 19 )
 movie = tmdb.getMovieByID( tmdb_id )
 
 if movie == {}:
@@ -109,7 +109,12 @@ else:
 ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
 dbc.add_ownertriplet_with_googleid( ot, 18 )
 
-tmdb_title = str( 'Az ötödik elem' )
+print( '-----------------' )
+
+user = dbc.get_user_only_by_googleid( 18 )
+medium = dbc.add_medium_to_user( "kiscica", 18 )
+
+tmdb_title = str( 'Star Wars' )
 movie = tmdb.getMovieByTitle( tmdb_title )
 
 if movie == {}:
@@ -121,10 +126,6 @@ ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = m
 dbc.add_ownertriplet_with_googleid( ot, 18 )
 
 
-print( dbc.get_movie_by_id_and_by_googleid( 3, 18 ).title )
 
-print( dbc.get_movie_bases_by_googleid( 18 ).triplet[0].movie.title )
+print( len( dbc.get_movie_bases_by_googleid( 18 ).triplet ) )
 
-print( '------------------------' )
-
-print( dbc._get_movie_bases_by_title_and_year( 'Az ötödik elem', 1997 ) )
