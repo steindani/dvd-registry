@@ -19,7 +19,7 @@ import requests
 from flask_cors import CORS
 from flask_cors import cross_origin
 from tmdb.tmdbhelper import TMDBHelper
-from db.entityhelper import EntityFactory, EntityConnector
+from db.entityhelper import EntityFactory, EntityConnector, EntityConverter
 
 # Configuration
 
@@ -51,57 +51,9 @@ dbc.init_db()
 tmdb = TMDBHelper()
 
 # # TEST DATA
-medium = Medium( name = "Hello" )
-person = Person( name = "John Doe" )
-user = User( googleid = 12 )
-genre = Genre( name = "Action" )
-moviebase = MovieBase( title = "Bronze", cover_small = "http://waaa" )
-movieextra = MovieExtra( year = 1923, plot = "BLALALALAAL", trailer = "http://woo" )
-# movieextra.last_access = datetime.now()
-
-moviebase.extra = movieextra
-
-movieextra.genres.append( genre )
-movieextra.cast.append( person )
-
-dbc.add_movie( moviebase )
-
-medium.user = user
-dbc.add_medium( medium )
-
-ownertrip = OwnershipTriplet( user, moviebase, medium )
-dbc.add_ownertriplet( ownertrip )
-
-basetwo = MovieBase( title = "silver", cover_small = "http://silvertwo" )
-basetwoextra = MovieExtra( year = 1928, plot = "BLOBLOBLOB", trailer = "http://wiasjdi" )
-# basetwoextra.last_access = datetime.now()
-basetwo.extra = basetwoextra
-ownertriptwo = OwnershipTriplet( user, basetwo, medium )
-dbc.add_ownertriplet( ownertriptwo )
-
 user2 = User( googleid = 11 )
 dbc.add_user( user2 )
-
 # # TEST DATA
-
-def create_result_from_movie( movie ):
-    result = {}
-    if movie is not None:
-        result['title'] = movie.title
-        result['year'] = movie.extra.year
-        result['genres'] = [genre.name for genre in movie.extra.genres]
-        result['actors'] = [actor.name for actor in movie.extra.cast]
-        result['plot'] = movie.extra.plot
-        result['trailer'] = movie.extra.trailer
-        result['backdrop_path'] = movie.extra.cover_large
-        result['medium'] = movie.triplet.medium.name
-        return jsonify( result )
-    else: 
-        abort( 400 )
-    
-def convert_movie_base_obj( movie_base ):
-    return {"movie_id": movie_base.extra.id, "title": movie_base.title, "cover": movie_base.cover_small, } 
-
 
 ''' AUTHENTICATION '''
 
@@ -154,7 +106,7 @@ def add_movie():
     POST /movies 
     { 
        “title”: “The Fifth Element”, 
-       "id": 42
+       "id": 42,
        “location”: “WD HDD”
     }
     
@@ -163,7 +115,6 @@ def add_movie():
     if ( not req ) or ( 'location' not in request.json ) or ( ( 'title' not in req ) and ( 'id' not in req ) ):
         abort( 400 )
         
-    # googleid = req['g']
     googleid = g.googleid
         
     location = str( req['location'] )
@@ -186,7 +137,7 @@ def add_movie():
             db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )            
         
     ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
-    dbc.add_ownertriplet_with_googleid( ot, googleid )
+    dbc.add_ownertriplet_exists_check( ot )
         
     return jsonify( {} )           
 
@@ -196,23 +147,41 @@ def add_movie():
 @login_required
 def search_tmdb():
     '''
-    GET /helper/search 
+    POST /helper/search 
     { 
         “fragment”: “The Fif” 
     }
     
     { 
-        “possible_titles”: [ 
-            “The Fifth Element”, 
-            “The Fifth Commandment” ], 
+        "results": [
+            {
+              "id": 18,
+              "title": "Az \u00f6t\u00f6dik elem"
+            },
+            {
+              "id": 162903,
+              "title": "A WikiLeaks-botr\u00e1ny"
+            },
+            {
+              "id": 14075,
+              "title": "The Fifth Commandment"
+            },
+            {
+              "id": 231735,
+              "title": "The Dandy Fifth"
+            },
+            {
+              "id": 54415,
+              "title": "Sinbad: The Fifth Voyage"
+            }
+        ],
         “first_result”:  { 
-            "original_title": "The Fifth Element", 
+            "title": "Az \u00f6t\u00f6dik elem", 
             "overview": "It’s the year 2257 and a taxi driver has been unintentionally given 
             the task of saving a young girl who is part of the key that will ensure the survival of 
             humanity. The Fifth Element takes place in a futuristic metropolitan city and is filmed 
             in a French comic book aesthetic by a British, French and American lineup.", 
-            "poster_path": 
-            "https://image.tmdb.org/t/p/w185/zaFa1NRZEnFgRTv5OVXkNIZO78O.jpg", 
+            "poster_path": "https://image.tmdb.org/t/p/w185/zaFa1NRZEnFgRTv5OVXkNIZO78O.jpg", 
         } 
     } 
     '''
@@ -221,7 +190,30 @@ def search_tmdb():
         if request.json is None:
             raise KeyError()
         fragment = str( request.json['fragment'] )
-        result = tmdb.getFirstFiveResults( fragment )
+        
+        if ( '(' in fragment ) and ( ')' in fragment ):
+            opening_index = fragment.find( '(' )
+            closing_index = fragment.find( ')' )
+            if( opening_index > closing_index ):
+                # parenthesis are in incorrect order
+                result = tmdb.getFirstFiveResults( fragment )
+            else:
+                subs = fragment[opening_index + 1:closing_index]
+                if ( '(' in subs ) or ( ')' in subs ):
+                     # there are more parenthesis nested in each other
+                    result = tmdb.getFirstFiveResults( fragment )
+                else:
+                    try:
+                        year = int( subs )
+                        if( len( fragment[closing_index + 1:].strip() ) > 0 ):
+                            # there is something after the year parenthesis
+                            result = tmdb.getFirstFiveResults( fragment )    
+                        else:
+                            result = tmdb.getFirstFiveResults( title_fragment = fragment[:opening_index], year = year )
+                    except ValueError:
+                        result = tmdb.getFirstFiveResults( fragment )
+        else:
+            result = tmdb.getFirstFiveResults( fragment )
     except KeyError:
         pass
     if result == {}:
@@ -235,7 +227,7 @@ def search_tmdb():
 @login_required
 def get_media():
     '''
-    GET /media 
+    GET /media [no JSON]
     { 
         "media": [
             "WD HDD",
@@ -244,8 +236,7 @@ def get_media():
         ]
     }
     '''
-    googleid = request.json['g']
-    # googleid = g.googleid
+    googleid = g.googleid
     user = dbc.get_user_with_media_by_googleid( googleid )
     
     media = []
@@ -259,23 +250,22 @@ def get_media():
 @login_required
 def get_movies():
     '''
-    GET /movies 
+    GET /movies [no JSON] 
     { 
         “movies”: [ 
             { 
             movie_id: 42 
             title: “movie title”, 
-            cover: “cover URL / cover itself”, 
+            cover: “cover URL”, 
             } 
         ] 
     } 
     '''
-    # googleid = request.json['g']
     googleid = g.googleid
     
     user = dbc.get_movie_bases_by_googleid( googleid )
     if user is not None:
-        movie_bases = [convert_movie_base_obj( triple.movie ) for triple in user.triplet]
+        movie_bases = [EntityConverter.convert_movie_base_to_return_format( triple.movie ) for triple in user.triplet]
         return jsonify( movies = movie_bases )
     else:
         abort( 400 )
@@ -298,11 +288,10 @@ def get_movie( movie_id ):
         medium: “iStore” 
     } 
     '''
-    googleid = request.json['g']
-    # googleid = g.googleid
+    googleid = g.googleid
         
     movie = dbc.get_movie_by_id_and_by_googleid( movie_id, googleid )
-    return create_result_from_movie( movie )
+    return EntityConverter.convert_movie_to_json( movie )
     
 
 @app.route( '/random', methods = ['GET'] )
@@ -315,7 +304,7 @@ def get_random_movies():
             { 
             movie_id: 42 
             title: “movie title”, 
-            cover: “cover URL / cover itself”, 
+            cover: “cover URL”, 
             } 
         ] 
      } 
@@ -325,7 +314,7 @@ def get_random_movies():
     movie_bases_list = dbc.get_movie_bases_not_seen_in_last_time_by_googleid( googleid )
 
     if movie_bases_list is not None:
-        movie_bases_result = [convert_movie_base_obj( movie_base ) for movie_base in movie_bases_list]
+        movie_bases_result = [EntityConverter.convert_movie_base_to_return_format( movie_base ) for movie_base in movie_bases_list]
         return jsonify( movies = movie_bases_result )
     else:
         abort( 400 )
@@ -350,7 +339,7 @@ def get_random_movie():
     googleid = g.googleid
     
     movie = dbc.get_movie_not_seen_in_last_time_by_googleid( googleid )
-    return create_result_from_movie( movie )
+    return EntityConverter.convert_movie_to_json( movie )
 
 
 @app.route( '/auth/google', methods = ['POST'] )

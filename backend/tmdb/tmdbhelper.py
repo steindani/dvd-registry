@@ -74,12 +74,12 @@ class TMDBHelper( object ):
                         plot = ''
                     response['results'][0]['overview'] = translate( plot )
             
-            possible_results = [( result['title'], result['id'] ) for result in response['results'] if response['results'].index( result ) < 5 ]
-            result_movies['possible_ids'] = [result[1] for result in possible_results]
-            result_movies['possible_titles'] = [result[0] for result in possible_results]
+            possible_results = [( result['id'], result['title'] ) for result in response['results'] if response['results'].index( result ) < 5 ]
+            result_movies['results'] = [{'id': result[0], "title":result[1]} for result in possible_results]
             result_movies['first_result'] = {}
             
             if( len( possible_results ) > 0 ):
+                result_movies['first_result']['id'] = response['results'][0]['id']
                 result_movies['first_result']['title'] = response['results'][0]['title']
                 result_movies['first_result']['overview'] = response['results'][0]['overview']
                 result_movies['first_result']['poster_path'] = 'https://image.tmdb.org/t/p/w185' + response['results'][0]['poster_path']
