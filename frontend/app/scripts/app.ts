@@ -14,7 +14,8 @@ module dvdApp {
     'ngDialog',
     'satellizer',
     'dvdApp.Controllers',
-    'dvdApp.Directives'
+    'dvdApp.Directives',
+    'dvdApp.Services'
   ]);
 
   app.config(
