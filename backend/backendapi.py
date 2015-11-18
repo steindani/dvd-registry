@@ -100,7 +100,7 @@ def create_result_from_movie( movie ):
         abort( 400 )
     
 def convert_movie_base_obj( movie_base ):
-    return {"movie_id": movie_base.extra.id, "title": movie_base.title, "cover_small": movie_base.cover_small, } 
+    return {"movie_id": movie_base.extra.id, "title": movie_base.title, "cover": movie_base.cover_small, } 
 
 
 ''' AUTHENTICATION '''
@@ -314,7 +314,7 @@ def get_random_movies():
             { 
             movie_id: 42 
             title: “movie title”, 
-            cover_small: “cover URL / cover itself”, 
+            cover: “cover URL / cover itself”, 
             } 
         ] 
      } 
