@@ -270,10 +270,3 @@ class DBManager( object ):
     def update_movie_last_access( self, movie_extra_obj, session ):
         movie_extra_obj.last_access = datetime.now()
         self._add_object( movie_extra_obj, session )
-        
-
-    ''' UPDATE METHODS '''
-    ''' TODO: film hozzáadásának folyamatát végiggondolni, mit kell visszaadni a JS-nek, mit nem adunk már vissza neki, mi az amit nekünk kell most még eközben megcsinálnunk szerveroldalon (hogyan kapom vissza az adatokat kliensoldalró, hogy most akkor mit választott a felhasználó, hogymit ad hozzá az adatbázishoz)
-        TODO: https-et integrálni az egészhez, megnézni hogy a flask tudja-e (kell-e tudnia)
-     '''
-
