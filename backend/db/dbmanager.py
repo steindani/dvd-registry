@@ -84,7 +84,7 @@ class DBManager( object ):
         if len( movie_bases ) > 0:
             for movie_base in movie_bases:
                 triplet = movie_base.triplet
-                if ( triplet.user.googleid == googleid ) and ( triplet.medium.name == ownertriplet.medium.name ):
+                if ( triplet.user.googleid == str( googleid ) ) and ( triplet.medium.name == ownertriplet.medium.name ):
                     # remove session
                     session_creator.remove()
                     return False
@@ -208,7 +208,7 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch result
-        user_ownertriplet_moviebase_tuple = session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == googleid ).filter( MovieBase.id == movieid ).first()
+        user_ownertriplet_moviebase_tuple = session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == str( googleid ) ).filter( MovieBase.id == movieid ).first()
         
         if user_ownertriplet_moviebase_tuple is None:
             # remove session
@@ -240,7 +240,7 @@ class DBManager( object ):
         
         # fetch result
         last_seen_date_threshold = datetime.now() - timedelta( days = 0 )
-        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ).join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ).filter( User.googleid == googleid ).filter( MovieExtra.last_access < last_seen_date_threshold ).all()
+        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ).join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ).filter( User.googleid == str( googleid ) ).filter( MovieExtra.last_access < last_seen_date_threshold ).all()
         
         if user_ownertrip_movie_tuple_list == []:
             # remove session
@@ -265,7 +265,7 @@ class DBManager( object ):
         
         # fetch result
         last_seen_date_threshold = datetime.now() - timedelta( days = 0 )
-        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ).join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ).filter( User.googleid == googleid ).filter( MovieExtra.last_access < last_seen_date_threshold ).all()
+        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ).join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ).filter( User.googleid == str( googleid ) ).filter( MovieExtra.last_access < last_seen_date_threshold ).all()
         
         if user_ownertrip_movie_tuple_list == []:
             # remove session
