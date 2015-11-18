@@ -29,9 +29,9 @@ module dvdApp.Controllers {
 					() => {
 						BackendService.searchFor(
 							$scope.enteredTitle,
-							(data: { id: string, title: string }[]) => {
-								$scope.possibleMovies = data;
-								console.log(data);
+							(data: dvdApp.Services.FragmentResult) => {
+								$scope.firstResult = data.first_result;
+								$scope.possibleMovies = data.results;
 							})
 					},
 					200
