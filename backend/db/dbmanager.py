@@ -74,24 +74,26 @@ class DBManager( object ):
     def add_ownertriplet( self, ownertriplet ):
         self._add_object( ownertriplet )
    
-    def add_ownertriplet_with_googleid( self, ownertriplet, googleid ):
+    def add_ownertriplet_exists_check( self, ownertriplet ):
         # create session
         session_creator = self.create_session()
         session = session_creator()
         
-        # query for similar movies
-        movie_bases = self._get_movie_bases_by_title_and_year( ownertriplet.movie.title, ownertriplet.movie.extra.year, session )
-        if len( movie_bases ) > 0:
-            for movie_base in movie_bases:
-                triplet = movie_base.triplet
-                if ( triplet.user.googleid == str( googleid ) ) and ( triplet.medium.name == ownertriplet.medium.name ):
-                    # remove session
-                    session_creator.remove()
-                    return False
+        # params for query
+        googleid = ownertriplet.user.googleid
+        medium_name = ownertriplet.medium.name
+        title = ownertriplet.movie.title
+        year = ownertriplet.movie.extra.year
+        
+        # query similary ownertrip
+        ownertrip_exists = session.query( OwnershipTriplet ).join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( OwnershipTriplet.medium ).join( MovieBase.extra ).filter( User.googleid == googleid ).filter( Medium.name == medium_name ).filter( MovieBase.title == title ).filter( MovieExtra.year == year ).first()
+        if ownertrip_exists:
+            # remove session
+            session_creator.remove()
+            return False
 
         # add ownertriplet
         self._add_object( ownertriplet, session )
-        ownertriplet.user
         
         # remove session
         session_creator.remove()
@@ -104,7 +106,7 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch user
-        user = session.query( User ).filter_by( googleid = googleid ).first()
+        user = session.query( User ).filter_by( googleid = str( googleid ) ).first()
         
         if user:
             user_media = self.get_user_with_media_by_googleid( googleid, session = session )
@@ -129,27 +131,11 @@ class DBManager( object ):
     
     '''GETTER METHODS BY QUERY'''
     
-    def _get_movie_bases_by_title_and_year( self, title, year, session = None ):
-        # create session
-        if not session:
-            _session_creator = self.create_session()
-            _session = _session_creator()
-        else:
-            _session = session
-    
+    def _get_ownertriplet_by_params( self, googleid, medium_name, title, year, session ):
         # fetch_result
-        movie_bases = _session.query( MovieBase ).join( MovieBase.extra ).filter( MovieBase.title == title ).filter( MovieExtra.year == year ).all()
-        for movie_base in movie_bases:
-            movie_base.triplet.medium
-            movie_base.triplet.user
-
-        if not session:
-            # remove session
-            _session_creator.remove()
+        return 
         
-        return movie_bases
 
-    
     def get_user_with_media_by_googleid( self, googleid, session = None ):
         # create session
         if not session:
@@ -159,7 +145,7 @@ class DBManager( object ):
             _session = session
         
         # fetch result
-        user = _session.query( User ).filter_by( googleid = googleid ).first()
+        user = _session.query( User ).filter_by( googleid = str( googleid ) ).first()
         if user is not None:
             user.media
         
@@ -176,8 +162,8 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch result
-        user = session.query( User ).filter_by( googleid = googleid ).first()
-        
+        user = session.query( User ).filter_by( googleid = str( googleid ) ).first()
+
         # remove session
         session_creator.remove()
         
@@ -190,7 +176,7 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch result
-        user = session.query( User ).filter_by( googleid = googleid ).first()
+        user = session.query( User ).filter_by( googleid = str( googleid ) ).first()
         if user is not None:
             for triplet in user.triplet:
                 triplet.movie
@@ -208,7 +194,7 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch result
-        user_ownertriplet_moviebase_tuple = session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == str( googleid ) ).filter( MovieBase.id == movieid ).first()
+        user_ownertriplet_moviebase_tuple = session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == str( googleid ) ).filter( MovieBase.id == int( movieid ) ).first()
         
         if user_ownertriplet_moviebase_tuple is None:
             # remove session
@@ -290,3 +276,4 @@ class DBManager( object ):
     ''' TODO: film hozzáadásának folyamatát végiggondolni, mit kell visszaadni a JS-nek, mit nem adunk már vissza neki, mi az amit nekünk kell most még eközben megcsinálnunk szerveroldalon (hogyan kapom vissza az adatokat kliensoldalró, hogy most akkor mit választott a felhasználó, hogymit ad hozzá az adatbázishoz)
         TODO: https-et integrálni az egészhez, megnézni hogy a flask tudja-e (kell-e tudnia)
      '''
+

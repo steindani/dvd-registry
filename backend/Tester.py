@@ -106,7 +106,7 @@ if movie == {}:
 else:
     db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
 ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
-dbc.add_ownertriplet_with_googleid( ot, 18 )
+dbc.add_ownertriplet_exists_check( ot )
 
 print( '-----------------' )
 
@@ -122,7 +122,7 @@ else:
     db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
     
 ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
-dbc.add_ownertriplet_with_googleid( ot, 18 )
+dbc.add_ownertriplet_exists_check( ot )
 
 print( len( dbc.get_movie_bases_by_googleid( 18 ).triplet ) )
 
