@@ -31,7 +31,10 @@ module dvdApp.Controllers {
 							$scope.enteredTitle,
 							(data: dvdApp.Services.FragmentResult) => {
 								$scope.firstResult = data.first_result;
-								$scope.possibleMovies = data.results;
+
+								if ($scope.selectedId !== data.first_result.id) {
+									$scope.possibleMovies = data.results;
+								}
 							})
 					},
 					200
@@ -40,8 +43,12 @@ module dvdApp.Controllers {
 
 			$scope.selectPossibleMovie = function(id: string) {
 				$scope.possibleMovies.forEach(element => {
-					if (element.id === id.toString()) {
+					if (element.id === id) {
 						$scope.enteredTitle = element.title;
+						$scope.selectedId = id;
+						$scope.possibleMovies = [];
+
+						$scope.titleChanged();
 					}
 				});
 			}
@@ -54,6 +61,7 @@ module dvdApp.Controllers {
 
     export interface INewMovieScope extends ng.IScope {
 		enteredTitle: string;
+		selectedId: string;
 		possibleMovies: { id: string, title: string }[];
 		firstResult: any;
 		media: string[];

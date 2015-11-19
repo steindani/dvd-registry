@@ -1,17 +1,46 @@
+@mixin keyframes( $animationName )
+{
+    @-webkit-keyframes $animationName {
+        @content;
+    }
+    @-moz-keyframes $animationName {
+        @content;
+    }
+    @-o-keyframes $animationName {
+        @content;
+    }
+    @keyframes $animationName {
+        @content;
+    }
+}
+
+@include keyframes(fadeimg) {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	} 
+}
+
+
 .dvd-details-container {
 	width: 100%;
 	z-index: 0;
 	margin-bottom: 200px;
+	transition: width 1s, height 1s;
 	
 	.dvd-details-header {
-		max-height: 30vw;
+		height: 30vw;
 		position: relative;
 		padding-bottom: 2em;
 		overflow: hidden;
+		background: lightgray;
 		
 		img.dvd-backdrop {
-			position: relative;
-			width: 100%;
+			// position: relative;
+			width: 101%;
+			animation: fadeimg 1s;
 		}
 		
 		h2 {
@@ -37,7 +66,7 @@
 	}
 	
 	.dvd-details-content {
-		margin: 0px 24px;
+		margin: 0px 24px 24px 24px;
 		
 		.dvd-column {
 			width: 47.5%

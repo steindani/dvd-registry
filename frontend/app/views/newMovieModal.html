@@ -1,31 +1,39 @@
 <div class="dvd-details-container mdl-card mdl-shadow--2dp">
   <div class="dvd-details-content">
     <h2>Add new movie</h2>
-    
-    <h3>Media</h3>
-    <input type="text" list="media" />
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" id="media" list="media">
+      <label class="mdl-textfield__label" for="sample3">Storage media</label>
+    </div>
     <datalist id="media">
       <option value="{{m}}" ng-repeat="m in media" />
     </datalist>
-    
-    <h3>Title</h3>
-    <input ng-model="enteredTitle" ng-change="titleChanged()" list="movies" />
+
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" id="title" ng-model="enteredTitle" ng-change="titleChanged()" list="movies">
+      <label class="mdl-textfield__label" for="sample3">Movie title</label>
+    </div>
     <datalist id="movies">
       <option value="{{m.title}}" ng-repeat="m in possibleMovies" label="{{m.title}}">{{m.id}}</option>
     </datalist>
-    <p>Possible titles:</p>
-    <ul>
-      <li ng-repeat="m in possibleMovies" ng-click="alert(m.id)" class="animated fadeIn">{{m.title}}</li>
-    </ul>
-    
-    <div class="dvd-column dvd-column-left">
-      <h3>Story</h3>
-      <p>Maecenas tempor vehicula lacinia condimentum parturient purus a suspendisse cubilia vehicula quam etiam torquent aliquet
-        parturient eros suspendisse a dolor elementum cum tristique platea.Fringilla a litora metus nisi adipiscing ac morbi
-        porta adipiscing curabitur ut vestibulum auctor vestibulum cum adipiscing ac nec fringilla luctus elit habitant.
-        A adipiscing.</p>
-    </div>
 
-    <div class="clear" />
+    <ul class="dvd-possible-movies" ng-if="possibleMovies">
+      <li ng-repeat="m in possibleMovies" ng-click="selectPossibleMovie(m.id)">
+        {{m.title}}
+      </li>
+    </ul>
+
+    <div ng-if="firstResult.id">
+      <div class="dvd-column dvd-column-left">
+        <p>{{firstResult.overview}}</p>
+      </div>
+      <div class="dvd-column dvd-column-right">
+        <img class="cover-loader" style="display: hidden;" ng-src="{{firstResult.poster_path}}" />
+      </div>
+
+      <div class="clear" />
+    </div>
   </div>
 </div>

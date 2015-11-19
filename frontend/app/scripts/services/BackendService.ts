@@ -105,20 +105,30 @@ module dvdApp.Services {
                 }
             }
             ).success((data: any) => {
-                if (data.possible_ids) {
+                if (data.results && data.first_result) {
                     var result: FragmentResult = new FragmentResult();
-                    result.first_result = data.first_result;
 
-                    var pairs = data.possible_ids.map(
-                        (value, index) => {
-                            var m = new MovieBase();
-                            m.id = value,
-                            m.title = data.possible_titles[index]
-                            
-                            return m;
-                        });
-                        
-                    result.results = pairs;
+                    var first_result = new MovieDetail();
+                    first_result.id = data.first_result.id;
+                    first_result.title = data.first_result.title;
+                    first_result.poster_path = data.first_result.poster_path;
+                    first_result.overview = data.first_result.overview;
+                    first_result.year = data.first_result.year;
+                    first_result.genres = data.first_result.genres;
+                    first_result.actors = data.first_result.actors;
+                    first_result.trailer = data.first_result.trailer;
+                    first_result.backdrop_path = data.first_result.backdrop_path;
+                    first_result.medium = data.first_result.medium;
+
+                    result.first_result = first_result;
+
+                    result.results = data.results.map(pair => {
+                        var m = new MovieBase();
+                        m.id = pair.id;
+                        m.title = pair.title;
+
+                        return m;
+                    });
 
                     callback(result);
                 }
