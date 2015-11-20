@@ -6,8 +6,13 @@ module dvdApp.Services {
 
         private static MEDIA_URI: string = "http://localhost:5000/media";
         private static HELPER_SEARCH_URI: string = "http://127.0.0.1:5000/helper/search";
+        private static ADD_MOVIE_URI: string = "http://127.0.0.1:5000/movies";
+        private static GET_MOVIES_URI: string = "http://127.0.0.1:5000/movies";
+        private static GET_MOVIE_DETAILS_URI: string = "http://127.0.0.1:5000/movie/";
+        private static RECOMMENDATION_URI: string = "http://127.0.0.1:5000/random";
 
-        private static MOCK = true;
+
+        private static MOCK = false;
 
         constructor(
             private $http: ng.IHttpService,
@@ -33,7 +38,23 @@ module dvdApp.Services {
                         }));
                     });
             } else {
-
+                this.$http({
+                    method: "GET",
+                    url: BackendService.GET_MOVIES_URI,
+                    headers: {
+                        Authorization: 'Bearer ' + this.$auth.getToken()
+                    }
+                }
+                ).success((data: any) => {
+                    callback(
+                        data.movies.map(movie => {
+                            return {
+                                id: movie.movie_id,
+                                poster_path: movie.cover,
+                                title: movie.title
+                            }
+                        }));
+                });
             }
         }
 
@@ -51,7 +72,23 @@ module dvdApp.Services {
                         }));
                     });
             } else {
-
+                this.$http({
+                    method: "GET",
+                    url: BackendService.RECOMMENDATION_URI,
+                    headers: {
+                        Authorization: 'Bearer ' + this.$auth.getToken()
+                    }
+                }
+                ).success((data: any) => {
+                    callback(
+                        data.movies.map(movie => {
+                            return {
+                                id: movie.movie_id,
+                                poster_path: movie.cover,
+                                title: movie.title
+                            }
+                        }));
+                });
             }
         }
 
@@ -75,7 +112,27 @@ module dvdApp.Services {
                         callback(m);
                     });
             } else {
+                this.$http({
+                    method: "GET",
+                    url: BackendService.GET_MOVIE_DETAILS_URI + id,
+                    headers: {
+                        Authorization: 'Bearer ' + this.$auth.getToken()
+                    }
+                }
+                ).success((data: any) => {
+                    var m = new dvdApp.Services.MovieDetail();
+                    m.id = data.id;
+                    m.actors = data.actors;
+                    m.backdrop_path = data.backdrop_path;
+                    m.genres = data.genres;
+                    m.medium = data.medium;
+                    m.overview = data.plot;
+                    m.title = data.title;
+                    m.trailer = data.trailer;
+                    m.year = data.year;
 
+                    callback(m);
+                });
             }
         }
 
@@ -134,6 +191,33 @@ module dvdApp.Services {
                 }
             });
         }
+
+        public addMovie(id: string, title: string, media: string, callback: (data: any) => void): void {
+            console.log("adding new movie: " + id + " " + title + " " + media);
+
+            var data: any = {};
+            if (id) {
+                data.id = id;
+            }
+            if (title) {
+                data.title = title;
+            }
+            if (media) {
+                data.media = media;
+            }
+            
+            // TODO feedback on empty media
+
+            this.$http({
+                method: "POST",
+                url: BackendService.ADD_MOVIE_URI,
+                data: data,
+                headers: {
+                    Authorization: 'Bearer ' + this.$auth.getToken()
+                }
+            }
+            );
+        }
     }
 
     angular
@@ -146,6 +230,8 @@ module dvdApp.Services {
 
         media: (callback: (data: string[]) => void) => void;
         searchFor: (fragment: string, callback: (data: FragmentResult) => void) => void;
+
+        addMovie: (id: string, title: string, media: string, callback: (data: any) => void) => void;
     }
 
     export class FragmentResult {

@@ -3,7 +3,7 @@
     <h2>Add new movie</h2>
 
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <input class="mdl-textfield__input" type="text" id="media" list="media">
+      <input class="mdl-textfield__input" type="text" ng-model="medium" list="media">
       <label class="mdl-textfield__label" for="sample3">Storage media</label>
     </div>
     <datalist id="media">
@@ -35,5 +35,6 @@
 
       <div class="clear" />
     </div>
+    <button ng-click="addSelectedMovie()">Film hozzáadása</button>
   </div>
 </div>

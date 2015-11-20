@@ -5,44 +5,44 @@ module dvdApp {
 
   var app = angular
     .module('dvdApp', [
-    'ngAnimate',
-    'ngCookies',
-    'ngResource',
-    'ngRoute',
-    'ngSanitize',
-    'ngTouch',
-    'ngDialog',
-    'satellizer',
-    'dvdApp.Controllers',
-    'dvdApp.Directives',
-    'dvdApp.Services'
-  ]);
+      'ngAnimate',
+      'ngCookies',
+      'ngResource',
+      'ngRoute',
+      'ngSanitize',
+      'ngTouch',
+      'ngDialog',
+      'satellizer',
+      'dvdApp.Controllers',
+      'dvdApp.Directives',
+      'dvdApp.Services'
+    ]);
 
   app.config(
-      function($routeProvider) {
-        $routeProvider
-          .when('/', {
-            templateUrl: 'views/main.html',
-            controller: dvdApp.Controllers.MoviesController,
-            controllerAs: 'controller'
-          })
-          .when('/login', {
-            templateUrl: 'views/login.html',
-            controller: dvdApp.Controllers.LoginController,
-            controllerAs: 'controller'
-          })
-          .otherwise({
-            redirectTo: '/'
-          });
-        }
-      );
+    function($routeProvider) {
+      $routeProvider
+        .when('/', {
+          templateUrl: 'views/main.html',
+          controller: dvdApp.Controllers.MoviesController,
+          controllerAs: 'controller'
+        })
+        .when('/login', {
+          templateUrl: 'views/login.html',
+          controller: dvdApp.Controllers.LoginController,
+          controllerAs: 'controller'
+        })
+        .otherwise({
+          redirectTo: '/'
+        });
+    }
+  );
       
   // http://stackoverflow.com/questions/11541695/redirecting-to-a-certain-route-based-on-condition
   app.run(function($rootScope, $location, $auth) {
 
     // register listener to watch route changes
     $rootScope.$on("$routeChangeStart", function(event, next, current) {
-      if (! $auth.isAuthenticated()) {
+      if (!$auth.isAuthenticated()) {
         // no logged user, we should be going to #login
         if (next.templateUrl === "views/login.html") {
           // already going to #login, no redirect needed
@@ -53,11 +53,11 @@ module dvdApp {
       }
     });
   });
-  
+
   app.config(function($authProvider) {
     $authProvider.httpInterceptor = false;
     $authProvider.baseUrl = "http://localhost:5000";
-    
+
     $authProvider.google({
       clientId: '1085060587208-7ciq58jrnui1go17k7o8fuqu14281jdu.apps.googleusercontent.com'
     });
@@ -92,5 +92,12 @@ module dvdApp {
       closeByEscape: true,
       appendTo: false
     });
-  }]); 
+  }]);
+
+  // http://stackoverflow.com/questions/24163152/angularjs-ng-src-inside-of-iframe
+  app.filter('trustAsResourceUrl', ['$sce', function($sce) {
+    return function(val) {
+      return $sce.trustAsResourceUrl(val);
+    };
+  }])
 }

@@ -52,6 +52,10 @@ module dvdApp.Controllers {
 					}
 				});
 			}
+			
+			$scope.addSelectedMovie = () => {
+				BackendService.addMovie($scope.selectedId, $scope.enteredTitle, $scope.medium, null);
+			}
 		}
 	}
 
@@ -65,8 +69,10 @@ module dvdApp.Controllers {
 		possibleMovies: { id: string, title: string }[];
 		firstResult: any;
 		media: string[];
+		medium: string;
 
         titleChanged: () => void;
 		selectPossibleMovie: (id: string) => void;
+		addSelectedMovie: () => void;
     }
 }
