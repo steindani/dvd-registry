@@ -83,5 +83,11 @@ var dvdApp;
                 appendTo: false
             });
         }]);
+    // http://stackoverflow.com/questions/24163152/angularjs-ng-src-inside-of-iframe
+    app.filter('trustAsResourceUrl', ['$sce', function ($sce) {
+            return function (val) {
+                return $sce.trustAsResourceUrl(val);
+            };
+        }]);
 })(dvdApp || (dvdApp = {}));
 //# sourceMappingURL=app.js.map
