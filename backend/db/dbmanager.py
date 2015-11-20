@@ -258,6 +258,8 @@ class DBManager( object ):
             return None
         else:
             movie_bases = [record[2] for record in user_ownertrip_movie_tuple_list]
+            for movie_base in movie_bases:
+                movie_base.extra
             
             # remove session
             session_creator.remove()
