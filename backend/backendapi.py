@@ -359,7 +359,10 @@ def get_random_movie():
     googleid = g.googleid
     
     movie = dbc.get_movie_not_seen_in_last_time_by_googleid( googleid )
-    return EntityConverter.convert_movie_to_json( movie )
+    if movie is None:
+        return jsonify( {} )
+    else:
+        return EntityConverter.convert_movie_base_to_return_format( movie )
 
 
 @app.route( '/auth/google', methods = ['POST'] )
