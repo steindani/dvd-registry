@@ -132,19 +132,32 @@ def add_movie():
     medium = dbc.add_medium_to_user( media_name, googleid )
         
     if 'id' in req:
-        tmdb_id = int( req['id'] )
-        movie = tmdb.getMovieByID( tmdb_id )
-        if movie == {}:
-            abort( 400 )
-        else:
-            db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
-    else:
+        try:
+            tmdb_id = int( req['id'] )
+            movie = tmdb.getMovieByID( tmdb_id )
+            if movie == {}:
+                abort( 400 )
+            else:
+                db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
+        except ValueError:
+            if 'title' in req:
+                tmdb_title = str( req['title'] )
+                movie = tmdb.getMovieByTitle( tmdb_title )
+                if movie == {}:
+                    abort( 400 )
+                else:
+                    db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )                      
+            else:
+                abort( 400 )
+    elif 'title' in req:
         tmdb_title = str( req['title'] )
         movie = tmdb.getMovieByTitle( tmdb_title )
         if movie == {}:
             abort( 400 )
         else:
             db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )            
+    else:
+        abort( 400 )
         
     ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
     dbc.add_ownertriplet_exists_check( ot )
