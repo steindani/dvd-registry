@@ -44,6 +44,16 @@ cors = CORS( app, resources = {
         "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
         "send_wildcard": True
         },
+        
+    r"/random": {
+        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
+        "send_wildcard": True
+        },
+        
+    r"/random/one": {
+        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
+        "send_wildcard": True
+        },
     
     r"/auth/google": {
         "origins": [{"localhost:9000"}, {"localhost:5000"}]
