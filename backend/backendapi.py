@@ -264,8 +264,7 @@ def get_media():
     { 
         "media": [
             "WD HDD",
-            "BlueRay",
-            "Kiscica pendrive"
+            "BlueRay"
         ]
     }
     '''
@@ -289,7 +288,7 @@ def get_movies():
             { 
             movie_id: 42 
             title: “movie title”, 
-            cover: “cover URL”, 
+            cover: “cover URL” 
             } 
         ] 
     } 
@@ -301,7 +300,7 @@ def get_movies():
         movie_bases = [EntityConverter.convert_movie_base_to_return_format( triple.movie ) for triple in user.triplet]
         return jsonify( movies = movie_bases )
     else:
-        abort( 400 )
+        return jsonify( movies = [] )
     
 
 @app.route( '/movie/<int:movie_id>', methods = ['GET'] )
@@ -360,24 +359,21 @@ def get_random_movies():
 def get_random_movie():
     '''
     GET /random [no JSON] 
-    {   
+     { 
+        movie_id: 42 
         title: “movie title”, 
-        year: “creation year”, 
-        genres: [“action”, “adventure”], 
-        actors: [“Will Smith”, “Anne Hathaway”], 
-        plot: “plot in hungarian”, 
-        trailer: “youtube URL”, poster_path: “poster URL”, 
-        backdrop_path: “backdrop URL”, 
-        medium: “iStore” 
+        cover: “cover URL”, 
     } 
     '''
+    
     googleid = g.googleid
     
     movie = dbc.get_movie_not_seen_in_last_time_by_googleid( googleid )
-    if movie is None:
-        return jsonify( {} )
+    
+    if movie is not None:
+        return jsonify( EntityConverter.convert_movie_base_to_return_format( movie ) )
     else:
-        return EntityConverter.convert_movie_base_to_return_format( movie )
+        return jsonify( {} )
 
 
 @app.route( '/auth/google', methods = ['POST'] )

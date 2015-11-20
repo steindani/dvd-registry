@@ -10,7 +10,7 @@ from db.entities.person import Person
 from db.entities.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date, MINYEAR
 from random import randrange
 
 class DBManager( object ):
@@ -93,6 +93,7 @@ class DBManager( object ):
             return False
 
         # add ownertriplet
+        ownertriplet.movie.extra.last_access = date( MINYEAR, 1, 1 )
         self._add_object( ownertriplet, session )
         
         # remove session

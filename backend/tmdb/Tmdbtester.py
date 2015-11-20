@@ -21,10 +21,8 @@ helper = TMDBHelper()
 
 # print(helper.getMovieByTitle('The Fifth Element))
 
-
-fragments = helper.getFirstFiveResults( ' ' )
-print( fragments )
-
+mv = helper.getMovieByTitle( 'star wars' )
+print_dict( mv )
 #===============================================================================
 # fragment = 'the fifth(1997) element '
 #         

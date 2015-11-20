@@ -1,7 +1,7 @@
 '''
 @author: benjo
 '''
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date, MINYEAR
 from db.dbmanager import DBManager
 from db.entities.base import Base
 from db.entities.genre import Genre
@@ -124,5 +124,4 @@ else:
 ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
 dbc.add_ownertriplet_exists_check( ot )
 
-print( len( dbc.get_movie_bases_by_googleid( 18 ).triplet ) )
-
+print( dbc.get_movie_not_seen_in_last_time_by_googleid( 18 ).extra.trailer )
