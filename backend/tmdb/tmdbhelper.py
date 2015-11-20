@@ -35,7 +35,10 @@ class TMDBHelper( object ):
             result_movie['poster_path'] = 'https://image.tmdb.org/t/p/w185' + movie.poster_path
             result_movie['poster_original_path'] = 'https://image.tmdb.org/t/p/w1280' + movie.poster_path
             result_movie['cast'] = sorted( [ cast['name'] for cast in movie.cast] )
-            result_movie['trailer'] = 'https://www.youtube.com/embed/' + movie_videos['results'][0]['key']
+            if( len( movie_videos['results'] ) > 0 ):
+                result_movie['trailer'] = 'https://www.youtube.com/embed/' + movie_videos['results'][0]['key']
+            else:
+                result_movie['trailer'] = ''
         except HTTPError:
             pass
         

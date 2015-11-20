@@ -236,8 +236,7 @@ class DBManager( object ):
             result_length = len( user_ownertrip_movie_tuple_list )
             index = randrange( result_length )
             movie = user_ownertrip_movie_tuple_list[index][2]
-            
-            self._refresh_movie_extra_fields( movie, session )
+            movie.extra
             
             # remove session
             session_creator.remove()
