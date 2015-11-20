@@ -336,7 +336,7 @@ def get_random_movies():
         movie_bases_result = [EntityConverter.convert_movie_base_to_return_format( movie_base ) for movie_base in movie_bases_list]
         return jsonify( movies = movie_bases_result )
     else:
-        abort( 400 )
+        return jsonify( movies = [] )
         
 
 @app.route( '/random/one', methods = ['GET'] )
