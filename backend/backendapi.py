@@ -107,19 +107,24 @@ def add_movie():
     { 
        “title”: “The Fifth Element”, 
        "id": 42,
-       “location”: “WD HDD”
+       “media”: “WD HDD”
     }
     
     '''
     req = request.json
-    if ( not req ) or ( 'location' not in request.json ) or ( ( 'title' not in req ) and ( 'id' not in req ) ):
+    if ( not req ) or ( 'media' not in request.json ) or ( ( 'title' not in req ) and ( 'id' not in req ) ):
         abort( 400 )
         
     googleid = g.googleid
         
-    location = str( req['location'] )
+    media_name = str( req['media'] )
+    media_name = media_name.strip()
+    
+    if len( media_name ) == 0:
+        abort( 400 )
+    
     user = dbc.get_user_only_by_googleid( googleid )
-    medium = dbc.add_medium_to_user( location, googleid )
+    medium = dbc.add_medium_to_user( media_name, googleid )
         
     if 'id' in req:
         tmdb_id = int( req['id'] )

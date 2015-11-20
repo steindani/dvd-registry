@@ -61,6 +61,8 @@ class TMDBHelper( object ):
     def getFirstFiveResults( self, title_fragment, year = None ):
         tmdb.API_KEY = TMDBHelper._API_KEY
         result_movies = {}
+        result_movies['results'] = []
+        result_movies['first_result'] = {}
         
         try:
             search = tmdb.Search()
@@ -76,7 +78,6 @@ class TMDBHelper( object ):
             
             possible_results = [( result['id'], result['title'] ) for result in response['results'] if response['results'].index( result ) < 5 ]
             result_movies['results'] = [{'id': result[0], "title":result[1]} for result in possible_results]
-            result_movies['first_result'] = {}
             
             if( len( possible_results ) > 0 ):
                 result_movies['first_result']['id'] = response['results'][0]['id']
