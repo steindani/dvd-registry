@@ -131,6 +131,7 @@ def add_movie():
         abort( 400 )
         
     googleid = g.googleid
+        
     media_name = str( req['media'] )
     media_name = media_name.strip()
     
@@ -300,7 +301,7 @@ def get_movies():
         movie_bases = [EntityConverter.convert_movie_base_to_return_format( triple.movie ) for triple in user.triplet]
         return jsonify( movies = movie_bases )
     else:
-        return jsonify( movies = [] )
+        abort( 400 )
     
 
 @app.route( '/movie/<int:movie_id>', methods = ['GET'] )
