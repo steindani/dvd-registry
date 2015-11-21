@@ -62,4 +62,4 @@ class EntityConverter( object ):
             
     @staticmethod
     def convert_movie_base_to_return_format( movie_base ):
-        return {"movie_id": movie_base.extra.id, "title": movie_base.title, "cover": movie_base.cover_small }
+        return {"movie_id": movie_base.extra.id, "title": movie_base.title, "cover": movie_base.cover_small, "year": movie_base.extra.year }
