@@ -3,13 +3,16 @@ from requests.exceptions import HTTPError
 from translate.yandexhelper import translate 
 from copy import deepcopy
 from youtube.search import youtube_search
+import config.configuration
 
 ''' TMDB lib: https://github.com/celiao/tmdbsimple '''
 
 class TMDBHelper( object ):
-    _API_KEY = '13ed7e5e07699386ba2c32a52aed7ae6'
     _movie_data_cache = []
     _short_query_cache = []
+    
+    def __init__( self ):
+        self.api_key = config.configuration.app.config['TMDB_KEY']
     
     def _remove_unused_fields( self, movie_data ):
         movie_data = deepcopy( movie_data )
@@ -37,7 +40,7 @@ class TMDBHelper( object ):
 
 
     def get_movie_by_id( self, movie_id, title_fragment = None ):
-        tmdb.API_KEY = TMDBHelper._API_KEY
+        tmdb.API_KEY = self.api_key
         
         tmdb_id = int( movie_id )
         result_movie = self._get_movie_from_movie_data_cache_by_id( tmdb_id ) 
@@ -89,7 +92,7 @@ class TMDBHelper( object ):
     
     
     def get_movie_by_title( self, title_fragment ):
-        tmdb.API_KEY = TMDBHelper._API_KEY
+        tmdb.API_KEY = self.api_key
         result_movie = {}
         title = str( title_fragment )
         
@@ -109,7 +112,7 @@ class TMDBHelper( object ):
     
     
     def get_first_five_results( self, title_fragment, year = None ):
-        tmdb.API_KEY = TMDBHelper._API_KEY
+        tmdb.API_KEY = self.api_key
         title = str( title_fragment )
         
         result_movies = self._get_movie_from_short_query_cache( title )
