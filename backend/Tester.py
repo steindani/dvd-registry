@@ -129,4 +129,19 @@ ownertrip = dbc.get_ownertrip_by_year_title_googleid( 18, movie['year'], movie['
 
 print( '----------------' )
 
-print( dbc.get_movie_extra_by_googleid_and_criteria( 18, 'sci-fi' ).movie.extra.plot )
+# print( dbc.get_ownertriplet_by_googleid_and_criteria( 18, 'sci-fi' ).movie.extra.id )
+
+criteria = 'sci-fi metropolis'.strip()
+    
+movies_id = []
+criteria_parts = criteria.split( ' ' )
+
+for criteria_part in criteria_parts:
+    criteria_part = criteria_part.strip()
+    if len( criteria_part ) > 0:
+        ownertrip = dbc.get_ownertriplet_by_googleid_and_criteria( 18, criteria_part )
+        if ownertrip is not None:
+            if ownertrip.movie.extra.id not in movies_id:
+                movies_id.append( ownertrip.movie.extra.id )
+
+print( movies_id )

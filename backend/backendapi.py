@@ -125,9 +125,15 @@ def add_movie():
        “media”: “WD HDD”
     }
     
+    {
+        movie_id: 42 
+        title: “movie title”, 
+        cover: “cover URL”,
+        year: 1978
+    }
     '''
     req = request.json
-    if ( not req ) or ( 'media' not in request.json ) or ( ( 'title' not in req ) and ( 'id' not in req ) ):
+    if ( not req ) or ( 'media' not in req ) or ( ( 'title' not in req ) and ( 'id' not in req ) ):
         abort( 400 )
         
     googleid = g.googleid
@@ -219,41 +225,75 @@ def search_tmdb():
         } 
     } 
     '''
+    
+    req = request.json
+    if ( not req ) or ( 'fragment' not in req ):
+        abort( 400 )
+    
     result = {}
-    try:
-        if request.json is None:
-            raise KeyError()
-        fragment = str( request.json['fragment'] )
+    fragment = str( req['fragment'] )
         
-        if ( '(' in fragment ) and ( ')' in fragment ):
-            opening_index = fragment.find( '(' )
-            closing_index = fragment.find( ')' )
-            if( opening_index > closing_index ):
-                # parenthesis are in incorrect order
+    if ( '(' in fragment ) and ( ')' in fragment ):
+        opening_index = fragment.find( '(' )
+        closing_index = fragment.find( ')' )
+        if( opening_index > closing_index ):
+            # parenthesis are in incorrect order
+            result = tmdb.getFirstFiveResults( fragment )
+        else:
+            subs = fragment[opening_index + 1:closing_index]
+            if ( '(' in subs ) or ( ')' in subs ):
+                # there are more parenthesis nested in each other
                 result = tmdb.getFirstFiveResults( fragment )
             else:
-                subs = fragment[opening_index + 1:closing_index]
-                if ( '(' in subs ) or ( ')' in subs ):
-                     # there are more parenthesis nested in each other
+                try:
+                    year = int( subs )
+                    if( len( fragment[closing_index + 1:].strip() ) > 0 ):
+                        # there is something after the year parenthesis
+                        result = tmdb.getFirstFiveResults( fragment )    
+                    else:
+                        result = tmdb.getFirstFiveResults( title_fragment = fragment[:opening_index], year = year )
+                except ValueError:
                     result = tmdb.getFirstFiveResults( fragment )
-                else:
-                    try:
-                        year = int( subs )
-                        if( len( fragment[closing_index + 1:].strip() ) > 0 ):
-                            # there is something after the year parenthesis
-                            result = tmdb.getFirstFiveResults( fragment )    
-                        else:
-                            result = tmdb.getFirstFiveResults( title_fragment = fragment[:opening_index], year = year )
-                    except ValueError:
-                        result = tmdb.getFirstFiveResults( fragment )
-        else:
-            result = tmdb.getFirstFiveResults( fragment )
-    except KeyError:
-        pass
-    if result == {}:
-        abort( 400 )
     else:
-        return jsonify( result )
+        result = tmdb.getFirstFiveResults( fragment )
+    
+    return jsonify( result )
+    
+    
+@app.route( '/search/movies', methods = ['POST'] )
+@cross_origin( supports_credentials = True )
+@login_required
+def search_movies():
+    ''' 
+    POST /search/movies 
+    { 
+        criteria: "query"
+    }
+    
+    {
+        movies: [ 1,2,3,4,5,28]
+    }
+    '''
+    
+    req = request.json
+    if ( not req ) or ( 'criteria' not in req ):
+        abort( 400 )
+
+    googleid = g.googleid
+    criteria = str( req['criteria'] ).strip()
+    
+    movies_id = []
+    criteria_parts = criteria.split( ' ' )
+    
+    for criteria_part in criteria_parts:
+        criteria_part = criteria_part.strip()
+        if len( criteria_part ) > 0:
+            ownertrip = dbc.get_ownertriplet_by_googleid_and_criteria( googleid, criteria_part )
+            if ownertrip is not None:
+                if ownertrip.movie.extra.id not in movies_id:
+                    movies_id.append( ownertrip.movie.extra.id )
+    
+    return jsonify( movies = movies_id )
     
     
 @app.route( '/media', methods = ['GET'] )
@@ -289,7 +329,8 @@ def get_movies():
             { 
             movie_id: 42 
             title: “movie title”, 
-            cover: “cover URL” 
+            cover: “cover URL”,
+            year: 1978 
             } 
         ] 
     } 

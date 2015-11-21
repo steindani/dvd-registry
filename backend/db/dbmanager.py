@@ -214,7 +214,7 @@ class DBManager( object ):
         
         return ownertrip
     
-    def get_movie_extra_by_googleid_and_criteria( self, googleid, criteria ):
+    def get_ownertriplet_by_googleid_and_criteria( self, googleid, criteria ):
         # create session
         session_creator = self.create_session()
         session = session_creator()
