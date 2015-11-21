@@ -8,7 +8,7 @@ class Medium( Base ):
     __tablename__ = 'media'
     
     id = Column( Integer, Sequence( 'medium_id_seq' ), primary_key = True )
-    name = Column( String )
+    name = Column( String , nullable = False )
     
     triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet' )
     

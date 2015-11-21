@@ -6,7 +6,7 @@ class Person( Base ):
     __tablename__ = 'cast'
     
     id = Column( Integer, Sequence( 'person_id_seq' ), primary_key = True )
-    name = Column( String )
+    name = Column( String, nullable = False )
     
     movie_id = Column( Integer, ForeignKey( 'moviesextra.id' ) )
     

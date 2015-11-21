@@ -9,6 +9,6 @@ class Genre( Base ):
     __tablename__ = 'genres'
     
     id = Column( Integer, Sequence( 'genre_id_seq' ), primary_key = True )
-    name = Column( String )
+    name = Column( String, nullable = False )
     
     movie_id = Column( Integer, ForeignKey( 'moviesextra.id' ) )

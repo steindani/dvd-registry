@@ -8,7 +8,7 @@ class User( Base ):
     __tablename__ = 'users'
     
     id = Column( Integer, Sequence( 'user_id_seq' ), primary_key = True )
-    googleid = Column( String( 120 ) )
+    googleid = Column( String( 120 ), nullable = False )
     
     triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet' )
     media = relationship( 'db.entities.medium.Medium' )

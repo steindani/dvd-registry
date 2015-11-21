@@ -7,7 +7,7 @@ class MovieBase( Base ):
     __tablename__ = 'movies'
     
     id = Column( Integer, Sequence( 'movie_id_seq' ), primary_key = True )
-    title = Column( String )
+    title = Column( String, nullable = False )
     cover_small = Column( String )
     
     triplet = relationship( 'db.entities.ownershiptriplet.OwnershipTriplet', uselist = False )
@@ -18,7 +18,7 @@ class MovieExtra( Base ):
     
     id = Column( Integer, Sequence( 'movie_id_seq' ), primary_key = True )
     cover_large = Column( String )
-    year = Column( Integer )
+    year = Column( Integer, nullable = False )
     plot = Column( String )
     trailer = Column( String )
     last_access = Column( DateTime )
