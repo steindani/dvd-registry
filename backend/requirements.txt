@@ -9,3 +9,4 @@ itsdangerous
 PyJWT
 requests
 requests-oauthlib
+google-api-python-client

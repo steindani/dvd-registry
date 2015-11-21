@@ -2,6 +2,7 @@ import tmdbsimple as tmdb
 from requests.exceptions import HTTPError
 from translate.yandexhelper import translate 
 from copy import deepcopy
+from youtube.search import youtube_search
 
 ''' TMDB lib: https://github.com/celiao/tmdbsimple '''
 
@@ -70,7 +71,7 @@ class TMDBHelper( object ):
                 if( len( movie_videos['results'] ) > 0 ):
                     result_movie['trailer'] = 'https://www.youtube.com/embed/' + movie_videos['results'][0]['key']
                 else:
-                    result_movie['trailer'] = ''
+                    result_movie['trailer'] = youtube_search( result_movie['title'] )
                     
                 if title_fragment is not None:
                     result_movie['title_fragment'] = str( title_fragment )
