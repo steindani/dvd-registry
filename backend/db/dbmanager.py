@@ -13,14 +13,7 @@ from random import randrange
 class DBManager( object ):
     
     def __init__( self ):
-        self.engine = create_engine( 'sqlite:///:memory:', echo = False )
-        
-        try:
-            self.engine.connect().close()
-        except Exception:
-            # TODO better error handling
-            raise
-
+        self.engine = create_engine( 'sqlite:///movies.db', echo = False )
         self.session_factory = sessionmaker( bind = self.engine )
         
     def init_db( self ):
