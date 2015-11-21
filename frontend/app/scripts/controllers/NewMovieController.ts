@@ -37,7 +37,7 @@ module dvdApp.Controllers {
 								}
 							})
 					},
-					200
+					300
 				);
 			}
 
@@ -52,9 +52,18 @@ module dvdApp.Controllers {
 					}
 				});
 			}
-			
+
 			$scope.addSelectedMovie = () => {
-				BackendService.addMovie($scope.selectedId, $scope.enteredTitle, $scope.medium, null);
+				BackendService.addMovie(
+					$scope.selectedId,
+					$scope.enteredTitle,
+					$scope.medium,
+					(data: dvdApp.Services.MoviePresent) => {
+						(<dvdApp.Controllers.IMoviesScope>$scope.$parent).applyUpdate(data);
+						(<any> $scope).closeThisDialog();
+					});
+					
+					
 			}
 		}
 	}

@@ -51,7 +51,8 @@ module dvdApp.Services {
                             return {
                                 id: movie.movie_id,
                                 poster_path: movie.cover,
-                                title: movie.title
+                                title: movie.title,
+                                year: movie.year
                             }
                         }));
                 });
@@ -85,7 +86,8 @@ module dvdApp.Services {
                             return {
                                 id: movie.movie_id,
                                 poster_path: movie.cover,
-                                title: movie.title
+                                title: movie.title,
+                                year: movie.year
                             }
                         }));
                 });
@@ -215,8 +217,14 @@ module dvdApp.Services {
                 headers: {
                     Authorization: 'Bearer ' + this.$auth.getToken()
                 }
-            }
-            );
+            }).success((data: any) => {
+                callback({
+                    id: data.movie_id,
+                    poster_path: data.cover,
+                    title: data.title,
+                    year: data.year
+                })
+            });
         }
     }
 
@@ -246,11 +254,11 @@ module dvdApp.Services {
 
     export class MoviePresent extends MovieBase {
         poster_path: string;
+        year: string;
     }
 
     export class MovieDetail extends MoviePresent {
         overview: string;
-        year: string;
         genres: string[];
         actors: string[];
         trailer: string;

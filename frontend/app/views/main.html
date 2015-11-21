@@ -1,6 +1,7 @@
 <div class="dvd-reccomendation-breaker">
   <div class="dvd-recommendation-container mdl-grid">
-    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in recommendations track by $index">
+    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in recommendations track by $index"
+         ng-click="showDetails(m.id)">
       <img class="cover-loader" style="display: hidden;" ng-src="{{m.poster_path}}" />
       <div class="mdl-card__title mdl-card--expand"></div>
       <div class="mdl-card__actions">

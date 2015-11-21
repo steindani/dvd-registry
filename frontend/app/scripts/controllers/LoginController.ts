@@ -9,7 +9,8 @@ module dvdApp.Controllers {
         constructor(
             private $scope: ILoginScope,
             private $auth: any,
-            private $location: ng.ILocationService
+            private $location: ng.ILocationService,
+            private $routeParams: any
         ) {
             this.scope = $scope;
 
@@ -18,6 +19,10 @@ module dvdApp.Controllers {
                     .then((response) => {
                         $auth.setToken(response.data.token);
                         $location.url("/");
+                    })
+                    .catch((data) => {
+                        console.log(data);
+                        $location.url("login?force=" + provider);
                     });
             };
 
@@ -29,12 +34,17 @@ module dvdApp.Controllers {
                 $auth.removeToken();
                 $location.url("/");
             }
+
+            console.log($routeParams);
+            if ($routeParams.force) {
+                $scope.authenticate($routeParams.force)
+            }
         }
     }
 
     angular
         .module('dvdApp.Controllers', [])
-        .controller('LoginController', ['$scope', '$auth', '$location', dvdApp.Controllers.LoginController]);
+        .controller('LoginController', ['$scope', '$auth', '$location', '$routeParams', dvdApp.Controllers.LoginController]);
 
     export interface ILoginScope extends ng.IScope {
         authenticate: (provider: string) => void;
