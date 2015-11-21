@@ -70,11 +70,6 @@ dbc.init_db()
 
 tmdb = TMDBHelper()
 
-# # TEST DATA
-user2 = User( googleid = 11 )
-dbc.add_user( user2 )
-# # TEST DATA
-
 ''' AUTHENTICATION '''
 
 def create_token( user ):
