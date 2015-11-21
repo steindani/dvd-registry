@@ -43,6 +43,10 @@
             <label class="mdl-textfield__label" for="search">Enter your query...</label>
           </div>
         </div>
+        <div ng-controller="LoginController">
+          <a href="#/login" ng-if="!isAuthenticated()">Bejelentkezés</a>
+          <a href="#" ng-if="isAuthenticated()" ng-click="logOut()">Kijelentkezés</a>
+        </div>
       </div>
     </header>
     <div class="dvd-ribbon"></div>

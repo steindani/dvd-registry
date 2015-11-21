@@ -5,13 +5,37 @@
   </div>
   <div class="dvd-details-content">
     <div class="dvd-column dvd-column-left">
-      <h3>Story</h3>
+      <h3>Történet</h3>
       <p>{{movie.overview}}</p>
+
+      <div ng-if="movie.actors[0]">
+        <h3>Szereplők</h3>
+        <p>
+          <span ng-repeat="actor in movie.actors">
+          {{actor}}{{$last ? '' : ', '}}
+        </span>
+        </p>
+      </div>
     </div>
     <div class="dvd-column dvd-column-right">
-      <iframe style="width: 100%; height: 15vw;" ng-src="{{movie.trailer | trustAsResourceUrl}}" frameborder="0" allowfullscreen></iframe>
+      <h3>Tárolási hely</h3>
+      <p>{{movie.medium}}</p>
+
+      <div ng-if="movie.genres[0]">
+        <h3>Műfaj</h3>
+        <p>
+          <span ng-repeat="genre in movie.genres">
+          {{genre}}{{$last ? '' : ', '}}
+        </span>
+        </p>
+      </div>
+
+      <div ng-if="movie.trailer">
+        <h3>Trailer</h3>
+        <iframe style="width: 100%; height: 15vw;" ng-src="{{movie.trailer | trustAsResourceUrl}}" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
-    
+
     <div class="clear" />
   </div>
 </div>
