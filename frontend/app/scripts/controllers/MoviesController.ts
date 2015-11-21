@@ -34,14 +34,19 @@ module dvdApp.Controllers {
             }
             
             $scope.newMovieModal = function() {
-
                 ngDialog.open({
                     className: 'ngdialog-theme-dvd',
                     template: 'views/newMovieModal.html',
                     plain: false,
-                    controller: dvdApp.Controllers.NewMovieController
+                    controller: dvdApp.Controllers.NewMovieController,
+                    scope: $scope
                 });
             }
+            
+            $scope.applyUpdate = function(movie: dvdApp.Services.MoviePresent) {
+                $scope.movies.push(movie);
+            }
+            
         }
     }
 
@@ -50,10 +55,11 @@ module dvdApp.Controllers {
         .controller('MoviesController', ['$scope', '$window', '$http', 'ngDialog', '$auth', 'BackendService', dvdApp.Controllers.MoviesController]);
 
     export interface IMoviesScope extends ng.IScope {
-        movies: any;
-        recommendations: any;
+        movies: dvdApp.Services.MoviePresent[];
+        recommendations: dvdApp.Services.MoviePresent[];
 
         showDetails: (id: string) => void;
         newMovieModal: () => void;
+        applyUpdate: (movie: dvdApp.Services.MoviePresent) => void;
     }
 }

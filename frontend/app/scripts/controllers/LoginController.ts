@@ -21,6 +21,7 @@ module dvdApp.Controllers {
                         $location.url("/");
                     })
                     .catch((data) => {
+                        console.log(data);
                         $location.url("login?force=" + provider);
                     });
             };
