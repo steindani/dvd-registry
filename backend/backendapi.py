@@ -34,6 +34,11 @@ cors = CORS( app, resources = {
         "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
         "send_wildcard": True
         },
+                               
+    r"/search/movies": {
+        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
+        "send_wildcard": True
+        },
         
     r"/media": {
         "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
