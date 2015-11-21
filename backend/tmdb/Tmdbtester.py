@@ -15,7 +15,7 @@ helper = TMDBHelper()
 
 #===============================================================================
 # movie = helper.get_movie_by_id( 296100 )
-# #print_dict( movie )
+# print_dict( movie )
 #  
 # print(TMDBHelper._movie_data_cache)
 #  
@@ -44,7 +44,7 @@ helper = TMDBHelper()
 # print( '---------------------------------' )
 #  
 # fragments = helper.get_first_five_results( 'The Fif' )
-# # print_dict( fragments )
+# print_dict( fragments )
 #  
 # print( len( TMDBHelper._short_query_cache ) )
 #  
