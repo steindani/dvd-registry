@@ -131,7 +131,7 @@ print( '----------------' )
 
 # print( dbc.get_ownertriplet_by_googleid_and_criteria( 18, 'sci-fi' ).movie.extra.id )
 
-criteria = 'sci-fi metropolis'.strip()
+criteria = 'sci-fi'.strip()
     
 movies_id = []
 criteria_parts = criteria.split( ' ' )

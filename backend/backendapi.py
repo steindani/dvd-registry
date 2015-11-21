@@ -155,7 +155,7 @@ def add_movie():
     if 'id' in req:
         try:
             tmdb_id = int( req['id'] )
-            movie = tmdb.getMovieByID( tmdb_id )
+            movie = tmdb.get_movie_by_id( tmdb_id )
             if movie == {}:
                 abort( 400 )
             else:
@@ -163,7 +163,7 @@ def add_movie():
         except ValueError:
             if 'title' in req:
                 tmdb_title = str( req['title'] )
-                movie = tmdb.getMovieByTitle( tmdb_title )
+                movie = tmdb.get_movie_by_title( tmdb_title )
                 if movie == {}:
                     abort( 400 )
                 else:
@@ -172,7 +172,7 @@ def add_movie():
                 abort( 400 )
     elif 'title' in req:
         tmdb_title = str( req['title'] )
-        movie = tmdb.getMovieByTitle( tmdb_title )
+        movie = tmdb.get_movie_by_title( tmdb_title )
         if movie == {}:
             abort( 400 )
         else:
@@ -243,24 +243,24 @@ def search_tmdb():
         closing_index = fragment.find( ')' )
         if( opening_index > closing_index ):
             # parenthesis are in incorrect order
-            result = tmdb.getFirstFiveResults( fragment )
+            result = tmdb.get_first_five_results( fragment )
         else:
             subs = fragment[opening_index + 1:closing_index]
             if ( '(' in subs ) or ( ')' in subs ):
                 # there are more parenthesis nested in each other
-                result = tmdb.getFirstFiveResults( fragment )
+                result = tmdb.get_first_five_results( fragment )
             else:
                 try:
                     year = int( subs )
                     if( len( fragment[closing_index + 1:].strip() ) > 0 ):
                         # there is something after the year parenthesis
-                        result = tmdb.getFirstFiveResults( fragment )    
+                        result = tmdb.get_first_five_results( fragment )    
                     else:
-                        result = tmdb.getFirstFiveResults( title_fragment = fragment[:opening_index], year = year )
+                        result = tmdb.get_first_five_results( title_fragment = fragment[:opening_index], year = year )
                 except ValueError:
-                    result = tmdb.getFirstFiveResults( fragment )
+                    result = tmdb.get_first_five_results( fragment )
     else:
-        result = tmdb.getFirstFiveResults( fragment )
+        result = tmdb.get_first_five_results( fragment )
     
     return jsonify( result )
     

@@ -36,7 +36,7 @@ class TMDBHelper( object ):
                 return self._remove_unused_fields( movie_data )
 
 
-    def getMovieByID( self, movie_id, title_fragment = None ):
+    def get_movie_by_id( self, movie_id, title_fragment = None ):
         tmdb.API_KEY = TMDBHelper._API_KEY
         
         tmdb_id = int( movie_id )
@@ -88,7 +88,7 @@ class TMDBHelper( object ):
         return result_movie
     
     
-    def getMovieByTitle( self, title_fragment ):
+    def get_movie_by_title( self, title_fragment ):
         tmdb.API_KEY = TMDBHelper._API_KEY
         result_movie = {}
         title = str( title_fragment )
@@ -101,14 +101,14 @@ class TMDBHelper( object ):
                 response = search.movie( query = title, language = 'hu' )
                 if( len( response['results'] ) > 0 ):
                     tmdb_id = response['results'][0]['id']
-                    result_movie = self.getMovieByID( tmdb_id, title_fragment )
+                    result_movie = self.get_movie_by_id( tmdb_id, title_fragment )
             except HTTPError:
                  pass
          
         return result_movie
     
     
-    def getFirstFiveResults( self, title_fragment, year = None ):
+    def get_first_five_results( self, title_fragment, year = None ):
         tmdb.API_KEY = TMDBHelper._API_KEY
         title = str( title_fragment )
         
