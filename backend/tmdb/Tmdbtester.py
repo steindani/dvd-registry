@@ -13,16 +13,46 @@ def print_dict( dics ):
 
 helper = TMDBHelper()
 
+#===============================================================================
 # movie = helper.getMovieByID( 296100 )
-# print_dict( movie )
-    
-# fragments = helper.getFirstFiveResults( 'The Fifth Element' )
+# #print_dict( movie )
+# 
+# print(TMDBHelper._movie_data_cache)
+# 
+# movie = helper.getMovieByID( 296100 )
+# #print_dict( movie )
+# print(TMDBHelper._movie_data_cache)
+#===============================================================================
+
+movie = helper.getMovieByTitle( 'The Night Before' )
+print_dict( movie )
+print( TMDBHelper._movie_data_cache )
+ 
+print( '---------------------------------' )
+
+movie = helper.getMovieByID( 296100, title_fragment = 'The Night Before' )
+print( TMDBHelper._movie_data_cache )
+print_dict( movie )
+
+print( '---------------------------------' )
+
+movie = helper.getMovieByTitle( 'The Night Before' )
+print_dict( movie )
+print( TMDBHelper._movie_data_cache )
+
+print( '---------------------------------' )
+print( '---------------------------------' )
+print( '---------------------------------' )
+
+fragments = helper.getFirstFiveResults( 'The Fif' )
 # print_dict( fragments )
 
-# print(helper.getMovieByTitle('The Fifth Element))
+print( len( TMDBHelper._short_query_cache ) )
 
-mv = helper.getMovieByTitle( 'star wars' )
-print_dict( mv )
+print( '---------------------------------' )
+
+fragments = helper.getFirstFiveResults( 'The Fif' )
+# print_dict( fragments )
 #===============================================================================
 # fragment = 'the fifth(1997) element '
 #         
