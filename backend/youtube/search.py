@@ -7,7 +7,7 @@ def youtube_search( movie_title ):
     video_url = ''
     
     try:
-        search_response = youtube.search().list( q = query, part = "id", maxResults = 1 ).execute()
+        search_response = youtube.search().list( q = query, part = "id", order = 'viewCount', maxResults = 1 ).execute()
         
         for search_result in search_response.get( "items", [] ):
             if search_result["id"]["kind"] == "youtube#video":
