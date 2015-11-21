@@ -126,4 +126,7 @@ ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = m
 dbc.add_ownertriplet_exists_check( ot )
 
 ownertrip = dbc.get_ownertrip_by_year_title_googleid( 18, movie['year'], movie['title'] )
-print( EntityConverter.convert_movie_base_to_return_format( ownertrip.movie ) )
+
+print( '----------------' )
+
+print( dbc.get_movie_extra_by_googleid_and_criteria( 18, 'sci-fi' ).movie.extra.plot )

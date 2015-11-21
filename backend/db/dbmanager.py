@@ -8,7 +8,7 @@ from db.entities.movie import MovieBase, MovieExtra
 from db.entities.ownershiptriplet import OwnershipTriplet
 from db.entities.person import Person
 from db.entities.user import User
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime, timedelta, date, MINYEAR
 from random import randrange
@@ -197,6 +197,34 @@ class DBManager( object ):
         # remove session
         session_creator.remove()
         
+        return ownertrip
+    
+    def get_movie_extra_by_googleid_and_criteria( self, googleid, criteria ):
+        # create session
+        session_creator = self.create_session()
+        session = session_creator()
+        
+        criteria_old = criteria
+        try:
+            criteria = int( criteria )
+        except ValueError:
+            criteria = '%' + str( criteria_old ) + '%'
+        
+        ownertrip = session.query( OwnershipTriplet ).join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).join( MovieExtra.cast ).join( MovieExtra.genres ) \
+                            .filter( User.googleid == str( googleid ) ) \
+                            .filter( or_( 
+                                        MovieBase.title.like( criteria ),
+                                        MovieExtra.year == criteria,
+                                        MovieExtra.plot.like( criteria ),
+                                        Person.name.like( criteria ),
+                                        Genre.name.like( criteria )
+                                    ) ).first()
+        if ownertrip is not None:
+            ownertrip.movie
+            ownertrip.movie.extra
+            
+        # remove session
+        session_creator.remove()
         return ownertrip
     
     
