@@ -283,7 +283,7 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch result
-        last_seen_date_threshold = datetime.now() - timedelta( days = 0 )
+        last_seen_date_threshold = datetime.now() - timedelta( seconds = 30 )
         user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ) \
                                                     .join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ) \
                                                     .filter( User.googleid == str( googleid ) ) \
@@ -311,7 +311,7 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch result
-        last_seen_date_threshold = datetime.now() - timedelta( days = 0 )
+        last_seen_date_threshold = datetime.now() - timedelta( seconds = 30 )
         user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ) \
                                                     .join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ) \
                                                     .filter( User.googleid == str( googleid ) ) \
