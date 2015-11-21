@@ -1,8 +1,3 @@
-'''
-Created on Nov 17, 2015
-
-@author: benjo
-'''
 from db.entities.genre import Genre
 from db.entities.medium import Medium
 from db.entities.movie import MovieBase, MovieExtra

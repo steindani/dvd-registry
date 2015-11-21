@@ -1,7 +1,3 @@
-'''
-@author: benedekh
-'''
- 
 from db.entities.base import Base
 from db.entities.user import User
 from db.entities.movie import MovieBase

@@ -1,6 +1,3 @@
-'''
-@author: benjo
-'''
 from datetime import datetime, timedelta, date, MINYEAR
 from db.dbmanager import DBManager
 from db.entities.base import Base

@@ -1,9 +1,3 @@
-'''
-Created on Nov 17, 2015
-
-@author: benjo
-'''
-
 import requests, json
 import config.configuration
 

@@ -1,9 +1,3 @@
-'''
-Created on Nov 21, 2015
-
-@author: benjo
-'''
-
 from datetime import datetime, timedelta
 from flask import g, send_file, request, jsonify, abort, url_for
 from functools import wraps

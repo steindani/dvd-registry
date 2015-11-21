@@ -1,10 +1,3 @@
-'''
-Created on Nov 21, 2015
-
-@author: benjo
-
-'''
-
 from flask import Flask
 from flask_cors import CORS
 import os

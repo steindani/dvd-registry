@@ -1,7 +1,3 @@
-'''
-@author:  benedekh
-'''
-
 from db.entities.base import Base
 from sqlalchemy import Column, ForeignKey, Integer, Sequence, String
 from sqlalchemy.ext.declarative import declarative_base

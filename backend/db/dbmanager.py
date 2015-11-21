@@ -1,6 +1,3 @@
-'''
-@author: benedekh
-'''
 from db.entities.base import Base
 from db.entities.genre import Genre
 from db.entities.medium import Medium
