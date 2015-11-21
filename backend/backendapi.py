@@ -1,117 +1,26 @@
-from datetime import datetime, timedelta
+from auth.authentication import create_token, parse_token, login_required
 from db.dbmanager import DBManager
-from db.entities.base import Base
-from db.entities.genre import Genre
 from db.entities.medium import Medium
 from db.entities.movie import MovieBase, MovieExtra
 from db.entities.ownershiptriplet import OwnershipTriplet
-from db.entities.person import Person
 from db.entities.user import User
-from flask import Flask, g, send_file, request, redirect, url_for, jsonify, abort
-from functools import wraps
-from jwt import DecodeError, ExpiredSignature
-from urllib.parse import urlencode
+from db.entityhelper import EntityFactory, EntityConnector, EntityConverter
+from flask import Flask, g, url_for, send_file, request, jsonify, abort
+from flask_cors import cross_origin
+import config.configuration
 import json
-import jwt
-import os
 import requests
 
-from flask_cors import CORS
-from flask_cors import cross_origin
 from tmdb.tmdbhelper import TMDBHelper
-from db.entityhelper import EntityFactory, EntityConnector, EntityConverter
 
-# Configuration
 
-current_path = os.path.dirname( __file__ )
-client_path = os.path.abspath( os.path.join( current_path, '..', '..', 'client' ) )
-
-app = Flask( __name__ , static_url_path = '', static_folder = client_path )
-app.config.from_object( 'config' )
-
-cors = CORS( app, resources = {
-    r"/helper/search": {
-        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
-        "send_wildcard": True
-        },
-                               
-    r"/search/movies": {
-        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
-        "send_wildcard": True
-        },
-        
-    r"/media": {
-        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
-        "send_wildcard": True
-        },
-        
-    r"/movies": {
-        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
-        "send_wildcard": True
-        },
-        
-    r"/random": {
-        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
-        "send_wildcard": True
-        },
-        
-    r"/random/one": {
-        "origins": [{"*"}, {"localhost:9000"}, {"localhost:5000"}],
-        "send_wildcard": True
-        },
-    
-    r"/auth/google": {
-        "origins": [{"localhost:9000"}, {"localhost:5000"}]
-        }
-    } )
+config.configuration.init( __file__, __name__ )
+app = config.configuration.app
 
 dbc = DBManager()
 dbc.init_db()
 
 tmdb = TMDBHelper()
-
-''' AUTHENTICATION '''
-
-def create_token( user ):
-    payload = {
-        'sub': user.googleid,
-        'iat': datetime.utcnow(),
-        'exp': datetime.utcnow() + timedelta( days = 14 )
-    }
-    token = jwt.encode( payload, app.config['TOKEN_SECRET'] )
-    return token.decode( 'unicode_escape' )
-
-
-def parse_token( req ):
-    token = req.headers.get( 'Authorization' ).split()[1]
-    return jwt.decode( token, app.config['TOKEN_SECRET'] )
-
-
-def login_required( f ):
-    @wraps( f )
-    def decorated_function( *args, **kwargs ):
-        if not request.headers.get( 'Authorization' ):
-            response = jsonify( message = 'Missing authorization header' )
-            response.status_code = 401
-            return response
-
-        try:
-            payload = parse_token( request )
-        except DecodeError:
-            response = jsonify( message = 'Token is invalid' )
-            response.status_code = 401
-            return response
-        except ExpiredSignature:
-            response = jsonify( message = 'Token has expired' )
-            response.status_code = 401
-            return response
-
-        g.googleid = payload['sub']
-
-        return f( *args, **kwargs )
-
-    return decorated_function
-
 
 @app.route( '/movies', methods = ['POST'] )
 @cross_origin( supports_credentials = True )
