@@ -131,11 +131,6 @@ class DBManager( object ):
         
     
     '''GETTER METHODS BY QUERY'''
-    
-    def _get_ownertriplet_by_params( self, googleid, medium_name, title, year, session ):
-        # fetch_result
-        return 
-        
 
     def get_user_with_media_by_googleid( self, googleid, session = None ):
         # create session
@@ -188,6 +183,22 @@ class DBManager( object ):
         
         return user
             
+    def get_ownertrip_by_year_title_googleid( self, googleid, year, title ):
+        # create session
+        session_creator = self.create_session()
+        session = session_creator()
+        
+        # fetch result
+        ownertrip = session.query( OwnershipTriplet ).join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).filter( User.googleid == str( googleid ) ).filter( MovieBase.title == str( title ) ).filter( MovieExtra.year == int( year ) ).first()
+        if ownertrip is not None:
+            ownertrip.movie
+            ownertrip.movie.extra
+            
+        # remove session
+        session_creator.remove()
+        
+        return ownertrip
+    
     
     def get_movie_by_id_and_by_googleid( self, movieid, googleid ):
         # create session

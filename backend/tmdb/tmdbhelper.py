@@ -75,6 +75,9 @@ class TMDBHelper( object ):
                     
                 if title_fragment is not None:
                     result_movie['title_fragment'] = str( title_fragment )
+                else:
+                    result_movie['title_fragment'] = ''
+                    
                 result_movie['tmdb_id'] = tmdb_id
                     
                 TMDBHelper._movie_data_cache.append( result_movie )
