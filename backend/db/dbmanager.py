@@ -86,7 +86,14 @@ class DBManager( object ):
         year = ownertriplet.movie.extra.year
         
         # query similary ownertrip
-        ownertrip_exists = session.query( OwnershipTriplet ).join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( OwnershipTriplet.medium ).join( MovieBase.extra ).filter( User.googleid == googleid ).filter( Medium.name == medium_name ).filter( MovieBase.title == title ).filter( MovieExtra.year == year ).first()
+        ownertrip_exists = session.query( OwnershipTriplet ) \
+                                    .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( OwnershipTriplet.medium ).join( MovieBase.extra ) \
+                                    .filter( User.googleid == googleid ) \
+                                    .filter( Medium.name == medium_name ) \
+                                    .filter( MovieBase.title == title ) \
+                                    .filter( MovieExtra.year == year ) \
+                                    .first()
+                                    
         if ownertrip_exists:
             # remove session
             session_creator.remove()
@@ -142,6 +149,7 @@ class DBManager( object ):
         
         # fetch result
         user = _session.query( User ).filter_by( googleid = str( googleid ) ).first()
+        
         if user is not None:
             user.media
         
@@ -173,6 +181,7 @@ class DBManager( object ):
         
         # fetch result
         user = session.query( User ).filter_by( googleid = str( googleid ) ).first()
+        
         if user is not None:
             for triplet in user.triplet:
                 triplet.movie
@@ -189,7 +198,13 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch result
-        ownertrip = session.query( OwnershipTriplet ).join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).filter( User.googleid == str( googleid ) ).filter( MovieBase.title == str( title ) ).filter( MovieExtra.year == int( year ) ).first()
+        ownertrip = session.query( OwnershipTriplet ) \
+                            .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ) \
+                            .filter( User.googleid == str( googleid ) ) \
+                            .filter( MovieBase.title == str( title ) ) \
+                            .filter( MovieExtra.year == int( year ) ) \
+                            .first()
+                            
         if ownertrip is not None:
             ownertrip.movie
             ownertrip.movie.extra
@@ -210,7 +225,8 @@ class DBManager( object ):
         except ValueError:
             criteria = '%' + str( criteria_old ) + '%'
         
-        ownertrip = session.query( OwnershipTriplet ).join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).join( MovieExtra.cast ).join( MovieExtra.genres ) \
+        ownertrip = session.query( OwnershipTriplet ) \
+                            .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).join( MovieExtra.cast ).join( MovieExtra.genres ) \
                             .filter( User.googleid == str( googleid ) ) \
                             .filter( or_( 
                                         MovieBase.title.like( criteria ),
@@ -219,6 +235,7 @@ class DBManager( object ):
                                         Person.name.like( criteria ),
                                         Genre.name.like( criteria )
                                     ) ).first()
+                                    
         if ownertrip is not None:
             ownertrip.movie
             ownertrip.movie.extra
@@ -234,7 +251,11 @@ class DBManager( object ):
         session = session_creator()
         
         # fetch result
-        user_ownertriplet_moviebase_tuple = session.query( User, OwnershipTriplet, MovieBase ).join( OwnershipTriplet ).join( MovieBase ).filter( User.googleid == str( googleid ) ).filter( MovieBase.id == int( movieid ) ).first()
+        user_ownertriplet_moviebase_tuple = session.query( User, OwnershipTriplet, MovieBase ) \
+                                                    .join( OwnershipTriplet ).join( MovieBase ) \
+                                                    .filter( User.googleid == str( googleid ) ) \
+                                                    .filter( MovieBase.id == int( movieid ) ) \
+                                                    .first()
         
         if user_ownertriplet_moviebase_tuple is None:
             # remove session
@@ -266,7 +287,11 @@ class DBManager( object ):
         
         # fetch result
         last_seen_date_threshold = datetime.now() - timedelta( days = 0 )
-        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ).join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ).filter( User.googleid == str( googleid ) ).filter( MovieExtra.last_access < last_seen_date_threshold ).all()
+        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ) \
+                                                    .join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ) \
+                                                    .filter( User.googleid == str( googleid ) ) \
+                                                    .filter( MovieExtra.last_access < last_seen_date_threshold ) \
+                                                    .all()
         
         if user_ownertrip_movie_tuple_list == []:
             # remove session
@@ -290,7 +315,11 @@ class DBManager( object ):
         
         # fetch result
         last_seen_date_threshold = datetime.now() - timedelta( days = 0 )
-        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ).join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ).filter( User.googleid == str( googleid ) ).filter( MovieExtra.last_access < last_seen_date_threshold ).all()
+        user_ownertrip_movie_tuple_list = session.query( User, OwnershipTriplet, MovieBase, MovieExtra ) \
+                                                    .join( OwnershipTriplet ).join( MovieBase ).join( MovieExtra ) \
+                                                    .filter( User.googleid == str( googleid ) ) \
+                                                    .filter( MovieExtra.last_access < last_seen_date_threshold ) \
+                                                    .all()
         
         if user_ownertrip_movie_tuple_list == []:
             # remove session
