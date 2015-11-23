@@ -112,6 +112,8 @@ module dvdApp {
     }
   }]);
 
+
+  declare var componentHandler;
   app.run(function($rootScope, $location, $timeout) {
     $rootScope.$on('$viewContentLoaded', function() {
       $timeout(function() {

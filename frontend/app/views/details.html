@@ -5,8 +5,10 @@
   </div>
   <div class="dvd-details-content">
     <div class="dvd-column dvd-column-left">
-      <h3>Történet</h3>
-      <p>{{movie.overview}}</p>
+      <div ng-if="movie.overview">
+        <h3>Történet</h3>
+        <p>{{movie.overview}}</p>
+      </div>
 
       <div ng-if="movie.actors[0]">
         <h3>Szereplők</h3>

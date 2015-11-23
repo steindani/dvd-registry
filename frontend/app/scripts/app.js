@@ -97,5 +97,12 @@ var dvdApp;
                 return input.filter(function (m) { return (bs.filterResults.indexOf(m.id) > -1); });
             };
         }]);
+    app.run(function ($rootScope, $location, $timeout) {
+        $rootScope.$on('$viewContentLoaded', function () {
+            $timeout(function () {
+                componentHandler.upgradeAllRegistered();
+            });
+        });
+    });
 })(dvdApp || (dvdApp = {}));
 //# sourceMappingURL=app.js.map
