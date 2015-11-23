@@ -10,6 +10,7 @@ module dvdApp.Services {
         private static GET_MOVIES_URI: string = "http://127.0.0.1:5000/movies";
         private static GET_MOVIE_DETAILS_URI: string = "http://127.0.0.1:5000/movie/";
         private static RECOMMENDATION_URI: string = "http://127.0.0.1:5000/random";
+        private static SEARCH_URI: string = "http://127.0.0.1:5000/search/movies ";
 
 
         private static MOCK = false;
@@ -22,6 +23,20 @@ module dvdApp.Services {
             this.$http = $http;
             this.$q = $q;
             this.$auth = $auth;
+        }
+
+        public filterResults: string[] = null;
+        public updateFilter(query: string) {
+            this.$http({
+                method: "POST",
+                url: BackendService.ADD_MOVIE_URI,
+                data: { criteria: query },
+                headers: {
+                    Authorization: 'Bearer ' + this.$auth.getToken()
+                }
+            }).success((data: any) => {
+                this.filterResults = data.movies;
+            });
         }
 
         public movies(callback: (data: MoviePresent[]) => void) {
@@ -235,11 +250,13 @@ module dvdApp.Services {
     export interface IBackendService {
         movies: (callback: (data: MoviePresent[]) => void) => void;
         recommendations: (callback: (data: MoviePresent[]) => void) => void;
+        filterResults: string[];
 
         media: (callback: (data: string[]) => void) => void;
         searchFor: (fragment: string, callback: (data: FragmentResult) => void) => void;
 
         addMovie: (id: string, title: string, media: string, callback: (data: any) => void) => void;
+        updateFilter: (query: string) => void;
     }
 
     export class FragmentResult {

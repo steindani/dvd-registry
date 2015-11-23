@@ -38,32 +38,33 @@ h3 {
 
 .dvd-main-container {
   margin: 0 auto;
-  padding: 0 5%;
+  // padding: 0 5%;
   margin-top: -35vh;
-  flex-shrink: 0;
-}
+  // flex-shrink: 0;
+  width:100%;
 
-.dvd-container {
-  max-width: 80%;
-  margin: 0 auto;
-  
-  .dvd-grid {
+  .dvd-container {
+    width: 80%;
     margin: 0 auto;
-    justify-content: center;
-  }
-  
-  .dvd-fab {
-    position: fixed;
-    right: 3vw;
-    bottom: 5vw;
-    z-index: 3;
-    background: #ad1457;
-    padding: 36px;
     
-    &:hover,
-    &:focus,
-    &:active {
-      background: lighten($color: #ad1457, $amount: 10)
+    .dvd-grid {
+      margin: 0 auto;
+      justify-content: center;
+    }
+    
+    .dvd-fab {
+      position: fixed;
+      right: 3vw;
+      bottom: 5vw;
+      z-index: 3;
+      background: #ad1457;
+      padding: 36px;
+      
+      &:hover,
+      &:focus,
+      &:active {
+        background: lighten($color: #ad1457, $amount: 10)
+      }
     }
   }
 }

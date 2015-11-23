@@ -99,5 +99,24 @@ module dvdApp {
     return function(val) {
       return $sce.trustAsResourceUrl(val);
     };
-  }])
+  }]);
+
+  app.filter('selected', ['BackendService', (bs: dvdApp.Services.BackendService) => {
+    return (input) => {
+
+      if (!input || bs.filterResults == null) {
+        return input;
+      }
+
+      return input.filter((m) => (bs.filterResults.indexOf(m.id) > -1));
+    }
+  }]);
+
+  app.run(function($rootScope, $location, $timeout) {
+    $rootScope.$on('$viewContentLoaded', function() {
+      $timeout(function() {
+        componentHandler.upgradeAllRegistered();
+      });
+    });
+  });
 }

@@ -34,15 +34,6 @@
       <div class="mdl-layout__header-row">
         <span class="mdl-layout-title">Movie Time</span>
         <div class="mdl-layout-spacer"></div>
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-          <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
-            <i class="material-icons">search</i>
-          </label>
-          <div class="mdl-textfield__expandable-holder" ng-init="search=''">
-            <input class="mdl-textfield__input" type="text" id="search" ng-model="search" />
-            <label class="mdl-textfield__label" for="search">Enter your query...</label>
-          </div>
-        </div>
         <div ng-controller="LoginController">
           <a href="#/login" ng-if="!isAuthenticated()">Bejelentkezés</a>
           <a href="#" ng-if="isAuthenticated()" ng-click="logOut()">Kijelentkezés</a>
