@@ -1,6 +1,6 @@
 import os
 
-TOKEN_SECRET = os.environ.get( 'TOKEN_SECRET' ) or 'JWT Token Secret String' 
+TOKEN_SECRET = os.environ.get( 'TOKEN_SECRET' ) or '6Zf5II0qykHfdu7Rhecv' 
 GOOGLE_SECRET = os.environ.get( 'GOOGLE_SECRET' ) or 'FnK9Fh3Oq9HIlvLYxFiBcgAs'
 TMDB_KEY = os.environ.get( 'TMDB_KEY' ) or '13ed7e5e07699386ba2c32a52aed7ae6'
 YOUTUBE_KEY = os.environ.get( 'YOUTUBE_KEY' ) or  'AIzaSyDZSAWLGft1AxX-U4Dunw2SfStcHujU4nw'
