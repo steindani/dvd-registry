@@ -5,7 +5,6 @@ from copy import deepcopy
 from youtube.search import youtube_search
 import config.configuration
 
-''' TMDB lib: https://github.com/celiao/tmdbsimple '''
 ''' Don't forget to overwrite the base.py with the plugins/tmdbsimple/base.py!!! '''
 
 class TMDBHelper( object ):

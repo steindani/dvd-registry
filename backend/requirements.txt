@@ -10,5 +10,4 @@ pyjwt
 requests
 requests-oauthlib
 google-api-python-client
-pyopenssl
-requests-futures
+tmdbsimple
