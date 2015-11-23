@@ -89,5 +89,13 @@ var dvdApp;
                 return $sce.trustAsResourceUrl(val);
             };
         }]);
+    app.filter('selected', ['BackendService', function (bs) {
+            return function (input) {
+                if (!input || bs.filterResults == null) {
+                    return input;
+                }
+                return input.filter(function (m) { return (bs.filterResults.indexOf(m.id) > -1); });
+            };
+        }]);
 })(dvdApp || (dvdApp = {}));
 //# sourceMappingURL=app.js.map

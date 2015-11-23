@@ -12,16 +12,25 @@ module dvdApp.Controllers {
             private $http: ng.IHttpService,
             private ngDialog: angular.dialog.IDialogService,
             private $auth: any,
-            private BackendService: dvdApp.Services.BackendService
+            private BackendService: dvdApp.Services.BackendService,
+            private $timeout: ng.ITimeoutService
         ) {
             this.scope = $scope;
+
+            var updateMovies = () => {
+                BackendService.movies((data) => { $scope.movies = data });
+            }
             
-            BackendService.movies((data) => {$scope.movies = data});
-            BackendService.recommendations((data) => {$scope.recommendations = data});
+            var updateRecommendations = () => {
+                BackendService.recommendations((data) => { $scope.recommendations = data });
+            }
+
+            updateMovies();
+            updateRecommendations();
 
             $scope.showDetails = function(id: string) {
                 var childScope: any = $scope.$new();
-                BackendService.movieDetail(id, (data:dvdApp.Services.MovieDetail) => {
+                BackendService.movieDetail(id, (data: dvdApp.Services.MovieDetail) => {
                     childScope.movie = data;
                 });
 
@@ -32,7 +41,7 @@ module dvdApp.Controllers {
                     scope: childScope
                 });
             }
-            
+
             $scope.newMovieModal = function() {
                 ngDialog.open({
                     className: 'ngdialog-theme-dvd',
@@ -42,24 +51,43 @@ module dvdApp.Controllers {
                     scope: $scope
                 });
             }
-            
+
             $scope.applyUpdate = function(movie: dvdApp.Services.MoviePresent) {
                 $scope.movies.push(movie);
+                updateRecommendations();
             }
-            
+
+            var filterTimeoutPromise;
+            $scope.updateFilter = function() {
+                if (filterTimeoutPromise) {
+                    $timeout.cancel(filterTimeoutPromise)
+                }
+
+                filterTimeoutPromise = $timeout(
+                    () => {
+                        BackendService.updateFilter($scope.search)
+                    },
+                    300
+                );
+            }
+
         }
     }
 
     angular
         .module('dvdApp.Controllers', [])
-        .controller('MoviesController', ['$scope', '$window', '$http', 'ngDialog', '$auth', 'BackendService', dvdApp.Controllers.MoviesController]);
+        .controller('MoviesController', ['$scope', '$window', '$http', 'ngDialog', '$auth', 'BackendService', '$timeout', dvdApp.Controllers.MoviesController]);
 
     export interface IMoviesScope extends ng.IScope {
         movies: dvdApp.Services.MoviePresent[];
         recommendations: dvdApp.Services.MoviePresent[];
+        search: string;
 
         showDetails: (id: string) => void;
         newMovieModal: () => void;
         applyUpdate: (movie: dvdApp.Services.MoviePresent) => void;
+
+        filteredMovies: (movies: dvdApp.Services.MoviePresent[], search: string) => void;
+        updateFilter: () => void;
     }
 }
