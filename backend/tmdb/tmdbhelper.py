@@ -5,7 +5,10 @@ from copy import deepcopy
 from youtube.search import youtube_search
 import config.configuration
 
-''' Don't forget to overwrite the base.py with the plugins/tmdbsimple/base.py!!! '''
+''' 
+   Don't forget to overwrite the /usr/local/lib/python3.4/dist-packages/tmdbsimple/base.py with the plugins/tmdbsimple/base.py,
+   otherwise the queries will be a little bit slow.
+'''
 
 class TMDBHelper( object ):
     _movie_data_cache = []
