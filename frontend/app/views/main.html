@@ -11,16 +11,18 @@
 </div>
 
 <div class="dvd-container mdl-js-layout">
-  <h2>Tárolt filmek</h2>
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-    <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
-      <i class="material-icons">search</i>
-    </label>
-    <div class="mdl-textfield__expandable-holder" ng-init="search=''">
-      <input class="mdl-textfield__input" type="text" id="search" ng-model="search" ng-change="updateFilter()" />
-      <label class="mdl-textfield__label" for="search">Enter your query...</label>
+  <div class="dvd-searchbar">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+      <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
+        <i class="material-icons">search</i>
+      </label>
+      <div class="mdl-textfield__expandable-holder" ng-init="search=''">
+        <input class="mdl-textfield__input" type="text" id="search" ng-model="search" ng-change="updateFilter()" />
+        <label class="mdl-textfield__label" for="search">Kereső kifejezés</label>
+      </div>
     </div>
   </div>
+  <h2>Tárolt filmek</h2>
   <div class="dvd-grid mdl-grid">
     <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in movies | selected" ng-click="showDetails(m.id)">
       <!--ng-style="{ 'background': 'url({{m.cover}}) center / cover' }"-->

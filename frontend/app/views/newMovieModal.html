@@ -1,20 +1,18 @@
 <div class="dvd-details-container mdl-card mdl-shadow--2dp">
   <div class="dvd-details-content">
-    <h2>Add new movie</h2>
+    <h2>Új film felvétele</h2>
 
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <input class="mdl-textfield__input" type="text" ng-model="medium" list="media">
-      <label class="mdl-textfield__label" for="sample3">Storage media</label>
-    </div>
+    <mdl-text-field mdl-upgrade class="dvd-input-big" label="Tárolási hely" ng-model="medium" list="media"></mdl-text-field>
     <datalist id="media">
       <option value="{{m}}" ng-repeat="m in media" />
     </datalist>
 
 
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <input class="mdl-textfield__input" type="text" id="title" ng-model="enteredTitle" ng-change="titleChanged()" list="movies">
-      <label class="mdl-textfield__label" for="sample3">Movie title</label>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label dvd-input-big">
+      <input mdl-upgrade class="mdl-textfield__input" type="text" ng-model="enteredTitle" list="movies">
+      <label mdl-upgrade class="mdl-textfield__label">Film címe</label>
     </div>
+    <!--<mdl-text-field mdl-upgrade class="dvd-input-big" label="Film címe" ng-model="enteredTitle" list="movies"></mdl-text-field>-->
     <datalist id="movies">
       <option value="{{m.title}}" ng-repeat="m in possibleMovies" label="{{m.title}}">{{m.id}}</option>
     </datalist>
@@ -35,6 +33,6 @@
 
       <div class="clear" />
     </div>
-    <button ng-click="addSelectedMovie()">Film hozzáadása</button>
+    <mdl-button-raised theme="primary" ng-click="addSelectedMovie()">Film hozzáadása</mdl-button-raised>
   </div>
 </div>

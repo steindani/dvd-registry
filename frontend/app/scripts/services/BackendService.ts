@@ -27,9 +27,14 @@ module dvdApp.Services {
 
         public filterResults: string[] = null;
         public updateFilter(query: string) {
+            if (query === "") {
+                this.filterResults = null;
+                return;
+            }
+            
             this.$http({
                 method: "POST",
-                url: BackendService.ADD_MOVIE_URI,
+                url: BackendService.SEARCH_URI,
                 data: { criteria: query },
                 headers: {
                     Authorization: 'Bearer ' + this.$auth.getToken()

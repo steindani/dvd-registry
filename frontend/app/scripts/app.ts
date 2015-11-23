@@ -13,6 +13,7 @@ module dvdApp {
       'ngTouch',
       'ngDialog',
       'satellizer',
+      'mdl',
       'dvdApp.Controllers',
       'dvdApp.Directives',
       'dvdApp.Services'

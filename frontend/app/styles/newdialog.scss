@@ -1,3 +1,25 @@
+.dvd-details-container {
+	width: 60vw;
+}
+
+.dvd-input-big {
+	display: block;
+	
+	input {
+		font-size: 1.5em;
+		font-family: Lato;
+		line-height: 1em;
+		font-weight: 300;
+	}
+	
+	label {
+		font-size: 1.5em;
+		font-family: Lato;
+		line-height: 1em;
+		font-weight: 300;
+	}
+}
+
 ul.dvd-possible-movies {
 	margin: 0;
 	padding: 0;

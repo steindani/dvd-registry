@@ -13,13 +13,14 @@ module dvdApp.Controllers {
 			private $timeout: ng.ITimeoutService
         ) {
             this.scope = $scope;
-
+			
 			$scope.enteredTitle = ""
 			$scope.firstResult = {}
 
 			BackendService.media((data: any) => { $scope.media = data.media });
 
 			var titleTimeoutPromise;
+			$scope.$watch(() => $scope.enteredTitle, (newValue: string, oldValue: string) => { $scope.titleChanged() });
 			$scope.titleChanged = function() {
 				if (titleTimeoutPromise) {
 					$timeout.cancel(titleTimeoutPromise)
@@ -60,10 +61,10 @@ module dvdApp.Controllers {
 					$scope.medium,
 					(data: dvdApp.Services.MoviePresent) => {
 						(<dvdApp.Controllers.IMoviesScope>$scope.$parent).applyUpdate(data);
-						(<any> $scope).closeThisDialog();
+						(<any>$scope).closeThisDialog();
 					});
-					
-					
+
+
 			}
 		}
 	}

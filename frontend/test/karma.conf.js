@@ -37,6 +37,7 @@ module.exports = function(config) {
       'bower_components/ng-dialog/js/ngDialog.js',
       'bower_components/satellizer/satellizer.js',
       'bower_components/es6-promise/promise.js',
+      'bower_components/angular-material-design-lite/dist/angular-material-design-lite.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

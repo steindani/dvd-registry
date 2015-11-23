@@ -20,7 +20,7 @@ module dvdApp.Controllers {
             var updateMovies = () => {
                 BackendService.movies((data) => { $scope.movies = data });
             }
-            
+
             var updateRecommendations = () => {
                 BackendService.recommendations((data) => { $scope.recommendations = data });
             }
@@ -53,8 +53,10 @@ module dvdApp.Controllers {
             }
 
             $scope.applyUpdate = function(movie: dvdApp.Services.MoviePresent) {
-                $scope.movies.push(movie);
-                updateRecommendations();
+                $timeout(() => {
+                    $scope.movies.push(movie);
+                    updateRecommendations();
+                });
             }
 
             var filterTimeoutPromise;
