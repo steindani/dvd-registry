@@ -1,0 +1,2 @@
+Copy the folder (tmdbsimple) and all contained files into your python3 (default) lib installation directory (where pip installs the libs).
+E.g. for Python3.4 copy into /usr/local/lib/python3.4/dist-packages/
