@@ -13,8 +13,7 @@ class TMDBHelper( object ):
     _short_query_cache = []
     
     def __init__( self ):
-        # self.api_key = config.configuration.app.config['TMDB_KEY']
-        self.api_key = '13ed7e5e07699386ba2c32a52aed7ae6'
+        self.api_key = config.configuration.app.config['TMDB_KEY']
     
     def _remove_unused_fields( self, movie_data ):
         movie_data = deepcopy( movie_data )
