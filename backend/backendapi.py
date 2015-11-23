@@ -22,6 +22,22 @@ dbc.init_db()
 
 tmdb = TMDBHelper()
 
+@app.route( '/movie/<int:movie_id>', methods = ['DELETE'] )
+@cross_origin( supports_credentials = True )
+@login_required
+def delete_movie( movie_id ):
+    '''
+    DELETE /movie/moveid [no JSON]
+    {
+        success: true
+    } 
+    '''
+    googleid = g.googleid
+    
+    result = dbc.remove_movie_by_id_from_db( googleid, movie_id )
+    return jsonify( success = result )
+    
+
 @app.route( '/movies', methods = ['POST'] )
 @cross_origin( supports_credentials = True )
 @login_required

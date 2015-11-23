@@ -332,3 +332,29 @@ class DBManager( object ):
     def update_movie_last_access( self, movie_extra_obj, session ):
         movie_extra_obj.last_access = datetime.now()
         self._add_object( movie_extra_obj, session )
+        
+        
+    ''' DELETE METHODS '''
+    
+    def remove_movie_by_id_from_db( self, googleid, movie_id ):
+        # create session
+        session_creator = self.create_session()
+        session = session_creator()
+        
+        # fetch result
+        ownertrip = session.query( OwnershipTriplet ) \
+                            .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ) \
+                            .filter( User.googleid == str( googleid ) ) \
+                            .filter( MovieExtra.id == int( movie_id ) ).first()
+        
+        if ownertrip is not None:
+            session.delete( ownertrip )
+            session.commit()
+            # remove session
+            session_creator.remove()
+            return True
+        
+        # remove session
+        session_creator.remove()
+        
+        return False
