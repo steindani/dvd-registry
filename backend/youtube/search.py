@@ -4,7 +4,8 @@ from apiclient.errors import HttpError
 import config.configuration
 
 def youtube_search( movie_title ):
-    youtube = build( 'youtube', 'v3', developerKey = config.configuration.app.config['YOUTUBE_KEY'] )
+    # youtube = build( 'youtube', 'v3', developerKey = config.configuration.app.config['YOUTUBE_KEY'] )  
+    youtube = build( 'youtube', 'v3', developerKey = 'AIzaSyDZSAWLGft1AxX-U4Dunw2SfStcHujU4nw' )  
     query = movie_title.strip() + ' trailer'
     video_url = ''
     

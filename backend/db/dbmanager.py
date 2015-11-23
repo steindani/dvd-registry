@@ -87,19 +87,15 @@ class DBManager( object ):
         if ownertrip_exists:
             # remove session
             session_creator.remove()
-            ownertriplet.movie.extra
-            return ownertriplet.movie
+            return True
 
-        
-        movie = ownertriplet.movie
-        ownertriplet.movie.extra
         # add ownertriplet
         ownertriplet.movie.extra.last_access = date( MINYEAR, 1, 1 )
         self._add_object( ownertriplet, session )
         
         # remove session
         session_creator.remove()
-        return movie
+        return False
         
         
     def add_medium_to_user( self, medium_name, googleid ):
@@ -185,6 +181,29 @@ class DBManager( object ):
         session_creator.remove()
         
         return user
+    
+    
+    def get_ownertrip_by_year_title_googleid( self, googleid, year, title ):
+        # create session
+        session_creator = self.create_session()
+        session = session_creator()
+        
+        # fetch result
+        ownertrip = session.query( OwnershipTriplet ) \
+                            .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ) \
+                            .filter( User.googleid == str( googleid ) ) \
+                            .filter( MovieBase.title == str( title ) ) \
+                            .filter( MovieExtra.year == int( year ) ) \
+                            .first()                 
+
+        if ownertrip is not None:
+            ownertrip.movie
+            ownertrip.movie.extra
+            
+        # remove session
+        session_creator.remove()
+        
+        return ownertrip
     
     
     def get_ownertriplet_by_googleid_and_criteria( self, googleid, criteria ):

@@ -85,8 +85,9 @@ def add_movie():
         abort( 400 )
         
     ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
-    ownertrip = dbc.add_ownertriplet_exists_check( ot )
+    dbc.add_ownertriplet_exists_check( ot )
     
+    ownertrip = dbc.get_ownertrip_by_year_title_googleid( googleid, movie['year'], movie['title'] )
     return jsonify( EntityConverter.convert_movie_base_to_return_format( ownertrip.movie ) )
 
 
