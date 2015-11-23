@@ -16,6 +16,7 @@ module dvdApp.Controllers {
 			
 			$scope.enteredTitle = ""
 			$scope.firstResult = {}
+			$scope.loading = false;
 
 			BackendService.media((data: any) => { $scope.media = data.media });
 
@@ -28,6 +29,10 @@ module dvdApp.Controllers {
 
 				titleTimeoutPromise = $timeout(
 					() => {
+						$scope.loading = true;
+						// $scope.firstResult = null;
+						// $scope.possibleMovies = null;
+						
 						BackendService.searchFor(
 							$scope.enteredTitle,
 							(data: dvdApp.Services.FragmentResult) => {
@@ -36,6 +41,8 @@ module dvdApp.Controllers {
 								if ($scope.selectedId !== data.first_result.id) {
 									$scope.possibleMovies = data.results;
 								}
+								
+								$scope.loading = false;
 							})
 					},
 					300
@@ -80,6 +87,7 @@ module dvdApp.Controllers {
 		firstResult: any;
 		media: string[];
 		medium: string;
+		loading: boolean;
 
         titleChanged: () => void;
 		selectPossibleMovie: (id: string) => void;

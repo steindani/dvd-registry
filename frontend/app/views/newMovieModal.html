@@ -1,38 +1,47 @@
-<div class="dvd-details-container mdl-card mdl-shadow--2dp">
+<div class="dvd-details-container mdl-card mdl-shadow--2dp dvd-new-modal">
   <div class="dvd-details-content">
     <h2>Új film felvétele</h2>
 
-    <mdl-text-field mdl-upgrade class="dvd-input-big" label="Tárolási hely" ng-model="medium" list="media"></mdl-text-field>
-    <datalist id="media">
-      <option value="{{m}}" ng-repeat="m in media" />
-    </datalist>
-
-
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label dvd-input-big">
-      <input mdl-upgrade class="mdl-textfield__input" type="text" ng-model="enteredTitle" list="movies">
-      <label mdl-upgrade class="mdl-textfield__label">Film címe</label>
-    </div>
-    <!--<mdl-text-field mdl-upgrade class="dvd-input-big" label="Film címe" ng-model="enteredTitle" list="movies"></mdl-text-field>-->
-    <datalist id="movies">
-      <option value="{{m.title}}" ng-repeat="m in possibleMovies" label="{{m.title}}">{{m.id}}</option>
-    </datalist>
-
-    <ul class="dvd-possible-movies" ng-if="possibleMovies">
-      <li ng-repeat="m in possibleMovies" ng-click="selectPossibleMovie(m.id)">
-        {{m.title}}
-      </li>
-    </ul>
-
-    <div ng-if="firstResult.id">
-      <div class="dvd-column dvd-column-left">
-        <p>{{firstResult.overview}}</p>
+    <div class="dvd-column dvd-column-left">
+      <div mdl-upgrade class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label dvd-input-big">
+        <input mdl-upgrade class="mdl-textfield__input" type="text" ng-model="medium" list="media">
+        <label mdl-upgrade class="mdl-textfield__label">Tárolási hely</label>
       </div>
-      <div class="dvd-column dvd-column-right">
+      <!--<mdl-text-field mdl-upgrade class="dvd-input-big" label="Tárolási hely" ng-model="medium" list="media"></mdl-text-field>-->
+      <datalist id="media">
+        <option value="{{m}}" ng-repeat="m in media" />
+      </datalist>
+
+      <div mdl-upgrade class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label dvd-input-big">
+        <input mdl-upgrade class="mdl-textfield__input" type="text" ng-model="enteredTitle" list="movies">
+        <label mdl-upgrade class="mdl-textfield__label">Film címe</label>
+      </div>
+      <!--<mdl-text-field mdl-upgrade class="dvd-input-big" label="Film címe" ng-model="enteredTitle" list="movies"></mdl-text-field>-->
+      <datalist id="movies">
+        <option value="{{m.title}}" ng-repeat="m in possibleMovies" label="{{m.title}}">{{m.id}}</option>
+      </datalist>
+
+      <div ng-if="firstResult.id">
         <img class="cover-loader" style="display: hidden;" ng-src="{{firstResult.poster_path}}" />
       </div>
-
-      <div class="clear" />
     </div>
+
+    <div class="dvd-column dvd-column-right">
+      <ul class="dvd-possible-movies" ng-if="possibleMovies">
+        <li ng-repeat="m in possibleMovies" ng-click="selectPossibleMovie(m.id)">
+          {{m.title}}
+        </li>
+      </ul>
+
+      <div ng-if="firstResult.id">
+        <p>{{firstResult.overview}}</p>
+      </div>
+    </div>
+
+    <div class="clear" />
     <mdl-button-raised theme="primary" ng-click="addSelectedMovie()">Film hozzáadása</mdl-button-raised>
+    <div ng-if="loading">
+      <mdl-spinner mdl-upgrade></mdl-spinner>
+    </div>
   </div>
 </div>
