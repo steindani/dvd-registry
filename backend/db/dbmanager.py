@@ -195,7 +195,7 @@ class DBManager( object ):
                             .filter( MovieBase.title == str( title ) ) \
                             .filter( MovieExtra.year == int( year ) ) \
                             .first()                 
-
+                            
         if ownertrip is not None:
             ownertrip.movie
             ownertrip.movie.extra
@@ -216,26 +216,40 @@ class DBManager( object ):
             criteria = int( criteria )
         except ValueError:
             criteria = '%' + str( criteria_old ) + '%'
-        
-        ownertrip_list = session.query( OwnershipTriplet ) \
-                            .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).join( MovieExtra.cast ).join( MovieExtra.genres ) \
+               
+        ownertrip_list_base = session.query( OwnershipTriplet ) \
+                            .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ) \
                             .filter( User.googleid == str( googleid ) ) \
                             .filter( or_( 
                                         MovieBase.title.like( criteria ),
                                         MovieExtra.year == criteria,
                                         MovieExtra.plot.like( criteria ),
-                                        Person.name.like( criteria ),
-                                        Genre.name.like( criteria )
                                     ) ).all()
         
-        if len( ownertrip_list ) > 0:
-            for ownertrip in ownertrip_list:
+        ownertrip_list_cast = session.query( OwnershipTriplet ) \
+                            .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).join( MovieExtra.cast ) \
+                            .filter( User.googleid == str( googleid ) ) \
+                            .filter( or_( 
+                                        Person.name.like( criteria ),
+                                    ) ).all()
+                                    
+        ownertrip_list_genre = session.query( OwnershipTriplet ) \
+                            .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).join( MovieExtra.genres ) \
+                            .filter( User.googleid == str( googleid ) ) \
+                            .filter( or_( 
+                                        Genre.name.like( criteria_old )
+                                    ) ).all()
+        
+        ownertrips = set( ownertrip_list_base + ownertrip_list_cast + ownertrip_list_genre )
+        
+        if len( ownertrips ) > 0:
+            for ownertrip in ownertrips:
                 ownertrip.movie
                 ownertrip.movie.extra
-            
+        
         # remove session
         session_creator.remove()
-        return ownertrip_list
+        return list( ownertrips )
     
     
     def get_movie_by_id_and_by_googleid( self, movieid, googleid ):

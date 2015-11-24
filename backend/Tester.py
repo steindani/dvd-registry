@@ -91,21 +91,20 @@ dbc.init_db()
 # print( len( dbc.get_user_with_media_by_googleid( 11 ).media ) )
 #===============================================================================
 
-#===============================================================================
-# user3 = User( googleid = 18 )
-# dbc.add_user( user3 )
-# print( '---------------------------------' )
-# 
-# tmdb = TMDBHelper()
-# 
-# user = dbc.get_user_only_by_googleid( 18 )
-# medium = dbc.add_medium_to_user( "kiscica", 18 )
-# print( medium.name )
-#     
-# tmdb_id = 346352
-#===============================================================================
+user3 = User( googleid = 18 )
+dbc.add_user( user3 )
+print( '---------------------------------' )
+ 
+tmdb = TMDBHelper()
+ 
+user = dbc.get_user_only_by_googleid( 18 )
+medium = dbc.add_medium_to_user( "kiscica", 18 )
+print( medium.name )
+     
+tmdb_id = 164563
 
-import time
+
+# import time
 
 # movie = tmdb.get_movie_by_id( tmdb_id )
 
@@ -117,7 +116,7 @@ import time
 #===============================================================================
 
 
-import requests
+# import requests
 #===============================================================================
 # start = time.time()
 # res = requests.get( 'http://api.themoviedb.org/3/search/movie?api_key=13ed7e5e07699386ba2c32a52aed7ae6&query=%22The%20Fif%22' )
@@ -126,66 +125,68 @@ import requests
 # print( end - start )
 #===============================================================================
 
-tmdbsimple.API_KEY = '13ed7e5e07699386ba2c32a52aed7ae6'
-
-print( 'MOOOVIES' )
-
-movie = tmdbsimple.Movies( 206647 )
-
-start = time.time()
-movie_posters = movie.images()
-end = time.time()
-print( 'Images: ' + str( end - start ) )
-
-start = time.time()
-movie.info( language = 'hu' )
-end = time.time()
-print( 'Alap infók: ' + str( end - start ) )
-
-start = time.time()
-movie.credits()
-end = time.time()
-print( 'Credits: ' + str( end - start ) )
-
-start = time.time()
-movie_videos = movie.videos()
-end = time.time()
-print( 'Videos: ' + str( end - start ) )
-
-start = time.time()
-translate(movie.overview)
-end = time.time()
-print( 'Translation: ' + str( end - start ) )
-
-start = time.time()
-youtube_search(movie.title)
-end = time.time()
-print( 'Youtube: ' + str( end - start ) )
-
-
-
-print( 'SAJAAAAAT' )
-
-start = time.time()
-requests.get( 'http://api.themoviedb.org/3/movie/206647?api_key=13ed7e5e07699386ba2c32a52aed7ae6&language=hu' )
-end = time.time()
-print( 'Alap infók: ' + str( end - start ) )
-
-
-start = time.time()
-requests.get( 'http://api.themoviedb.org/3/movie/206647/credits?api_key=13ed7e5e07699386ba2c32a52aed7ae6&language=hu' )
-end = time.time()
-print( 'Credits: ' + str( end - start ) )
-
-start = time.time()
-requests.get( 'http://api.themoviedb.org/3/movie/206647/images?api_key=13ed7e5e07699386ba2c32a52aed7ae6&language=hu' )
-end = time.time()
-print( 'Images: ' + str( end - start ) )
-
-start = time.time()
-requests.get( 'http://api.themoviedb.org/3/movie/206647/videos?api_key=13ed7e5e07699386ba2c32a52aed7ae6&language=hu' )
-end = time.time()
-print( 'Videos: ' + str( end - start ) )
+#===============================================================================
+# tmdbsimple.API_KEY = '13ed7e5e07699386ba2c32a52aed7ae6'
+# 
+# print( 'MOOOVIES' )
+# 
+# movie = tmdbsimple.Movies( 206647 )
+# 
+# start = time.time()
+# movie_posters = movie.images()
+# end = time.time()
+# print( 'Images: ' + str( end - start ) )
+# 
+# start = time.time()
+# movie.info( language = 'hu' )
+# end = time.time()
+# print( 'Alap infók: ' + str( end - start ) )
+# 
+# start = time.time()
+# movie.credits()
+# end = time.time()
+# print( 'Credits: ' + str( end - start ) )
+# 
+# start = time.time()
+# movie_videos = movie.videos()
+# end = time.time()
+# print( 'Videos: ' + str( end - start ) )
+# 
+# start = time.time()
+# translate(movie.overview)
+# end = time.time()
+# print( 'Translation: ' + str( end - start ) )
+# 
+# start = time.time()
+# youtube_search(movie.title)
+# end = time.time()
+# print( 'Youtube: ' + str( end - start ) )
+# 
+# 
+# 
+# print( 'SAJAAAAAT' )
+# 
+# start = time.time()
+# requests.get( 'http://api.themoviedb.org/3/movie/206647?api_key=13ed7e5e07699386ba2c32a52aed7ae6&language=hu' )
+# end = time.time()
+# print( 'Alap infók: ' + str( end - start ) )
+# 
+# 
+# start = time.time()
+# requests.get( 'http://api.themoviedb.org/3/movie/206647/credits?api_key=13ed7e5e07699386ba2c32a52aed7ae6&language=hu' )
+# end = time.time()
+# print( 'Credits: ' + str( end - start ) )
+# 
+# start = time.time()
+# requests.get( 'http://api.themoviedb.org/3/movie/206647/images?api_key=13ed7e5e07699386ba2c32a52aed7ae6&language=hu' )
+# end = time.time()
+# print( 'Images: ' + str( end - start ) )
+# 
+# start = time.time()
+# requests.get( 'http://api.themoviedb.org/3/movie/206647/videos?api_key=13ed7e5e07699386ba2c32a52aed7ae6&language=hu' )
+# end = time.time()
+# print( 'Videos: ' + str( end - start ) )
+#===============================================================================
 
 
 
@@ -212,25 +213,33 @@ print( 'Videos: ' + str( end - start ) )
 # print( '-----------------' )
 #===============================================================================
 
-#===============================================================================
-# user = dbc.get_user_only_by_googleid( 18 )
-# medium = dbc.add_medium_to_user( "kiscica", 18 )
-# 
+user = dbc.get_user_only_by_googleid( 18 )
+medium = dbc.add_medium_to_user( "kiscica", 18 )
+ 
 # tmdb_title = str( 'Metropolis' )
 # movie = tmdb.getMovieByTitle( tmdb_title )
-# 
-# if movie == {}:
-#     abort( 400 )
-# else:
-#     db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
-#     
-# ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
-# dbc.add_ownertriplet_exists_check( ot )
-# 
-# ownertrip = dbc.get_ownertrip_by_year_title_googleid( 18, movie['year'], movie['title'] )
-# 
-# print( '----------------' )
-#===============================================================================
+ 
+movie = tmdb.get_movie_by_id( 672 )
+
+# movie = tmdb.get_movie_by_title( 'Harry Potter' )
+
+movie['genres'] = movie['genres'] + [ 'Harry' ]
+print( movie['genres'] )
+ 
+if movie == {}:
+    abort( 400 )
+else:
+    db_movie = EntityFactory.create_movie( title = movie['title'], cover_small = movie['poster_path'], cover_large = movie['poster_original_path'], year = movie['year'], plot = movie['plot'], trailer = movie['trailer'], cast = movie['cast'], genres = movie['genres'] )        
+     
+ot = EntityConnector.connect_user_with_movie_and_medium( user = user, medium = medium, movie = db_movie )
+dbc.add_ownertriplet_exists_check( ot )
+ 
+ownertrip = dbc.get_ownertrip_by_year_title_googleid( 18, movie['year'], movie['title'] )
+print( EntityConverter.convert_movie_to_json( ownertrip.movie ) )
+
+print( dbc.get_ownertriplet_by_googleid_and_criteria( 18, 'Harry' )[0].movie.extra.id )
+
+print( '----------------' )
 
 # print( dbc.get_ownertriplet_by_googleid_and_criteria( 18, 'sci-fi' ).movie.extra.id )
 

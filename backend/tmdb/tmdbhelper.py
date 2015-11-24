@@ -16,7 +16,7 @@ class TMDBHelper( object ):
     
     def __init__( self ):
         self.api_key = config.configuration.app.config['TMDB_KEY']
-    
+        
     def _remove_unused_fields( self, movie_data ):
         movie_data = deepcopy( movie_data )
         movie_data.pop( 'tmdb_id', None )
