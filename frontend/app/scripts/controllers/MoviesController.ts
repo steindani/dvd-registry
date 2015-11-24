@@ -16,6 +16,8 @@ module dvdApp.Controllers {
             private $timeout: ng.ITimeoutService
         ) {
             this.scope = $scope;
+            $scope.ord = '$index';
+            $scope.reverse = false;
 
             var updateMovies = () => {
                 BackendService.movies((data) => { $scope.movies = data });
@@ -84,6 +86,9 @@ module dvdApp.Controllers {
         movies: dvdApp.Services.MoviePresent[];
         recommendations: dvdApp.Services.MoviePresent[];
         search: string;
+        
+        ord: string;
+        reverse: boolean;
 
         showDetails: (id: string) => void;
         newMovieModal: () => void;

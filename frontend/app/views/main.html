@@ -21,10 +21,15 @@
         <label class="mdl-textfield__label" for="search">Kereső kifejezés</label>
       </div>
     </div>
+    <select ng-model="ord">
+      <option value="$index">Rendezés</option>
+      <option value="title">Cím szerint</option>
+      <option value="year">Év szerint</option>s
+    </select>
   </div>
   <h2>Tárolt filmek</h2>
   <div class="dvd-grid mdl-grid">
-    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in movies | selected" ng-click="showDetails(m.id)">
+    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in movies | filter: selected | orderBy: ord" ng-click="showDetails(m.id)">
       <!--ng-style="{ 'background': 'url({{m.cover}}) center / cover' }"-->
       <img class="cover-loader" style="display: hidden;" ng-src="{{m.poster_path}}" />
       <div class="mdl-card__title mdl-card--expand"></div>
