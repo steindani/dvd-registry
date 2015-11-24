@@ -278,10 +278,15 @@ def get_movie( movie_id ):
     '''
     GET /movie/moveid [no JSON] 
     {  
-        movie_id: 42 
-        title: “movie title”, 
-        cover: “cover URL”,
-        year: 1978 
+        title: “movie title”,
+        year: “creation year”,
+        genres: [“action”, “adventure”],
+        actors: [“Will Smith”, “Anne Hathaway”],
+        plot: “plot in hungarian”,
+        trailer: “youtube URL”,
+        poster_path: “poster URL”,
+        backdrop_path: “backdrop URL”,
+        medium: “iStore”
     } 
     '''
     googleid = g.googleid
