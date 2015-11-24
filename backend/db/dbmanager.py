@@ -217,7 +217,7 @@ class DBManager( object ):
         except ValueError:
             criteria = '%' + str( criteria_old ) + '%'
         
-        ownertrip = session.query( OwnershipTriplet ) \
+        ownertrip_list = session.query( OwnershipTriplet ) \
                             .join( OwnershipTriplet.user ).join( OwnershipTriplet.movie ).join( MovieBase.extra ).join( MovieExtra.cast ).join( MovieExtra.genres ) \
                             .filter( User.googleid == str( googleid ) ) \
                             .filter( or_( 
@@ -226,15 +226,16 @@ class DBManager( object ):
                                         MovieExtra.plot.like( criteria ),
                                         Person.name.like( criteria ),
                                         Genre.name.like( criteria )
-                                    ) ).first()
-                                    
-        if ownertrip is not None:
-            ownertrip.movie
-            ownertrip.movie.extra
+                                    ) ).all()
+        
+        if len( ownertrip_list ) > 0:
+            for ownertrip in ownertrip_list:
+                ownertrip.movie
+                ownertrip.movie.extra
             
         # remove session
         session_creator.remove()
-        return ownertrip
+        return ownertrip_list
     
     
     def get_movie_by_id_and_by_googleid( self, movieid, googleid ):

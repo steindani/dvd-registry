@@ -213,10 +213,11 @@ def search_movies():
     for criteria_part in criteria_parts:
         criteria_part = criteria_part.strip()
         if len( criteria_part ) > 0:
-            ownertrip = dbc.get_ownertriplet_by_googleid_and_criteria( googleid, criteria_part )
-            if ownertrip is not None:
-                if ownertrip.movie.extra.id not in movies_id:
-                    movies_id.append( ownertrip.movie.extra.id )
+            ownertrip_list = dbc.get_ownertriplet_by_googleid_and_criteria( googleid, criteria_part )
+            if len( ownertrip_list ) > 0:
+                for ownertrip in ownertrip_list:
+                    if ownertrip.movie.extra.id not in movies_id:
+                        movies_id.append( ownertrip.movie.extra.id )
     
     return jsonify( movies = movies_id )
     
