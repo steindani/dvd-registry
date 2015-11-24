@@ -75,6 +75,9 @@ module dvdApp.Controllers {
                 );
             }
 
+            $scope.first = (array: any[]) => {
+                return array[0];
+            }
         }
     }
 
@@ -86,9 +89,10 @@ module dvdApp.Controllers {
         movies: dvdApp.Services.MoviePresent[];
         recommendations: dvdApp.Services.MoviePresent[];
         search: string;
-        
+
         ord: string;
         reverse: boolean;
+        first: <T> (array: T[]) => T;
 
         showDetails: (id: string) => void;
         newMovieModal: () => void;

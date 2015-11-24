@@ -1,10 +1,15 @@
-<div class="dvd-reccomendation-breaker" ng-if="recommendations.length">
-  <div class="dvd-recommendation-container mdl-grid">
-    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in recommendations track by $index" ng-click="showDetails(m.id)">
-      <img class="cover-loader" style="display: hidden;" ng-src="{{m.poster_path}}" />
-      <div class="mdl-card__title mdl-card--expand"></div>
-      <div class="mdl-card__actions">
-        <span class="dvd-card-image__title">{{m.title}}</span>
+<div ng-if="recommendations.length">
+  <div class="dvd-container">
+    <h2 ng-click="showDetails(first(recommendations).id)">Ajánló <i class="material-icons">&#xE89E;</i></h2>
+  </div>
+  <div class="dvd-reccomendation-breaker">
+    <div class="dvd-recommendation-container mdl-grid">
+      <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in recommendations track by $index" ng-click="showDetails(m.id)">
+        <img class="cover-loader" style="display: hidden;" ng-src="{{m.poster_path}}" />
+        <div class="mdl-card__title mdl-card--expand"></div>
+        <div class="mdl-card__actions">
+          <span class="dvd-card-image__title">{{m.title}}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -29,7 +34,8 @@
   </div>
   <h2>Tárolt filmek</h2>
   <div class="dvd-grid mdl-grid">
-    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in movies | filter: selected | orderBy: ord" ng-click="showDetails(m.id)">
+    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in movies | filter: selected | orderBy: ord"
+    ng-click="showDetails(m.id)">
       <!--ng-style="{ 'background': 'url({{m.cover}}) center / cover' }"-->
       <img class="cover-loader" style="display: hidden;" ng-src="{{m.poster_path}}" />
       <div class="mdl-card__title mdl-card--expand"></div>

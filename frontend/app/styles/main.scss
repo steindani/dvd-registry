@@ -7,10 +7,6 @@ $lato-font-path: '../bower_components/lato/font';
 @import "dvddialog";
 @import "newdialog";
 
-// Fix
-.mdl-layout__container {
-  // position: relative !important;
-}
 
 body {
   font-family: Lato;
@@ -36,7 +32,7 @@ h3 {
 
 .dvd-main-container {
   margin: 0 auto;
-  margin-top: 5vh;
+  margin-top: 0vh;
   width:100%;
 
   .dvd-container {
@@ -119,7 +115,7 @@ h3 {
 }
 
 .dvd-reccomendation-breaker {
-  margin-top: 2vh;
+  margin-top: 7vh;
   width: 100%;
   
   .dvd-recommendation-container {
