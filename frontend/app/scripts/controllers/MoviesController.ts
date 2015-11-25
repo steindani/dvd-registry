@@ -42,6 +42,8 @@ module dvdApp.Controllers {
                     plain: false,
                     scope: childScope
                 });
+
+                updateRecommendations();
             }
 
             $scope.newMovieModal = function() {

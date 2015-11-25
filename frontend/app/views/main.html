@@ -34,7 +34,7 @@
   </div>
   <h2>Tárolt filmek</h2>
   <div class="dvd-grid mdl-grid">
-    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in movies | filter: selected | orderBy: ord"
+    <div class="dvd-card-image mdl-card mdl-shadow--2dp animated fadeIn" ng-repeat="m in movies | selected | orderBy: ord"
     ng-click="showDetails(m.id)">
       <!--ng-style="{ 'background': 'url({{m.cover}}) center / cover' }"-->
       <img class="cover-loader" style="display: hidden;" ng-src="{{m.poster_path}}" />
