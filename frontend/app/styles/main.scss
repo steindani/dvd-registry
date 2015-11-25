@@ -35,6 +35,20 @@ h3 {
   font-weight: 300;
 }
 
+.dvd-empty-list {
+  text-align: center;
+  margin: 3em;
+  
+  i {
+    color: lightgrey;
+    font-size: 10em;
+  }
+}
+
+.mdl-mini-footer {
+  padding: 16px;
+}
+
 .dvd-main-container {
   margin: 0 auto;
   margin-top: 0vh;

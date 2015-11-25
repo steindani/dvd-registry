@@ -16,7 +16,7 @@
 </div>
 
 <div class="dvd-container">
-  <div class="dvd-searchbar">
+  <div class="dvd-searchbar" ng-if="movies.length">
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
       <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
         <i class="material-icons">search</i>
@@ -43,6 +43,10 @@
         <span class="dvd-card-image__title">{{m.title}}</span>
       </div>
     </div>
+  </div>
+  <div class="dvd-empty-list" ng-if="! movies.length">
+    <i class="material-icons">&#xE05C;</i><br/>
+    <h3>A filmek listája üres.</h3>
   </div>
   <button style="position: fixed; right: 3em; bottom: 3em; z-index: 3; background: rgb(173, 20, 87) none repeat scroll 0% 0%; padding: 36px;"
   class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored dvd-fab" ng-click="newMovieModal()">
