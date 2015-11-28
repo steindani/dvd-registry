@@ -100,7 +100,7 @@ module dvdApp.Controllers {
         newMovieModal: () => void;
         applyUpdate: (movie: dvdApp.Services.MoviePresent) => void;
 
-        filteredMovies: (movies: dvdApp.Services.MoviePresent[], search: string) => void;
+        // filteredMovies: (movies: dvdApp.Services.MoviePresent[], search: string) => void;
         updateFilter: () => void;
     }
 }

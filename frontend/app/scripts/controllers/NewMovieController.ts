@@ -15,7 +15,6 @@ module dvdApp.Controllers {
             this.scope = $scope;
 			
 			$scope.enteredTitle = ""
-			$scope.firstResult = {}
 			$scope.loading = false;
 
 			BackendService.media((data: any) => { $scope.media = data.media });
@@ -83,8 +82,8 @@ module dvdApp.Controllers {
     export interface INewMovieScope extends ng.IScope {
 		enteredTitle: string;
 		selectedId: string;
-		possibleMovies: { id: string, title: string }[];
-		firstResult: any;
+		possibleMovies: dvdApp.Services.MovieBase[];
+		firstResult: dvdApp.Services.MoviePresent;
 		media: string[];
 		medium: string;
 		loading: boolean;
