@@ -15,7 +15,7 @@ module dvdApp {
       'satellizer',
       'mdl',
       'dvdApp.Controllers',
-      'dvdApp.Directives',
+      // 'dvdApp.Directives',
       'dvdApp.Services'
     ]);
 
